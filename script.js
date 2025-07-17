@@ -1826,10 +1826,10 @@ questions: [
     id: 22,
     text: "Pilih yang PALING (P) dan KURANG (K) menggambarkan diri Anda:",
     options: [
-      { text: "Ingin otoritas lebih",                    P: 'S', K: 'S' },
-      { text: "Ingin kesempatan baru",                   P: '*', K: 'I' },
-      { text: "Menghindari konflik",                     P: 'D', K: 'D' },
-      { text: "Ingin petunjuk, ingin jelas",             P: 'C', K: 'C' }
+      { text: "Menyenangkan orang, mudah setuju",                    P: 'S', K: 'S' },
+      { text: "Tertawa lepas, hidup",                   P: '*', K: 'I' },
+      { text: "Berani, tak gentar",                     P: 'D', K: 'D' },
+      { text: "Tenang, pendiam",             P: 'C', K: 'C' }
     ]
   },
   {
@@ -1867,72 +1867,244 @@ questions: [
       answer: "Pilih salah satu yang lebih sesuai dengan Anda",
       explanation: "Tidak ada jawaban benar/salah, pilih yang paling sesuai"
     },
-    questions: [
-      {
-        id: 1,
-        text: "Manakah yang lebih menggambarkan Anda?",
-        optionA: "Saya suka memimpin orang lain",
-        optionB: "Saya lebih suka mengikuti arahan"
-      },
-      {
-        id: 2,
-        text: "Manakah yang lebih menggambarkan Anda?",
-        optionA: "Saya orang yang sangat teratur",
-        optionB: "Saya fleksibel dalam pendekatan"
-      },
-      {
-        id: 3,
-        text: "Manakah yang lebih menggambarkan Anda?",
-        optionA: "Saya lebih suka bekerja dengan data",
-        optionB: "Saya lebih suka bekerja dengan orang"
-      },
-      {
-        id: 4,
-        text: "Manakah yang lebih menggambarkan Anda?",
-        optionA: "Saya mengambil risiko dengan mudah",
-        optionB: "Saya menghindari risiko sebisa mungkin"
-      }
-    ]
+       questions: [
+  { id: 1, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya seorang pekerja 'keras'", optionB: "Saya 'bukan' seorang pemurung" },
+  { id: 2, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka bekerja lebih baik dari orang lain", optionB: "Saya suka mengerjakan apa yang sedang saya kerjakan, sampai selesai" },
+  { id: 3, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka menunjukkan caranya melaksanakan sesuatu hal", optionB: "Saya ingin bekerja sebaik mungkin" },
+  { id: 4, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka berkelakar", optionB: "Saya senang mengatakan kepada orang lain, apa yang harus dilakukannya" },
+  { id: 5, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka menggabungkan diri dengan kelompok-kelompok", optionB: "Saya suka diperhatikan oleh kelompok-kelompok" },
+  { id: 6, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang bersahabat intim dengan seseorang", optionB: "Saya senang bersahabat dengan sekelompok orang" },
+  { id: 7, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya cepat berubah bila hal itu diperlukan", optionB: "Saya berusaha untuk intim dengan teman-teman" },
+  { id: 8, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka membalas dendam bila saya benar-benar disakiti", optionB: "Saya suka melakukan hal-hal yang baru dan berbeda" },
+  { id: 9, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya ingin atasan saya menyukai saya", optionB: "Saya suka mengatakan kepada orang lain, bila mereka salah" },
+  { id: 10, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka mengikuti perintah-perintah yang diberikan kepada saya", optionB: "Saya suka menyenangkan hati orang yang memimpin saya" },
+  { id: 11, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya mencoba sekuat tenaga", optionB: "Saya seorang yang tertib. Saya meletakkan segala sesuatu pada tempatnya" },
+  { id: 12, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya membuat orang lain melakukan apa yang saya inginkan", optionB: "Saya bukan orang yang cepat gusar" },
+  { id: 13, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka mengatakan kepada kelompok, apa yang harus dilakukan", optionB: "Saya menekuni satu pekerjaan sampai selesai" },
+  { id: 14, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya ingin tampak bersemangat dan menarik", optionB: "Saya ingin menjadi sangat sukses" },
+  { id: 15, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka menyelaraskan diri dengan kelompok", optionB: "Saya suka membantu orang lain menentukan pendapatnya" },
+  { id: 16, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya cemas kalau orang lain tidak menyukai saya", optionB: "Saya senang kalau orang-orang memperhatikan saya" },
+  { id: 17, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka mencoba sesuatu yang baru", optionB: "Saya lebih suka bekerja bersama orang-orang daripada bekerja sendiri" },
+  { id: 18, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Kadang-kadang saya menyalahkan orang lain bila terjadi sesuatu kesalahan", optionB: "Saya cemas bila seseorang tidak menyukai saya" },
+  { id: 19, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka menyenangkan hati orang yang memimpin saya", optionB: "Saya suka mencoba pekerjaan-pekerjaan baru dan berbeda" },
+  { id: 20, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka petunjuk yang terinci untuk melakukan suatu pekerjaan", optionB: "Saya suka mengatakan kepada orang lain bila mereka mengganggu saya" },
+  { id: 21, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya selalu mencoba sekuat tenaga", optionB: "Saya senang bekerja dengan sangat cermat dan hati-hati" },
+  { id: 22, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya adalah seorang pemimpin yang baik", optionB: "Saya mengorganisir tugas-tugas secara baik" },
+  { id: 23, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya mudah menjadi gusar", optionB: "Saya seorang yang lambat dalam membuat keputusan" },
+  { id: 24, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang mengerjakan beberapa pekerjaan pada waktu yang bersamaan", optionB: "Bila dalam kelompok, saya lebih suka diam" },
+  { id: 25, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang bila diundang", optionB: "Saya ingin melakukan sesuatu lebih baik dari orang lain" },
+  { id: 26, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka berteman intim dengan teman-teman saya", optionB: "Saya suka memberikan nasihat kepada orang lain" },
+  { id: 27, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka melakukan hal-hal yang baru dan berbeda", optionB: "Saya suka menceritakan keberhasilan saya dalam mengerjakan tugas" },
+  { id: 28, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Bila saya benar, saya suka mempertahankan mati-matian", optionB: "Saya suka bergabung dalam suatu kelompok" },
+  { id: 29, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya tidak mau berbeda dengan orang lain", optionB: "Saya berusaha untuk sangat intim dengan orang-orang" },
+  { id: 30, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka diajari mengenai caranya mengerjakan suatu pekerjaan", optionB: "Saya mudah merasa bosan" },
+  { id: 31, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya bekerja keras", optionB: "Saya banyak berpikir dan berencana" },
+  { id: 32, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya memimpin kelompok", optionB: "Hal-hal yang kecil (detail) menarik hati saya" },
+  { id: 33, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya cepat dan mudah mengambil keputusan", optionB: "Saya meletakkan segala sesuatu secara rapi dan teratur" },
+  { id: 34, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Tugas-tugas saya kerjakan secara cepat", optionB: "Saya jarang marah/sedih" },
+  { id: 35, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya ingin menjadi bagian dari kelompok", optionB: "Pada suatu waktu tertentu, saya hanya ingin mengerjakan satu tugas saja" },
+  { id: 36, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya berusaha untuk intim dengan teman-teman saya", optionB: "Saya berusaha keras untuk menjadi yang terbaik" },
+  { id: 37, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya menyukai mode baju baru dan tipe-tipe mobil baru", optionB: "Saya ingin menjadi penanggungjawab bagi orang-orang lain" },
+  { id: 38, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka berdebat", optionB: "Saya ingin diperhatikan" },
+  { id: 39, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka menyenangkan hati orang yang memimpin saya", optionB: "Saya tertarik menjadi anggota dari suatu kelompok" },
+  { id: 40, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka mengikuti aturan secara tertib", optionB: "Saya suka orang-orang mengenal saya benar-benar" },
+  { id: 41, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya mencoba sekuat tenaga", optionB: "Saya sangat menyenangkan" },
+  { id: 42, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Orang lain beranggapan bahwa saya adalah seorang pemimpin yang baik", optionB: "Saya berpikir jauh ke depan dan terinci" },
+  { id: 43, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Seringkali saya memanfaatkan peluang", optionB: "Saya senang memperhatikan hal-hal sampai sekecil-kecilnya" },
+  { id: 44, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Orang lain menganggap saya bekerja cepat", optionB: "Orang lain menganggap saya dapat melakukan penataan yang rapi dan teratur" },
+  { id: 45, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya menyukai permainan-permainan dan olahraga", optionB: "Saya sangat menyenangkan" },
+  { id: 46, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang bila orang-orang dapat intim dan bersahabat", optionB: "Saya selalu berusaha menyelesaikan apa yang telah saya mulai" },
+  { id: 47, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka bereksperimen dan mencoba sesuatu yang baru", optionB: "Saya suka mengerjekan pekerjaan-pekerjaan yang sulit dengan baik" },
+  { id: 48, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang diperlakukan secara adil", optionB: "Saya senang mengajari orang lain bagaimana caranya mengerjakan sesuatu" },
+  { id: 49, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka mengerjakan apa yang diharapkan dari saya", optionB: "Saya suka menarik perhatian" },
+  { id: 50, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka petunjuk-petunjuk terinci dalam melaksanakan pekerjaan", optionB: "Saya senang berada bersama dengan orang lain" },
+  { id: 51, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya selalu berusaha mengerjakan tugas secara sempurna", optionB: "Orang lain menganggap, saya tidak kenal lelah dalam kerja sehari-hari" },
+  { id: 52, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya tergolong tipe pemimpin", optionB: "Saya mudah berteman" },
+  { id: 53, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya memanfaatkan peluang", optionB: "Saya banyak berfikir" },
+  { id: 54, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya kerja dengan kecepatan yang mantap dan cepat", optionB: "Saya senang mengerjakan hal-hal yang detail" },
+  { id: 55, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya memiliki banyak energi untuk permainan dan olahraga", optionB: "Saya menempatkan segala sesuatunya secara rapi dan teratur" },
+  { id: 56, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya bergaul baik dengan semua orang", optionB: "Saya pandai mengendalikan diri" },
+  { id: 57, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya ingin berkenalan dengan orang baru dan mengerjakan hal baru", optionB: "Saya selalu ingin menyelesaikan pekerjaan yang sudah saya mulai" },
+  { id: 58, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Biasanya saya bersikeras mengenai apa yang saya yakini", optionB: "Biasanya saya suka bekerja keras" },
+  { id: 59, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya menyukai saran dari orang yang saya kagumi", optionB: "Saya senang mengatur orang lain" },
+  { id: 60, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya biarkan orang lain mempengaruhi saya", optionB: "Saya suka menerima banyak perhatian" },
+  { id: 61, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Biasanya saya bekerja sangat keras", optionB: "Biasanya saya bekerja cepat" },
+  { id: 62, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Bila saya berbicara, kelompok akan mendengarkan", optionB: "Saya terampil mempergunakan alat-alat kerja" },
+  { id: 63, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya lambat membina persahabatan", optionB: "Saya lambat dalam mengambil keputusan" },
+  { id: 64, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Biasanya saya makan secara cepat", optionB: "Saya suka membaca" },
+  { id: 65, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya menyukai pekerjaan yang memungkinkan saya berkeliling", optionB: "Saya menyukai pekerjaan yang harus dilakukan secara teliti" },
+  { id: 66, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya berteman sebanyak mungkin", optionB: "Saya dapat menemukan hal-hal yang telah saya pindahkan" },
+  { id: 67, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Perencanaan saya jauh ke masa depan", optionB: "Saya selalu menyenangkan" },
+  { id: 68, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya merasa bangga akan nama baik saya", optionB: "Saya tetap menekuni satu permasalahan sampai terselesaikan" },
+  { id: 69, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka menyenangkan hati orang yang saya kagumi", optionB: "Saya suka menjadi orang yang berhasil" },
+  { id: 70, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang bila orang lain mengambil keputusan untuk kelompok", optionB: "Saya suka mengambil keputusan untuk kelompok" },
+  { id: 71, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya selalu berusaha sangat keras", optionB: "Saya cepat dan mudah mengambil keputusan" },
+  { id: 72, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Biasanya kelompok saya mengerjakan hal-hal yang saya inginkan", optionB: "Biasanya saya tergesa-gesa" },
+  { id: 73, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya seringkali merasa lelah", optionB: "Saya lambat dalam mengambil keputusan" },
+  { id: 74, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya bekerja secara cepat", optionB: "Saya mudah mendapatkan kawan" },
+  { id: 75, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Biasanya saya bersemangat dan bergairah", optionB: "Sebagian besar waktu saya untuk berpikir" },
+  { id: 76, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya sangat hangat kepada orang-orang", optionB: "Saya menyukai pekerjaan yang menuntut ketepatan" },
+  { id: 77, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya banyak berpikir dan merencanakan", optionB: "Saya melakukan segala sesuatu pada tempatnya" },
+  { id: 78, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka tugas yang perlu ditekuni sampai kepada hal sedetailnya", optionB: "Saya tidak cepat marah" },
+  { id: 79, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang mengikuti orang-orang yang saya kagumi", optionB: "Saya selalu menyelesaikan pekerjaan yang saya mulai" },
+  { id: 80, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya menyukai petunjuk-petunjuk yang jelas", optionB: "Saya suka bekerja keras" },
+  { id: 81, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya mengejar apa yang saya inginkan", optionB: "Saya adalah seorang pemimpin yang baik" },
+  { id: 82, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya membuat orang lain bekerja keras", optionB: "Saya adalah orang yang gampangan (tidak banyak pertimbangan)" },
+  { id: 83, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya membuat keputusan-keputusan secara cepat", optionB: "Bicara saya cepat" },
+  { id: 84, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Biasanya saya bekerja tergesa-gesa", optionB: "Secara teratur saya berolahraga" },
+  { id: 85, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya tidak suka bertemu dengan orang", optionB: "Saya cepat lelah" },
+  { id: 86, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya mempunyai banyak sekali teman", optionB: "Banyak waktu saya untuk berpikir" },
+  { id: 87, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka bekerja dengan teori", optionB: "Saya suka bekerja sedetail-detailnya" },
+  { id: 88, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka bekerja sampai sedetail-detailnya", optionB: "Saya suka mengorganisir pekerjaan saya" },
+  { id: 89, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya suka meletakkan segala sesuatu pada tempatnya", optionB: "Saya selalu menyenangkan" },
+  { id: 90, text: "Manakah yang lebih menggambarkan Anda?", optionA: "Saya senang diberi petunjuk mengenai apa yang harus saya lakukan", optionB: "Saya harus menyelesaikan apa yang sudah saya mulai" }
+]
   },
-  BIGFIVE: {
-    name: "Tes Big Five Personality",
-    description: "Tes kepribadian berdasarkan model lima faktor besar",
-    time: 300, // 5 menit
-    instruction: "Beri penilaian seberapa sesuai pernyataan dengan diri Anda (1 = Sangat Tidak Sesuai, 5 = Sangat Sesuai)",
-    example: {
-      question: "Saya adalah seseorang yang suka bersosialisasi",
-      options: ["1", "2", "3", "4", "5"],
-      answer: "Pilih angka yang sesuai",
-      explanation: "Tidak ada jawaban benar/salah, pilih yang paling menggambarkan diri Anda"
-    },
-    questions: [
-      {
-        id: 1,
-        text: "Saya mudah bergaul dan ramah",
-        options: ["1", "2", "3", "4", "5"]
-      },
-      {
-        id: 2,
-        text: "Saya cenderung ceroboh dan tidak terorganisir",
-        options: ["1", "2", "3", "4", "5"]
-      },
-      {
-        id: 3,
-        text: "Saya sering merasa cemas atau mudah khawatir",
-        options: ["1", "2", "3", "4", "5"]
-      },
-      {
-        id: 4,
-        text: "Saya memiliki minat yang luas terhadap banyak hal",
-        options: ["1", "2", "3", "4", "5"]
-      },
-      {
-        id: 5,
-        text: "Saya cenderung pemalu dan pendiam",
-        options: ["1", "2", "3", "4", "5"]
-      }
-    ]
-  }
+BIGFIVE: {
+  name: "Tes Big Five Personality",
+  description: "Tes kepribadian berdasarkan model lima faktor besar (OCEAN)",
+  time: 600, // 10 menit (ubah sesuai kebutuhan)
+  instruction: "Beri penilaian seberapa sesuai pernyataan berikut dengan diri Anda (1 = Sangat Tidak Sesuai, 5 = Sangat Sesuai)",
+  example: {
+    question: "Saya adalah seseorang yang suka bersosialisasi",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "Pilih angka yang sesuai",
+    explanation: "Tidak ada jawaban benar/salah, pilih yang paling menggambarkan diri Anda"
+  },
+  questions: [
+    // ========== O ========== (1–24)
+    { id: 1, text: "Saya memiliki imajinasi yang aktif.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id: 2, text: "Saya tidak tertarik pada seni abstrak.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id: 3, text: "Saya suka mendengarkan ide-ide baru.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id: 4, text: "Saya tidak suka pergi ke museum seni.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id: 5, text: "Saya suka memecahkan teka-teki yang rumit.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id: 6, text: "Puisi memiliki sedikit efek emosional pada saya.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id: 7, text: "Saya penasaran tentang berbagai hal.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id: 8, text: "Saya menghindari film yang membutuhkan pemikiran mendalam.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id: 9, text: "Saya memiliki ide yang cemerlang.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:10, text: "Saya tidak tertarik pada diskusi teoritis.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:11, text: "Saya suka memikirkan cara-cara baru dalam melakukan sesuatu.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:12, text: "Saya merasa sulit memahami ide-ide abstrak.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:13, text: "Saya tertarik pada pengetahuan dari berbagai bidang.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:14, text: "Saya tidak suka membaca buku yang menantang.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:15, text: "Saya suka memecahkan masalah yang kompleks.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:16, text: "Saya lebih suka hal-hal rutin daripada perubahan.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:17, text: "Saya suka mengeksplorasi ide dan teori baru.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:18, text: "Saya menghindari percakapan filosofis.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:19, text: "Saya menikmati mencoba makanan baru.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:20, text: "Saya lebih suka kegiatan yang sudah saya kenal.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:21, text: "Saya suka memikirkan tentang masa depan.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:22, text: "Saya tidak tertarik pada spekulasi tentang alam semesta.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+    { id:23, text: "Saya suka belajar tentang budaya lain.", options: ["1","2","3","4","5"], dimension: "O", reverse: false },
+    { id:24, text: "Saya tidak suka membahas teori ilmiah.", options: ["1","2","3","4","5"], dimension: "O", reverse: true },
+
+    // ========== C ========== (25–48)
+    { id:25, text: "Saya selalu siap.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:26, text: "Saya meninggalkan barang-barang saya di mana saja.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:27, text: "Saya memperhatikan detail.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:28, text: "Saya membuat kekacauan.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:29, text: "Saya menyelesaikan tugas tepat waktu.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:30, text: "Saya sering lupa mengembalikan barang ke tempatnya.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:31, text: "Saya suka keteraturan.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:32, text: "Saya cenderung malas.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:33, text: "Saya mengikuti jadwal dengan ketat.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:34, text: "Saya menunda-nunda pekerjaan.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:35, text: "Saya melakukan tugas dengan hati-hati.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:36, text: "Saya menghindari tugas yang sulit.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:37, text: "Saya menyelesaikan apa yang saya mulai.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:38, text: "Saya tidak peduli dengan aturan.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:39, text: "Saya bekerja keras untuk mencapai tujuan saya.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:40, text: "Saya sulit memulai tugas.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:41, text: "Saya sangat teliti dalam pekerjaan saya.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:42, text: "Saya mudah terganggu dari pekerjaan.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:43, text: "Saya membuat rencana dan menaatinya.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:44, text: "Saya sering kehilangan fokus.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:45, text: "Saya menyelesaikan pekerjaan sebelum bersenang-senang.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:46, text: "Saya cenderung tidak teratur.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+    { id:47, text: "Saya memenuhi tenggat waktu dengan baik.", options: ["1","2","3","4","5"], dimension: "C", reverse: false },
+    { id:48, text: "Saya mengabaikan tugas yang tidak menyenangkan.", options: ["1","2","3","4","5"], dimension: "C", reverse: true },
+
+    // ========== E ========== (49–72)
+    { id:49, text: "Saya adalah jiwa pesta.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:50, text: "Saya tidak banyak bicara.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:51, text: "Saya merasa nyaman di sekitar orang.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:52, text: "Saya menyimpan diri saya sendiri.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:53, text: "Saya memulai percakapan.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:54, text: "Saya tidak suka menjadi pusat perhatian.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:55, text: "Saya banyak bicara.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:56, text: "Saya lebih suka mendengarkan daripada berbicara.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:57, text: "Saya memiliki banyak teman.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:58, text: "Saya merasa tidak nyaman di keramaian.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:59, text: "Saya bersemangat dalam kelompok sosial.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:60, text: "Saya menghindari kontak mata dengan orang asing.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:61, text: "Saya mudah berteman.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:62, text: "Saya membutuhkan banyak waktu untuk diri sendiri.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:63, text: "Saya suka memimpin kelompok.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:64, text: "Saya lebih suka bekerja sendirian.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:65, text: "Saya menikmati pertemuan sosial besar.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:66, text: "Saya merasa lelah setelah bersosialisasi.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:67, text: "Saya suka menjadi pusat perhatian.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:68, text: "Saya tidak suka pesta besar.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:69, text: "Saya energik saat bersama orang lain.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:70, text: "Saya pemalu dengan orang asing.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+    { id:71, text: "Saya mudah bergaul dengan orang baru.", options: ["1","2","3","4","5"], dimension: "E", reverse: false },
+    { id:72, text: "Saya lebih suka aktivitas tenang.", options: ["1","2","3","4","5"], dimension: "E", reverse: true },
+
+    // ========== A ========== (73–96)
+    { id:73, text: "Saya tertarik pada orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:74, text: "Saya mengolok-olok orang.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:75, text: "Saya bersimpati pada perasaan orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:76, text: "Saya tidak tertarik pada masalah orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:77, text: "Saya memiliki hati yang lembut.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:78, text: "Saya tidak terlalu peduli dengan orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:79, text: "Saya membuat orang merasa nyaman.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:80, text: "Saya menghina orang.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:81, text: "Saya mengasihi orang yang kurang beruntung.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:82, text: "Saya cenderung kritis terhadap orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:83, text: "Saya suka membantu orang.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:84, text: "Saya curiga pada niat orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:85, text: "Saya memaafkan orang yang menyakiti saya.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:86, text: "Saya suka membalas dendam.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:87, text: "Saya percaya pada apa yang orang katakan.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:88, text: "Saya memanipulasi orang untuk mendapatkan keuntungan.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:89, text: "Saya mudah percaya pada orang.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:90, text: "Saya mengeksploitasi orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:91, text: "Saya menghormati orang lain.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:92, text: "Saya tidak sabar dengan orang yang tidak efisien.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:93, text: "Saya menghindari konflik.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:94, text: "Saya suka berdebat.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+    { id:95, text: "Saya kooperatif dalam kelompok.", options: ["1","2","3","4","5"], dimension: "A", reverse: false },
+    { id:96, text: "Saya suka bersaing daripada bekerja sama.", options: ["1","2","3","4","5"], dimension: "A", reverse: true },
+
+        // ========== N ========== (97–120)
+    { id:97,  text: "Saya mudah gugup.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:98,  text: "Saya jarang merasa sedih.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:99,  text: "Saya sering merasa khawatir.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:100, text: "Saya puas dengan diri saya sendiri.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:101, text: "Saya mudah tersinggung.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:102, text: "Saya menangani stres dengan baik.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:103, text: "Saya sering merasa tidak enak hati.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:104, text: "Saya jarang merasa kesal.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:105, text: "Saya sering merasa murung.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:106, text: "Saya percaya diri dalam situasi baru.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:107, text: "Saya terlalu khawatir tentang hal-hal.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:108, text: "Saya merasa nyaman dengan diri sendiri.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:109, text: "Saya mudah panik.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:110, text: "Saya jarang merasa cemas.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:111, text: "Saya sering merasa tegang.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:112, text: "Saya jarang merasa tertekan.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:113, text: "Saya mudah marah.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:114, text: "Saya tetap tenang di bawah tekanan.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:115, text: "Saya merasa tidak aman dalam banyak hal.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:116, text: "Saya jarang merasa takut.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:117, text: "Saya merasa tidak berharga kadang-kadang.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:118, text: "Saya puas dengan hidup saya.", options: ["1","2","3","4","5"], dimension: "N", reverse: true },
+    { id:119, text: "Saya merasa kewalahan dengan mudah.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
+    { id:120, text: "Saya menikmati sebagian besar aspek hidup saya.", options: ["1","2","3","4","5"], dimension: "N", reverse: true }
+  ]
+}
+
+
 };
 // Membuat kolom Kraeplin random (helper nomor 2)
 // Membuat kolom Kraeplin random (helper)
@@ -1940,6 +2112,416 @@ function generateKraeplinColumns(jumlahKolom, jumlahBaris) {
   return Array.from({length: jumlahKolom}, () =>
     Array.from({length: jumlahBaris}, () => Math.floor(Math.random() * 9) + 1)
   );
+}
+// /src/data/kamusPAPI.js
+
+ const kamusPAPI = {
+  A: [
+    { range: [0, 4], desc: "Tidak kompetitif, mapan, puas. Tidak terdorong untuk menghasilkan prestasi, tdk berusaha utk mencapai sukses, membutuhkan dorongan dari luar diri, tidak berinisiatif, tidak memanfaatkan kemampuan diri secara optimal, ragu akan tujuan diri, misalnya sbg akibat promosi / perubahan struktur jabatan." },
+    { range: [5, 7], desc: "Tahu akan tujuan yang ingin dicapainya dan dapat merumuskannya, realistis akan kemampuan diri, dan berusaha untuk mencapai target." },
+    { range: [8, 9], desc: "Sangat berambisi utk berprestasi dan menjadi yg terbaik, menyukai tantangan, cenderung mengejar kesempurnaan, menetapkan target yg tinggi, 'self-starter', merumuskan kerja dg baik. Tdk realistis akan kemampuannya, sulit dipuaskan, mudah kecewa, harapan yg tinggi mungkin mengganggu org lain." }
+  ],
+  N: [
+    { range: [0, 2], desc: "Tidak terlalu merasa perlu untuk menuntaskan sendiri tugas-tugasnya, senang menangani beberapa pekerjaan sekaligus, mudah mendelegasikan tugas. Komitmen rendah, cenderung meninggalkan tugas sebelum tuntas, konsentrasi mudah buyar, mungkin suka berpindah pekerjaan." },
+    { range: [3, 5], desc: "Cukup memiliki komitmen untuk menuntaskan tugas, akan tetapi jika memungkinkan akan mendelegasikan sebagian dari pekerjaannya kepada orang lain." },
+    { range: [6, 7], desc: "Komitmen tinggi, lebih suka menangani pekerjaan satu demi satu, akan tetapi masih dapat mengubah prioritas jika terpaksa." },
+    { range: [8, 9], desc: "Memiliki komitmen yg sangat tinggi thd tugas, sangat ingin menyelesaikan tugas, tekun dan tuntas dlm menangani pekerjaan satu demi satu hingga tuntas. Perhatian terpaku pada satu tugas, sulit utk menangani beberapa pekerjaan sekaligus, sulit diinterupsi, tidak melihat masalah sampingan." }
+  ],
+  G: [
+    { range: [0, 2], desc: "Santai, kerja adalah sesuatu yang menyenangkan-bukan beban yg membutuhkan usaha besar. Mungkin termotivasi utk mencari cara atau sistem yg dpt mempermudah dirinya dlm menyelesaikan pekerjaan, akan berusaha menghindari kerja keras, sehingga dapat memberi kesan malas." },
+    { range: [3, 4], desc: "Bekerja keras sesuai tuntutan, menyalurkan usahanya untuk hal-hal yang bermanfaat / menguntungkan." },
+    { range: [5, 7], desc: "Bekerja keras, tetapi jelas tujuan yg ingin dicapainya." },
+    { range: [8, 9], desc: "Ingin tampil sbg pekerja keras, sangat suka bila orang lain memandangnya sbg pekerja keras. Cenderung menciptakan pekerjaan yang tidak perlu agar terlihat tetap sibuk, kadang kala tanpa tujuan yang jelas." }
+  ],
+  C: [
+    { range: [0, 2], desc: "Lebih mementingkan fleksibilitas daripada struktur, pendekatan kerja lebih ditentukan oleh situasi daripada oleh perencanaan sebelumnya, mudah beradaptasi. Tidak mempedulikan keteraturan atau kerapihan, ceroboh." },
+    { range: [3, 4], desc: "Fleksibel tapi masih cukup memperhatikan keteraturan atau sistematika kerja." },
+    { range: [5, 6], desc: "Memperhatikan keteraturan dan sistematika kerja, tapi cukup fleksibel." },
+    { range: [7, 9], desc: "Sistematis, bermetoda, berstruktur, rapi dan teratur, dapat menata tugas dengan baik. Cenderung kaku, tidak fleksibel." }
+  ],
+  D: [
+    { range: [0, 1], desc: "Melihat pekerjaan scr makro, membedakan hal penting dari yg kurang penting, mendelegasikan detil pd org lain, generalis. Menghindari detail, konsekuensinya mungkin bertindak tanpa data yg cukup/akurat, bertindak ceroboh pd hal yg butuh kecermatan. Dpt mengabaikan proses yg vital dlm evaluasi data." },
+    { range: [2, 3], desc: "Cukup peduli akan akurasi dan kelengkapan data." },
+    { range: [4, 6], desc: "Tertarik untuk menangani sendiri detail." },
+    { range: [7, 9], desc: "Sangat menyukai detail, sangat peduli akan akurasi dan kelengkapan data. Cenderung terlalu terlibat dengan detail sehingga melupakan tujuan utama." }
+  ],
+  R: [
+    { range: [0, 3], desc: "Tipe pelaksana, praktis - pragmatis, mengandalkan pengalaman masa lalu dan intuisi. Bekerja tanpa perencanaan, mengandalkan perasaan." },
+    { range: [4, 5], desc: "Pertimbangan mencakup aspek teoritis (konsep atau pemikiran baru) dan aspek praktis (pengalaman) secara berimbang." },
+    { range: [6, 7], desc: "Suka memikirkan suatu problem secara mendalam, merujuk pada teori dan konsep." },
+    { range: [8, 9], desc: "Tipe pemikir, sangat berminat pada gagasan, konsep, teori, mencari alternatif baru, menyukai perencanaan. Mungkin sulit dimengerti oleh orang lain, terlalu teoritis dan tidak praktis, mengawang-awang dan berbelit-belit." }
+  ],
+  T: [
+    { range: [0, 3], desc: "Santai. Kurang peduli akan waktu, kurang memiliki rasa urgensi, membuang-buang waktu, bukan pekerja yang tepat waktu." },
+    { range: [4, 6], desc: "Cukup aktif dalam segi mental, dapat menyesuaikan tempo kerjanya dengan tuntutan pekerjaan / lingkungan." },
+    { range: [7, 9], desc: "Cekatan, selalu siaga, bekerja cepat, ingin segera menyelesaikan tugas. Negatifnya: Tegang, cemas, impulsif, mungkin ceroboh, banyak gerakan yang tidak perlu." }
+  ],
+  V: [
+    { range: [0, 2], desc: "Cocok untuk pekerjaan 'di belakang meja'. Cenderung lamban, tidak tanggap, mudah lelah, daya tahan lemah." },
+    { range: [3, 6], desc: "Dapat bekerja di belakang meja dan senang jika sesekali harus terjun ke lapangan atau melaksanakan tugas-tugas yang bersifat mobile." },
+    { range: [7, 9], desc: "Menyukai aktifitas fisik (a.l.: olah raga), enerjik, memiliki stamina untuk menangani tugas-tugas berat, tidak mudah lelah. Tidak betah duduk lama, kurang dapat konsentrasi 'di belakang meja'." }
+  ],
+  W: [
+    { range: [0, 3], desc: "Hanya butuh gambaran ttg kerangka tugas scr garis besar, berpatokan pd tujuan, dpt bekerja dlm suasana yg kurang berstruktur, berinsiatif, mandiri. Tdk patuh, cenderung mengabaikan/tdk paham pentingnya peraturan/prosedur, suka membuat peraturan sendiri yg bisa bertentangan dg yg telah ada." },
+    { range: [4, 5], desc: "Perlu pengarahan awal dan tolok ukur keberhasilan." },
+    { range: [6, 7], desc: "Membutuhkan uraian rinci mengenai tugas, dan batasan tanggung jawab serta wewenang." },
+    { range: [8, 9], desc: "Patuh pada kebijaksanaan, peraturan dan struktur organisasi. Ingin segala sesuatunya diuraikan secara rinci, kurang memiliki inisiatif, tdk fleksibel, terlalu tergantung pada organisasi, berharap 'disuapi'." }
+  ],
+  F: [
+    { range: [0, 3], desc: "Otonom, dapat bekerja sendiri tanpa campur tangan orang lain, motivasi timbul krn pekerjaan itu sendiri - bukan krn pujian dr otoritas. Mempertanyakan otoritas, cenderung tidak puas thdp atasan, loyalitas lebih didasari kepentingan pribadi." },
+    { range: [4, 6], desc: "Loyal pada Perusahaan." },
+    { range: [7, 7], desc: "Loyal pada pribadi atasan." },
+    { range: [8, 9], desc: "Loyal, berusaha dekat dg pribadi atasan, ingin menyenangkan atasan, sadar akan harapan atasan akan dirinya. Terlalu memperhatikan cara menyenangkan atasan, tidak berani berpendirian lain, tidak mandiri." }
+  ],
+  L: [
+    { range: [0, 1], desc: "Puas dengan peran sebagai bawahan, memberikan kesempatan pada orang lain untuk memimpin, tidak dominan. Tidak percaya diri; sama sekali tidak berminat untuk berperan sebagai pemimpin; bersikap pasif dalam kelompok." },
+    { range: [2, 3], desc: "Tidak percaya diri dan tidak ingin memimpin atau mengawasi orang lain." },
+    { range: [4, 4], desc: "Kurang percaya diri dan kurang berminat utk menjadi pemimpin." },
+    { range: [5, 5], desc: "Cukup percaya diri, tidak secara aktif mencari posisi kepemimpinan akan tetapi juga tidak akan menghindarinya." },
+    { range: [6, 7], desc: "Percaya diri dan ingin berperan sebagai pemimpin." },
+    { range: [8, 9], desc: "Sangat percaya diri utk berperan sbg atasan & sangat mengharapkan posisi tersebut. Lebih mementingkan citra & status kepemimpinannya dari pada efektifitas kelompok, mungkin akan tampil angkuh atau terlalu percaya diri." }
+  ],
+  P: [
+    { range: [0, 1], desc: "Permisif, akan memberikan kesempatan pada orang lain untuk memimpin. Tidak mau mengontrol orang lain dan tidak mau mempertanggung jawabkan hasil kerja bawahannya." },
+    { range: [2, 3], desc: "Enggan mengontrol org lain & tidak mau mempertanggung jawabkan hasil kerja bawahannya, lebih memberi kebebasan kpd bawahan utk memilih cara sendiri dlm penyelesaian tugas dan meminta bawahan utk mempertanggungjawabkan hasilnya masing-masing." },
+    { range: [4, 4], desc: "Cenderung enggan melakukan fungsi pengarahan, pengendalian dan pengawasan, kurang aktif memanfaatkan kapasitas bawahan secara optimal, cenderung bekerja sendiri dalam mencapai tujuan kelompok." },
+    { range: [5, 5], desc: "Bertanggung jawab, akan melakukan fungsi pengarahan, pengendalian dan pengawasan, tapi tidak mendominasi." },
+    { range: [6, 7], desc: "Dominan dan bertanggung jawab, akan melakukan fungsi pengarahan, pengendalian dan pengawasan." },
+    { range: [8, 9], desc: "Sangat dominan, sangat mempengaruhi & mengawasi org lain, bertanggung jawab atas tindakan & hasil kerja bawahan. Posesif, tdk ingin berada di bawah pimpinan org lain, cemas bila tdk berada di posisi pemimpin, mungkin sulit utk bekerja sama dgn rekan yg sejajar kedudukannya." }
+  ],
+  I: [
+    { range: [0, 1], desc: "Sangat berhati-hati, memikirkan langkah-langkahnya secara bersungguh-sungguh. Lamban dlm mengambil keputusan, terlalu lama merenung, cenderung menghindar mengambil keputusan." },
+    { range: [2, 3], desc: "Enggan mengambil keputusan." },
+    { range: [4, 5], desc: "Berhati-hati dlm pengambilan keputusan." },
+    { range: [6, 7], desc: "Cukup percaya diri dlm pengambilan keputusan, mau mengambil resiko, dpt memutuskan dgn cepat, mengikuti alur logika." },
+    { range: [8, 9], desc: "Sangat yakin dl mengambil keputusan, cepat tanggap thd situasi, berani mengambil resiko, mau memanfaatkan kesempatan. Impulsif, dpt membuat keputusan yg tdk praktis, cenderung lebih mementingkan kecepatan daripada akurasi, tdk sabar, cenderung meloncat pd keputusan." }
+  ],
+  S: [
+    { range: [0, 2], desc: "Dpt. bekerja sendiri, tdk membutuhkan kehadiran org lain. Menarik diri, kaku dlm bergaul, canggung dlm situasi sosial, lebih memperhatikan hal-hal lain daripada manusia." },
+    { range: [3, 4], desc: "Kurang percaya diri & kurang aktif dlm menjalin hubungan sosial." },
+    { range: [5, 9], desc: "Percaya diri & sangat senang bergaul, menyukai interaksi sosial, bisa menciptakan suasana yg menyenangkan, mempunyai inisiatif & mampu menjalin hubungan & komunikasi, memperhatikan org lain. Mungkin membuang-buang waktu utk aktifitas sosial, kurang peduli akan penyelesaian tugas." }
+  ],
+  B: [
+    { range: [0, 2], desc: "Mandiri (dari segi emosi), tdk mudah dipengaruhi oleh tekanan kelompok. Penyendiri, kurang peka akan sikap & kebutuhan kelompok, mungkin sulit menyesuaikan diri." },
+    { range: [3, 5], desc: "Selektif dlm bergabung dg kelompok, hanya mau berhubungan dg kelompok di lingkungan kerja apabila bernilai & sesuai minat, tdk terlalu mudah dipengaruhi." },
+    { range: [6, 9], desc: "Suka bergabung dlm kelompok, sadar akan sikap & kebutuhan kelompok, suka bekerja sama, ingin menjadi bagian dari kelompok, ingin disukai & diakui oleh lingkungan; sangat tergantung pd kelompok, lebih memperhatikan kebutuhan kelompok daripada pekerjaan." }
+  ],
+  O: [
+    { range: [0, 2], desc: "Menjaga jarak, lebih memperhatikan hal-hal kedinasan, tdk mudah dipengaruhi oleh individu tertentu, objektif & analitis. Tampil dingin, tdk acuh, tdk ramah, suka berahasia, mungkin tdk sadar akan perasaan org lain, & mungkin sulit menyesuaikan diri." },
+    { range: [3, 5], desc: "Tidak mencari atau menghindari hubungan antar pribadi di lingkungan kerja, masih mampu menjaga jarak." },
+    { range: [6, 9], desc: "Peka akan kebutuhan org lain, sangat memikirkan hal-hal yg dibutuhkan org lain, suka menjalin hubungan persahabatan yg hangat & tulus. Sangat perasa, mudah tersinggung, cenderung subjektif, dpt terlibat terlalu dalam/intim dg individu tertentu dlm pekerjaan, sangat tergantung pd individu tertentu." }
+  ],
+  X: [
+    { range: [0, 1], desc: "Sederhana, rendah hati, tulus, tidak sombong dan tidak suka menampilkan diri. Terlalu sederhana, cenderung merendahkan kapasitas diri, tidak percaya diri, cenderung menarik diri dan pemalu." },
+    { range: [2, 3], desc: "Sederhana, cenderung diam, cenderung pemalu, tidak suka menonjolkan diri." },
+    { range: [4, 5], desc: "Mengharapkan pengakuan lingkungan dan tidak mau diabaikan tetapi tidak mencari-cari perhatian." },
+    { range: [6, 9], desc: "Bangga akan diri dan gayanya sendiri, senang menjadi pusat perhatian, mengharapkan penghargaan dari lingkungan. Mencari-cari perhatian dan suka menyombongkan diri." }
+  ],
+  E: [
+    { range: [0, 1], desc: "Sangat terbuka, terus terang, mudah terbaca (dari air muka, tindakan, perkataan, sikap). Tidak dapat mengendalikan emosi, cepat bereaksi, kurang mengindahkan/tidak mempunyai 'nilai' yg mengharuskannya menahan emosi." },
+    { range: [2, 3], desc: "Terbuka, mudah mengungkap pendapat atau perasaannya mengenai suatu hal kepada org lain." },
+    { range: [4, 6], desc: "Mampu mengungkap atau menyimpan perasaan, dapat mengendalikan emosi." },
+    { range: [7, 9], desc: "Mampu menyimpan pendapat atau perasaannya, tenang, dapat mengendalikan emosi, menjaga jarak. Tampil pasif dan tidak acuh, mungkin sulit mengungkapkan emosi/perasaan/pandangan." }
+  ],
+  K: [
+    { range: [0, 1], desc: "Sabar, tidak menyukai konflik. Mengelak atau menghindar dari konflik, pasif, menekan atau menyembunyikan perasaan sesungguhnya, menghindari konfrontasi, lari dari konflik, tidak mau mengakui adanya konflik." },
+    { range: [2, 3], desc: "Lebih suka menghindari konflik, akan mencari rasionalisasi untuk dapat menerima situasi dan melihat permasalahan dari sudut pandang orang lain." },
+    { range: [4, 5], desc: "Tidak mencari atau menghindari konflik, mau mendengarkan pandangan orang lain tetapi dapat menjadi keras kepala saat mempertahankan pandangannya." },
+    { range: [6, 7], desc: "Akan menghadapi konflik, mengungkapkan serta memaksakan pandangan dengan cara positif." },
+    { range: [8, 9], desc: "Terbuka, jujur, terus terang, asertif, agresif, reaktif, mudah tersinggung, mudah meledak, curiga, berprasangka, suka berkelahi atau berkonfrontasi, berpikir negatif." }
+  ],
+  Z: [
+    { range: [0, 1], desc: "Mudah beradaptasi dg pekerjaan rutin tanpa merasa bosan, tidak membutuhkan variasi, menyukai lingkungan stabil dan tidak berubah. Konservatif, menolak perubahan, sulit menerima hal-hal baru, tidak dapat beradaptasi dengan situasi yg berbeda-beda." },
+    { range: [2, 3], desc: "Enggan berubah, tidak siap untuk beradaptasi, hanya mau menerima perubahan jika alasannya jelas dan meyakinkan." },
+    { range: [4, 5], desc: "Mudah beradaptasi, cukup menyukai perubahan." },
+    { range: [6, 7], desc: "Antusias terhadap perubahan dan akan mencari hal-hal baru, tetapi masih selektif (menilai kemanfaatannya)." },
+    { range: [8, 9], desc: "Sangat menyukai perubahan, gagasan baru/variasi, aktif mencari perubahan, antusias dg hal-hal baru, fleksibel dlm berpikir, mudah beradaptasi pd situasi yg berbeda-beda. Gelisah, frustasi, mudah bosan, sangat membutuhkan variasi, tidak menyukai tugas/situasi yg rutin-monoton." }
+  ]
+};
+
+
+function getInterpretasiPAPI(aspek, nilai) {
+  if (!kamusPAPI[aspek]) return "-";
+  const entry = kamusPAPI[aspek].find(r => nilai >= r.range[0] && nilai <= r.range[1]);
+  return entry ? entry.desc : "-";
+}
+
+
+// Kunci mapping arah kerja PAPI (N, G, A)
+const mappingPAPI = {
+  ArahKerja: {
+    N: { tipe: 'B', nomor: [2, 13, 24, 35, 46, 57, 68, 79, 90] },
+    G: { tipe: 'A', nomor: [1, 11, 21, 31, 41, 51, 61, 71, 81] },
+    A: [
+      { tipe: 'A', nomor: [2] },
+      { tipe: 'B', nomor: [3, 14, 25, 36, 47, 58, 69, 80] }
+    ]
+  },
+ Kepemimpinan: {
+  L: [
+    { tipe: 'A', nomor: [12, 22, 32, 42, 52, 62, 72, 82] },
+    { tipe: 'B', nomor: [81] }
+  ],
+  P: [
+    { tipe: 'A', nomor: [3, 13] },
+    { tipe: 'B', nomor: [4, 15, 26, 37, 48, 59, 70] }
+  ],
+  I: [
+    { tipe: 'A', nomor: [23, 33, 43, 53, 63, 73, 83] },
+    { tipe: 'B', nomor: [71, 82] }
+  ]
+},
+ Aktivitas: {
+  T: [
+    { tipe: 'A', nomor: [34, 44, 54, 64, 74, 84] },
+    { tipe: 'B', nomor: [61, 72, 83] }
+  ],
+  V: [
+    { tipe: 'A', nomor: [45, 55, 65, 75, 85] },
+    { tipe: 'B', nomor: [51, 62, 73, 84] }
+  ]
+},
+  Pergaulan: {
+  X: [
+    { tipe: 'A', nomor: [4, 14, 24] },
+    { tipe: 'B', nomor: [5, 16, 27, 38, 49, 60] }
+  ],
+  S: [
+    { tipe: 'A', nomor: [56, 66, 76, 86] },
+    { tipe: 'B', nomor: [41, 52, 63, 74, 85] }
+  ],
+  B: [
+    { tipe: 'A', nomor: [5, 15, 25, 35] },
+    { tipe: 'B', nomor: [6, 17, 28, 39, 50] }
+  ],
+  O: [
+    { tipe: 'A', nomor: [6, 16, 26, 36, 46] },
+    { tipe: 'B', nomor: [7, 18, 29, 40] }
+  ]
+}
+,
+  GayaKerja: {
+  R: [
+    { tipe: 'A', nomor: [67, 77, 87] },
+    { tipe: 'B', nomor: [31, 42, 53, 64, 75, 86] }
+  ],
+  D: [
+    { tipe: 'A', nomor: [78, 88] },
+    { tipe: 'B', nomor: [21, 32, 43, 54, 65, 76, 87] }
+  ],
+  C: [
+    { tipe: 'A', nomor: [89] },
+    { tipe: 'B', nomor: [11, 22, 33, 44, 55, 66, 77, 88] }
+  ]
+}
+,
+ Sifat: {
+  Z: [
+    { tipe: 'A', nomor: [7, 17, 27, 37, 47, 57] },
+    { tipe: 'B', nomor: [8, 19, 30] }
+  ],
+  E: { tipe: 'B', nomor: [1, 12, 23, 34, 45, 56, 67, 78, 89] },
+  K: [
+    { tipe: 'A', nomor: [8, 18, 28, 38, 48, 58, 68] },
+    { tipe: 'B', nomor: [9, 20] }
+  ]
+}
+,
+  Ketaatan: {
+  F: [
+    { tipe: 'A', nomor: [9, 19, 29, 39, 49, 59, 69, 79] },
+    { tipe: 'B', nomor: [10] }
+  ],
+  W: { tipe: 'A', nomor: [10, 20, 30, 40, 50, 60, 70, 80, 90] }
+}
+};
+
+
+
+function skorPAPIArahKerja(answerObjArray) {
+  let hasil = { N: 0, G: 0, A: 0 };
+  mappingPAPI.ArahKerja.N.nomor.forEach(n => {
+    const jaw = answerObjArray.find(a => a.id === n);
+    if (jaw && jaw.answer === mappingPAPI.ArahKerja.N.tipe) hasil.N++;
+  });
+  mappingPAPI.ArahKerja.G.nomor.forEach(n => {
+    const jaw = answerObjArray.find(a => a.id === n);
+    if (jaw && jaw.answer === mappingPAPI.ArahKerja.G.tipe) hasil.G++;
+  });
+  mappingPAPI.ArahKerja.A.forEach(group => {
+    group.nomor.forEach(n => {
+      const jaw = answerObjArray.find(a => a.id === n);
+      if (jaw && jaw.answer === group.tipe) hasil.A++;
+    });
+  });
+  return hasil;
+}
+
+function skorPAPIKepemimpinan(answerObjArray) {
+  let hasil = { L: 0, P: 0, I: 0 };
+  ['L', 'P', 'I'].forEach(kode => {
+    mappingPAPI.Kepemimpinan[kode].forEach(group => {
+      group.nomor.forEach(n => {
+        const jaw = answerObjArray.find(a => a.id === n);
+        if (jaw && jaw.answer === group.tipe) hasil[kode]++;
+      });
+    });
+  });
+  return hasil;
+}
+
+function skorPAPIAktivitas(answerObjArray) {
+  let hasil = { T: 0, V: 0 };
+  ['T', 'V'].forEach(kode => {
+    mappingPAPI.Aktivitas[kode].forEach(group => {
+      group.nomor.forEach(n => {
+        const jaw = answerObjArray.find(a => a.id === n);
+        if (jaw && jaw.answer === group.tipe) hasil[kode]++;
+      });
+    });
+  });
+  return hasil;
+}
+
+function skorPAPIPergaulan(answerObjArray) {
+  let hasil = { X: 0, S: 0, B: 0, O: 0 };
+  ['X', 'S', 'B', 'O'].forEach(kode => {
+    mappingPAPI.Pergaulan[kode].forEach(group => {
+      group.nomor.forEach(n => {
+        const jaw = answerObjArray.find(a => a.id === n);
+        if (jaw && jaw.answer === group.tipe) hasil[kode]++;
+      });
+    });
+  });
+  return hasil;
+}
+
+function skorPAPIGayaKerja(answerObjArray) {
+  let hasil = { R: 0, D: 0, C: 0 };
+  ['R', 'D', 'C'].forEach(kode => {
+    mappingPAPI.GayaKerja[kode].forEach(group => {
+      group.nomor.forEach(n => {
+        const jaw = answerObjArray.find(a => a.id === n);
+        if (jaw && jaw.answer === group.tipe) hasil[kode]++;
+      });
+    });
+  });
+  return hasil;
+}
+
+function skorPAPISifat(answerObjArray) {
+  let hasil = { Z: 0, E: 0, K: 0 };
+
+  ['Z', 'E', 'K'].forEach(kode => {
+    const faktor = mappingPAPI.Sifat[kode];
+
+    if (Array.isArray(faktor)) {
+      // tipe campuran A dan B
+      faktor.forEach(group => {
+        group.nomor.forEach(n => {
+          const jaw = answerObjArray.find(a => a.id === n);
+          if (jaw && jaw.answer === group.tipe) hasil[kode]++;
+        });
+      });
+    } else {
+      // hanya satu tipe
+      faktor.nomor.forEach(n => {
+        const jaw = answerObjArray.find(a => a.id === n);
+        if (jaw && jaw.answer === faktor.tipe) hasil[kode]++;
+      });
+    }
+  });
+
+  return hasil;
+}
+
+
+function skorPAPIKetaatan(answerObjArray) {
+  let hasil = { F: 0, W: 0 };
+
+  ['F', 'W'].forEach(kode => {
+    const faktor = mappingPAPI.Ketaatan[kode];
+
+    if (Array.isArray(faktor)) {
+      // tipe campuran A dan B
+      faktor.forEach(group => {
+        group.nomor.forEach(n => {
+          const jaw = answerObjArray.find(a => a.id === n);
+          if (jaw && jaw.answer === group.tipe) hasil[kode]++;
+        });
+      });
+    } else {
+      // hanya satu tipe
+      faktor.nomor.forEach(n => {
+        const jaw = answerObjArray.find(a => a.id === n);
+        if (jaw && jaw.answer === faktor.tipe) hasil[kode]++;
+      });
+    }
+  });
+
+  return hasil;
+}
+
+function koreksiBigFive(answers, questions) {
+  const result = {
+    O: { score: 0, max: 0, name: "Openness" },
+    C: { score: 0, max: 0, name: "Conscientiousness" },
+    E: { score: 0, max: 0, name: "Extraversion" },
+    A: { score: 0, max: 0, name: "Agreeableness" },
+    N: { score: 0, max: 0, name: "Neuroticism" }
+  };
+
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i];
+    let value = answers[i]; // 1-5
+    if (q.reverse) value = 6 - value; // Balik skoring jika reverse
+    result[q.dimension].score += value;
+    result[q.dimension].max += 5;
+  }
+
+  // Hasil: persentase dan level
+  const desc = {
+    O: [
+      "Rendah: Cenderung tradisional, kurang suka perubahan dan eksplorasi ide baru.",
+      "Sedang: Kadang terbuka pada pengalaman baru, kadang suka rutinitas.",
+      "Tinggi: Imajinatif, kreatif, suka hal baru & terbuka terhadap berbagai pengalaman."
+    ],
+    C: [
+      "Rendah: Kurang terorganisir, mudah lalai, tidak konsisten dalam bekerja.",
+      "Sedang: Cukup teratur, kadang disiplin namun masih bisa lalai.",
+      "Tinggi: Sangat terorganisir, teliti, bertanggung jawab dan gigih."
+    ],
+    E: [
+      "Rendah: Pendiam, pemalu, lebih nyaman sendiri, tidak suka jadi pusat perhatian.",
+      "Sedang: Bisa bergaul, tapi juga butuh waktu sendiri.",
+      "Tinggi: Suka sosialisasi, percaya diri, energik, mudah akrab dengan orang."
+    ],
+    A: [
+      "Rendah: Keras kepala, kompetitif, kadang kritis dan tidak kooperatif.",
+      "Sedang: Kadang kooperatif, kadang mementingkan diri sendiri.",
+      "Tinggi: Ramah, mudah percaya, kooperatif, peduli & penuh empati."
+    ],
+    N: [
+      "Rendah: Emosi stabil, jarang stres, jarang khawatir.",
+      "Sedang: Kadang mudah khawatir atau sensitif, kadang stabil.",
+      "Tinggi: Mudah cemas, sensitif, gampang stres dan merasa tidak aman."
+    ]
+  };
+
+  const final = {};
+  for (const dim in result) {
+    const percent = Math.round((result[dim].score / result[dim].max) * 100);
+    let idx;
+    if (percent < 40) idx = 0;
+    else if (percent < 70) idx = 1;
+    else idx = 2;
+    final[dim] = {
+      name: result[dim].name,
+      percent,
+      desc: desc[dim][idx]
+    };
+  }
+  return final;
 }
 
 
@@ -2529,6 +3111,7 @@ function renderHome() {
         <div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')">
           <div class="test-icon">🧮</div>
           <h3>Tes Kraeplin</h3>
+          <p>${tests.KRAEPLIN.description}</p>
           <div class="time">Waktu: ±5-10 menit</div>
           <div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div>
         </div>
@@ -2758,34 +3341,133 @@ function showInstruksiOverlay(nickname, instruksiList) {
     btn.parentNode.parentNode.insertBefore(pesan, btn.parentNode);
 }
 }
-    typeLoop();
+   typeLoop();
 
+// Mainkan audio instruksi
+const audioTTS = new Audio('https://files.catbox.moe/4uj84n.mp3');
+audioTTS.volume = 0.92;
+setTimeout(() => audioTTS.play(), 350);
 
-    const audioTTS = new Audio('https://files.catbox.moe/4uj84n.mp3');
-    audioTTS.volume = 0.92;
-    setTimeout(()=>audioTTS.play(),350);
+document.getElementById('btnSelesaiInstruksi').onclick = () => {
+    overlay.remove();
+    sudahCekDownload = true;
 
-    document.getElementById('btnSelesaiInstruksi').onclick = () => {
-        overlay.remove();
-        setTimeout(() => {
-            const box = document.getElementById('downloadPDFBox');
-            if (box) {
-                box.scrollIntoView({ behavior: "smooth", block: "center" });
-                box.style.opacity = 1;
-                box.style.pointerEvents = "auto";
-                const pdfBtn = document.getElementById('btnDownloadPDF');
-                if (pdfBtn) {
-                    pdfBtn.classList.add('blink');
-                    pdfBtn.style.opacity = "1";
-                    pdfBtn.style.pointerEvents = "auto";
-                }
-            }
-        }, 400);
-    };
+    setTimeout(() => {
+        const box = document.getElementById('downloadPDFBox');
+        const pdfBtn = document.getElementById('btnDownloadPDF');
+        const cekMsg = document.getElementById('cekDownloadMsg');
+        let downloadClickCount = 0;
+
+        // Scroll ke elemen download box
+     if (box) {
+    // Scroll ke paling bawah agar tombol terlihat full
+    setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }, 300);
 }
 
+        enableDownloadButtonSetelahCek();
+
+        if (cekMsg) cekMsg.style.display = "block";
+
+        if (pdfBtn && !pdfBtn.hasHandler) {
+            pdfBtn.onclick = function () {
+                downloadClickCount++;
+                generatePDF();
+
+                if (downloadClickCount === 1) {
+                    pdfBtn.disabled = true;
+                    pdfBtn.classList.remove('blink');
+                    pdfBtn.style.opacity = "0.4";
+                    pdfBtn.style.pointerEvents = "none";
+
+                    if (cekMsg) {
+                       cekMsg.innerHTML = `
+<b>✅ Tombol sudah dicek.</b><br>
+Silakan periksa folder unduhan (Downloads) di browser Anda. File bernama <i>hasil-psikotes_[nama Anda].pdf</i> seharusnya telah terunduh.<br><br>
+Jika file tersebut tersedia, Anda dapat memulai dan mengerjakan seluruh tes yang diminta.<br><br>
+<b>Jangan klik tombol ini lagi sebelum semua tes selesai dikerjakan</b>, karena tombol akan beralih fungsi menjadi logout.<br><br>
+Jika Anda telah menyelesaikan seluruh tes, Anda boleh mengklik tombol ini kembali untuk keluar dari sistem.
+`;
 
 
+                        cekMsg.style.display = "block";
+                    }
+
+                    setTimeout(() => {
+                        pdfBtn.disabled = false;
+                        pdfBtn.style.opacity = "1";
+                        pdfBtn.style.pointerEvents = "auto";
+                        pdfBtn.classList.add('blink');
+                        // Tidak menyembunyikan cekMsg di sini
+                    }, 1100);
+                }
+
+                else if (downloadClickCount === 2) {
+                    if (box) {
+                        box.innerHTML = `
+                            <div style="text-align:center;margin-top:24px;">
+                                <div style="color:#c00;font-weight:600;margin-bottom:14px;">
+                                    ⚠️ Tombol sudah diklik 2 kali.<br>Silakan logout untuk menyelesaikan sesi.
+                                </div>
+                                <button class="btn btn-danger" id="btnLogoutPDF" style="padding:18px 40px;font-size:1.17rem;font-weight:700;">
+                                    🔒 Logout
+                                </button>
+                            </div>
+                        `;
+
+                        document.getElementById('btnLogoutPDF').onclick = function () {
+                            localStorage.setItem('usedPragas', '1');
+                            localStorage.removeItem('identity');
+                            setTimeout(() => location.reload(), 250);
+                        };
+
+                        // Scroll ulang agar logout terlihat
+                        setTimeout(() => {
+                            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                        }, 300);
+                    }
+
+                    // Sembunyikan pesan "tombol sudah dicek"
+                    if (cekMsg) cekMsg.style.display = "none";
+                }
+            };
+            pdfBtn.hasHandler = true;
+        }
+    }, 600);
+};
+}
+
+// --- Utility agar tombol download tetap aktif setelah cek instruksi ---
+function updateDownloadBtnStatusAfterInstruksi() {
+    const box = document.getElementById('downloadPDFBox');
+    const pdfBtn = document.getElementById('btnDownloadPDF');
+    const cekMsg = document.getElementById('cekDownloadMsg');
+
+    if (box && pdfBtn) {
+        if (sudahCekDownload) {
+            box.style.opacity = 1;
+            box.style.pointerEvents = "auto";
+            pdfBtn.disabled = false;
+            pdfBtn.style.opacity = "1";
+            pdfBtn.style.pointerEvents = "auto";
+            pdfBtn.classList.add('blink');
+            // Tampilkan pesan awal jika belum pernah diklik
+            if (cekMsg && downloadClickCount === 0) {
+                cekMsg.style.display = "block";
+            }
+
+            // JANGAN SET onclick DI SINI LAGI! SUDAH ADA DI TEMPAT LAIN!
+        } else {
+            box.style.opacity = 0.4;
+            box.style.pointerEvents = "none";
+            pdfBtn.disabled = true;
+            pdfBtn.style.opacity = "0.8";
+            pdfBtn.classList.remove('blink');
+            pdfBtn.style.pointerEvents = "none";
+            if (cekMsg) cekMsg.style.display = "none";
+        }
+    }}
 
 
 // Utility functions
@@ -2797,7 +3479,10 @@ function allTestsCompleted() {
          appState.completed.BIGFIVE;
 }
 
-
+// Utility agar tombol download aktif setelah cek instruksi
+function enableDownloadButtonSetelahCek() {
+    updateDownloadBtnStatusAfterInstruksi();
+}
 function calculateProgress() {
   if (!appState.currentTest) return 0;
 
@@ -4507,80 +5192,82 @@ function selectPAPIAnswer(element, value) {
 
 function nextPAPIQuestion() {
   const selectedOption = document.querySelector('input[name="papi-answer"]:checked');
-  
-  if (!selectedOption) {
-    alert('Harap pilih salah satu opsi!');
-    return;
-  }
-  
+  if (!selectedOption) return;
+
   const question = tests.PAPI.questions[appState.currentQuestion];
-  
+  if (!question) return;
+
   appState.answers.PAPI.push({
     id: question.id,
     answer: selectedOption.value,
     answerText: selectedOption.value === 'A' ? question.optionA : question.optionB
   });
-  
+
   appState.currentQuestion++;
-  
-if (appState.currentQuestion >= tests.PAPI.questions.length) {
-  clearInterval(appState.timer);
-  appState.completed.PAPI = true;
 
-  // SKORING: simpan saja ke appState, TIDAK PERLU alert!
-  appState.skorPAPIArahKerja = skorPAPIArahKerja(appState.answers.PAPI);
+  if (appState.currentQuestion >= tests.PAPI.questions.length) {
+    clearInterval(appState.timer);
+    appState.completed.PAPI = true;
 
-  renderHome();
-} else {
+    // Simpan skor semua aspek ke appState
+    appState.skorPAPIArahKerja    = skorPAPIArahKerja(appState.answers.PAPI);
+    appState.skorPAPIKepemimpinan = skorPAPIKepemimpinan(appState.answers.PAPI);
+    appState.skorPAPIAktivitas    = skorPAPIAktivitas(appState.answers.PAPI);
+    appState.skorPAPIPergaulan    = skorPAPIPergaulan(appState.answers.PAPI);
+    appState.skorPAPIGayaKerja    = skorPAPIGayaKerja(appState.answers.PAPI);
+    appState.skorPAPISifat        = skorPAPISifat(appState.answers.PAPI);
+    appState.skorPAPIKetaatan     = skorPAPIKetaatan(appState.answers.PAPI);
+
+    renderHome();
+  } else {
     renderPAPIQuestion();
+  }
 }
 
-}
 
 // ==================== Big Five Test ====================
 function renderBIGFIVEQuestion() {
   const question = tests.BIGFIVE.questions[appState.currentQuestion];
-  
   const progress = calculateProgress();
+
+  // Cegah jawaban ganda, pakai array sesuai index
+  if (!appState.answers.BIGFIVE) appState.answers.BIGFIVE = [];
   
+  const prevAnswer = appState.answers.BIGFIVE[appState.currentQuestion]?.answer || 0;
+
   const optionsHTML = question.options.map((option, index) => `
-    <div class="bigfive-option" onclick="selectBIGFIVEAnswer(this, ${index + 1})">
-      <input type="radio" name="bigfive-answer" value="${index + 1}">
+    <div class="bigfive-option${prevAnswer === (index + 1) ? ' selected' : ''}" onclick="selectBIGFIVEAnswer(this, ${index + 1})">
+      <input type="radio" name="bigfive-answer" value="${index + 1}"${prevAnswer === (index + 1) ? ' checked' : ''}>
       <span>${index + 1}</span>
       <span>${index === 0 ? 'Sangat Tidak Sesuai' : index === 4 ? 'Sangat Sesuai' : ''}</span>
     </div>
   `).join('');
-  
+
   const app = document.getElementById('app');
   app.innerHTML = `
     <div class="card">
       <div class="timer-container">
         <div class="timer-icon">⏱️</div>
-        <div class="timer" id="timer-display">${appState.timeLeft}s</div>
+        <div class="timer" id="timer-display">${formatTime(appState.timeLeft)}</div>
       </div>
-      
       <div class="progress-container">
         <div class="progress-bar" style="width: ${progress}%"></div>
       </div>
-      
       <h2>${tests.BIGFIVE.name}</h2>
       <p>${tests.BIGFIVE.description}</p>
       <p><strong>Petunjuk:</strong> ${tests.BIGFIVE.instruction}</p>
-      
       <div class="example-answer">
         <h4>Contoh Soal:</h4>
         <p><strong>Soal:</strong> ${tests.BIGFIVE.example.question}</p>
         <p><strong>Skala:</strong> 1 (Sangat Tidak Sesuai) - 5 (Sangat Sesuai)</p>
         <p><strong>Penjelasan:</strong> ${tests.BIGFIVE.example.explanation}</p>
       </div>
-      
       <div class="question-container">
         <p class="question-text">${question.text}</p>
         <div class="bigfive-options">
           ${optionsHTML}
         </div>
       </div>
-      
       <div style="text-align: center; margin-top: 30px;">
         <button class="btn" onclick="nextBIGFIVEQuestion()">
           ${appState.currentQuestion < tests.BIGFIVE.questions.length - 1 ? 'Lanjut' : 'Selesai'}
@@ -4591,49 +5278,105 @@ function renderBIGFIVEQuestion() {
       </div>
     </div>
   `;
-  
+
   updateTimerDisplay();
-  startTimer();
+  startBIGFIVETimer();
 }
 
+// --- TIMER BIGFIVE ---
+function startBIGFIVETimer() {
+  // Jangan double interval
+  if (appState.timer) clearInterval(appState.timer);
+
+  appState.timer = setInterval(() => {
+    appState.timeLeft--;
+    updateTimerDisplay();
+    if (appState.timeLeft <= 0) {
+      clearInterval(appState.timer);
+      appState.completed.BIGFIVE = true;
+      renderHome(); // Otomatis selesai kalau waktu habis
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const timerDisplay = document.getElementById('timer-display');
+  if (timerDisplay) timerDisplay.textContent = formatTime(appState.timeLeft);
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60).toString().padStart(2, '0');
+  const s = (sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+// --- PILIH JAWABAN (Jawaban by index) ---
 function selectBIGFIVEAnswer(element, value) {
   // Remove previous selection
   document.querySelectorAll('.bigfive-option').forEach(opt => {
-    opt.style.backgroundColor = '';
+    opt.classList.remove('selected');
+    opt.querySelector('input').checked = false;
   });
-  
+
   // Add new selection
-  element.style.backgroundColor = '#e8f8f0';
+  element.classList.add('selected');
   element.querySelector('input').checked = true;
+
+  // Simpan langsung ke appState, posisi sesuai index
+  const question = tests.BIGFIVE.questions[appState.currentQuestion];
+  appState.answers.BIGFIVE[appState.currentQuestion] = {
+    id: question.id,
+    answer: value,
+    answerText: `${value} (${value === 1 ? 'Sangat Tidak Sesuai' : value === 5 ? 'Sangat Sesuai' : 'Netral'})`
+  };
 }
 
 function nextBIGFIVEQuestion() {
   const selectedOption = document.querySelector('input[name="bigfive-answer"]:checked');
-  
   if (!selectedOption) {
     alert('Harap pilih salah satu skala penilaian!');
     return;
   }
-  
-  const question = tests.BIGFIVE.questions[appState.currentQuestion];
-  
-  appState.answers.BIGFIVE.push({
-    id: question.id,
-    answer: parseInt(selectedOption.value),
-    answerText: `${selectedOption.value} (${selectedOption.value === '1' ? 'Sangat Tidak Sesuai' : 
-                selectedOption.value === '5' ? 'Sangat Sesuai' : 'Netral'})`
-  });
-  
+  // --- Rekam jawaban urut di array ---
+  appState.answers.BIGFIVE = appState.answers.BIGFIVE || Array(tests.BIGFIVE.questions.length).fill(0);
+  appState.answers.BIGFIVE[appState.currentQuestion] = parseInt(selectedOption.value);
+
   appState.currentQuestion++;
-  
+
   if (appState.currentQuestion >= tests.BIGFIVE.questions.length) {
     clearInterval(appState.timer);
     appState.completed.BIGFIVE = true;
-    renderHome();
+
+    // === Koreksi dan tampilkan hasil OCEAN ===
+    const hasilOCEAN = koreksiBigFive(
+      appState.answers.BIGFIVE,
+      tests.BIGFIVE.questions
+    );
+    appState.hasilOCEAN = hasilOCEAN;
+
+    // --- Tampilkan hasil di halaman ---
+    let html = `<div class="card"><h2>Hasil Tes Big Five (OCEAN)</h2>
+      <table style="width:100%;margin-top:12px">
+        <tr><th>Dimensi</th><th>Skor (%)</th><th>Deskripsi</th></tr>`;
+    for (const k of ["O","C","E","A","N"]) {
+      html += `<tr>
+        <td style="font-weight:bold;">${hasilOCEAN[k].name}</td>
+        <td style="text-align:center;">${hasilOCEAN[k].percent}%</td>
+        <td>${hasilOCEAN[k].desc}</td>
+      </tr>`;
+    }
+    html += `</table>
+      <div style="margin-top:26px;text-align:center">
+        <button class="btn" onclick="renderHome()">Kembali ke Beranda</button>
+      </div>
+    </div>`;
+    document.getElementById('app').innerHTML = html;
+
   } else {
     renderBIGFIVEQuestion();
   }
 }
+
 
 //=====================GRAFIS=====================
 function renderGrafisUpload() {
@@ -4654,6 +5397,7 @@ function renderGrafisUpload() {
           <li>Detailkan wajah, rambut, pakaian, dan anggota tubuh.</li>
           <li>Bebas memilih laki-laki/perempuan dan posisi/aktivitas.</li>
           <li>Pakai pensil HB/2B di kertas putih polos.</li>
+           <li>Jika sudah, di halaman yang sama, tuliskan nama dan usia orang yang Anda gambar.</li>
         </ol>
       `,
       contoh: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkQN708-vQz0R7uuwehFFlbEJDRzsHT9mhEw&s"
@@ -4661,7 +5405,7 @@ function renderGrafisUpload() {
     {
       key: "rumah",
       kode: "HTP",
-      title: "Tes HTP (House-Tree-Person): Gambar Rumah",
+      title: "Tes HTP (House-Tree-Person): Gambar Rumah, Pohon, dan Orang",
       alat: `
         <ul style="margin-left:16px;">
           <li>Siapkan <b>pensil HB/2B</b> &amp; <b>kertas A4</b> polos.</li>
@@ -4670,9 +5414,10 @@ function renderGrafisUpload() {
       `,
       instruksi: `
         <ol style="margin-left:20px;">
-          <li>Gambarlah <b>rumah lengkap</b> di tengah kertas polos.</li>
-          <li>Lengkapi atap, pintu, jendela, pagar, lingkungan sekitar, dll.</li>
-          <li>Bebas bentuk/model rumah.</li>
+          <li>Gambarlah <b>rumah, pohon, dan orang</b> di tengah kertas polos.</li>
+           <li>Bebas bentuk/model rumah.</li>
+          <li>Jika sudah, deskripsikan gambar tersebut di halaman yang sama.</li>
+         
           <li>Pakai pensil HB/2B di kertas putih polos.</li>
         </ol>
       `,
@@ -4693,6 +5438,7 @@ function renderGrafisUpload() {
           <li>Gambarlah <b>pohon lengkap</b> di tengah kertas polos.</li>
           <li>Detailkan akar, batang, cabang, dan daun.</li>
           <li>Bebas pilih jenis pohon apapun.</li>
+          <li>Jika sudah, tuiskan pohon apa yang Anda gambar.</li>
           <li>Pakai pensil HB/2B di kertas putih polos.</li>
         </ol>
       `,
@@ -4705,7 +5451,7 @@ function renderGrafisUpload() {
 
   let slideIndex = -1; // MULAI DARI -1, slide pertama = persiapan 3 kertas A4
   let timer = null;
-  let timeLeft = 60;
+  let timeLeft = 600;
   let tahap = "persiapan";
 
   function formatTime(s) {
@@ -4775,7 +5521,7 @@ function renderGrafisUpload() {
   function renderGrafisSlide(idx, step = "persiapan") {
     if (timer) clearInterval(timer);
     tahap = step;
-    timeLeft = 60;
+    timeLeft = 600;
     const subtest = subtests[idx];
 
     if (step === "persiapan") {
@@ -4798,7 +5544,7 @@ function renderGrafisUpload() {
       `;
       document.getElementById('btnSiap').onclick = () => {
         renderGrafisSlide(idx, "gambar");
-        startTimerGambar(idx);
+       
       };
       return;
     }
@@ -4835,7 +5581,7 @@ function renderGrafisUpload() {
     }
 
     if (step === "foto") {
-      timeLeft = 60;
+      timeLeft = 300;
       document.getElementById('app').innerHTML = `
         <div class="card">
           <div class="header"><h2>${subtest.title}</h2></div>
@@ -5928,45 +6674,273 @@ if (persyaratan[identity.position]?.[0]?.includes(k)) {
   if (ySection > 265) { doc.addPage(); ySection = 20; }
 }
 
-  // ========== PAPI ==========
-  if (appState.completed.PAPI) {
-    ySection += 4;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
-    doc.setFontSize(7);
-    doc.setFont(undefined, 'bold');
-    doc.text('Tes PAPI', 20, ySection);
-    ySection += 3;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
-    doc.setFont(undefined, 'normal');
-    appState.answers.PAPI.forEach((ans, i) => {
-      if (ySection > 280) { doc.addPage(); ySection = 20; }
-      doc.text(`${i+1}. ${ans.answerText}`, 25, ySection);
-      ySection += 2.3;
-    });
-    ySection += 3;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
+// ========== PAPI ==========
+if (appState.completed.PAPI) {
+  ySection += 8; // Jarak atas lebih lebar
+  if (ySection > 265) { doc.addPage(); ySection = 20; }
+
+  doc.setFontSize(11); // Font lebih besar untuk judul
+  doc.setFont(undefined, 'bold');
+  doc.text('JAWABAN TES PAPI', 105, ySection, { align: 'center' }); // Center di kertas A4 (210/2 = 105)
+  ySection += 7; // Jarak bawah judul lebih lebar
+  doc.setFontSize(7); // Kembalikan ke font normal
+  doc.setFont(undefined, 'normal');
+
+  // Jawaban PAPI
+  const kolom = 9, baris = 10;
+  for (let i = 0; i < baris; i++) {
+    if (ySection > 280) { doc.addPage(); ySection = 20; }
+    let textRow = '';
+    for (let j = 0; j < kolom; j++) {
+      const idx = i + j * baris;
+      if (idx < appState.answers.PAPI.length) {
+        const ans = appState.answers.PAPI[idx];
+        textRow += `${String(idx + 1).padStart(2, ' ')}.${ans.answer || '-'}   `;
+      }
+    }
+    doc.text(textRow.trim(), 25, ySection);
+    ySection += 2.7;
   }
+
+  ySection += 4;
+  if (ySection > 265) { doc.addPage(); ySection = 20; }
+
+  // SKOR PAPI - Semua Aspek
+  doc.setFont(undefined, 'bold');
+  doc.text('Skor PAPI:', 25, ySection);
+  ySection += 3;
+  doc.setFont(undefined, 'normal');
+  const tampilSkor = (judul, skorObj) => {
+    if (!skorObj) return;
+    const entries = Object.entries(skorObj);
+    const perBaris = 4;
+    doc.setFont(undefined, 'bold');
+    doc.text(judul + ":", 25, ySection);
+    ySection += 3;
+    doc.setFont(undefined, 'normal');
+    for (let i = 0; i < entries.length; i += perBaris) {
+      const slice = entries.slice(i, i + perBaris)
+        .map(([key, val]) => `${key} = ${val}`)
+        .join('   |   ');
+      doc.text(slice, 30, ySection);
+      ySection += 3;
+      if (ySection > 265) { doc.addPage(); ySection = 20; }
+    }
+  };
+
+  tampilSkor('Arah Kerja', appState.skorPAPIArahKerja);
+  tampilSkor('Kepemimpinan', appState.skorPAPIKepemimpinan);
+  tampilSkor('Aktivitas', appState.skorPAPIAktivitas);
+  tampilSkor('Pergaulan', appState.skorPAPIPergaulan);
+  tampilSkor('Gaya Kerja', appState.skorPAPIGayaKerja);
+  tampilSkor('Sifat', appState.skorPAPISifat);
+  tampilSkor('Ketaatan', appState.skorPAPIKetaatan);
+
+  // ==== RANGKUMAN SKOR & INTERPRETASI (2 KOLOM ANTI-TABRAKAN) ====
+  ySection += 4;
+  if (ySection > 265) { doc.addPage(); ySection = 20; }
+  doc.setFont(undefined, 'bold');
+  doc.text('Rangkuman Skor dan Deskripsi:', 25, ySection);
+  ySection += 3;
+  doc.setFont(undefined, 'normal');
+
+  // Susunan kode tetap & urut
+  const urutanPAPI = [
+    'N','G','A', 'L','P','I', 'T','V',
+    'X','S','B','O', 'R','D','C',
+    'Z','E','K', 'F','W'
+  ];
+  const allScores = {
+    ...appState.skorPAPIArahKerja,
+    ...appState.skorPAPIKepemimpinan,
+    ...appState.skorPAPIAktivitas,
+    ...appState.skorPAPIPergaulan,
+    ...appState.skorPAPIGayaKerja,
+    ...appState.skorPAPISifat,
+    ...appState.skorPAPIKetaatan
+  };
+  // Filter agar urutan tetap, dan tidak undefined
+  const entries = urutanPAPI.map(kode => [kode, allScores[kode]]).filter(([k,v])=>v !== undefined);
+
+  // --- Kolom kiri & kanan --
+  const nHalf = Math.ceil(entries.length / 2);
+  const kolomKiri = entries.slice(0, nHalf);
+  const kolomKanan = entries.slice(nHalf);
+
+  // Tulis dua kolom sejajar, tapi baris kanan tidak boleh nabrak baris kiri (panjang teks adaptif)
+  let yL = ySection;
+  let yR = ySection;
+  const xL = 25;
+  const xR = 112;
+  doc.setFontSize(6.2);
+
+  function drawKolom(pasangan, xStart, yStart) {
+    let y = yStart;
+    pasangan.forEach(([kode, nilai]) => {
+      if (nilai == null) return;
+      doc.setFont(undefined, 'bold');
+      doc.text(`${kode} = ${nilai}`, xStart, y);
+      doc.setFont(undefined, 'normal');
+      const interpretasi = getInterpretasiPAPI(kode, nilai);
+      // text wrap maxWidth 72, multiline otomatis
+      const lines = doc.splitTextToSize(interpretasi, 72);
+      lines.forEach((line, i) => {
+        doc.text(line, xStart + 12, y + (i * 2.3));
+      });
+      y += 4.6 + (lines.length-1)*2.3;
+      if (y > 265) { doc.addPage(); y = 20; }
+    });
+    return y;
+  }
+
+  // Ambil y tertinggi untuk lanjut section berikutnya (biar gak tabrak)
+  yL = drawKolom(kolomKiri, xL, ySection);
+  yR = drawKolom(kolomKanan, xR, ySection);
+
+  ySection = Math.max(yL, yR) + 6;
+  doc.setFontSize(7);
+}
+
 
   // ========== BIG FIVE ==========
   if (appState.completed.BIGFIVE) {
-    ySection += 4;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
-    doc.setFontSize(7);
+  ySection += 6;
+  if (ySection > 265) { doc.addPage(); ySection = 20; }
+  doc.setFontSize(9);
+  doc.setFont(undefined, 'bold');
+  doc.text('Tes Big Five', 105, ySection, { align: 'center' });
+  ySection += 4;
+
+  doc.setFontSize(7);
+  doc.setFont(undefined, 'normal');
+  doc.text('Jawaban:', 20, ySection);
+  ySection += 3;
+
+  tests.BIGFIVE.questions.forEach((q, i) => {
+    if (ySection > 280) { doc.addPage(); ySection = 20; }
+    const ans = appState.answers.BIGFIVE[i];
+    let jawaban = "Tidak dijawab";
+    if (ans && ans.answerText) {
+      jawaban = ans.answerText;
+    }
+    doc.text(
+      `${(i + 1).toString().padStart(3, '0')}. ${q.text} [${jawaban}]`,
+      25, ySection
+    );
+    ySection += 3;
+  });
+
+  ySection += 3;
+
+  // Ringkasan OCEAN jika ada
+  if (appState.hasilOCEAN) {
+    if (ySection > 255) { doc.addPage(); ySection = 20; }
     doc.setFont(undefined, 'bold');
-    doc.text('Tes Big Five', 20, ySection);
+    doc.text('Ringkasan Hasil OCEAN:', 20, ySection);
     ySection += 3;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
     doc.setFont(undefined, 'normal');
-    appState.answers.BIGFIVE.forEach((ans, i) => {
+    Object.entries(appState.hasilOCEAN).forEach(([dim, val]) => {
       if (ySection > 280) { doc.addPage(); ySection = 20; }
-      doc.text(`${i+1}. ${ans.answerText}`, 25, ySection);
-      ySection += 2.3;
+      doc.text(
+        `${val.name.padEnd(15)} | Skor: ${val.percent.toString().padStart(2, ' ')}% | ${val.desc}`,
+        25, ySection
+      );
+      ySection += 3.1;
     });
-    ySection += 3;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
+    ySection += 2;
+  }
+}
+
+
+
+  // ========== GRAFIS ==========
+  const grafisLabel = {
+    orang: "Tes DAP (Draw A Person) - Gambar Orang",
+    rumah: "Tes HTP (House-Tree-Person) - Gambar Rumah, Pohon, Orang",
+    pohon: "Tes BAUM (Tree Drawing Test) - Gambar Pohon"
+  };
+  if (appState.completed.GRAFIS && appState.grafis) {
+    const grafisKeys = ["orang", "rumah", "pohon"];
+    for (const key of grafisKeys) {
+      if (appState.grafis[key]) {
+        await new Promise(resolve => {
+          doc.addPage();
+          doc.setFontSize(10);
+          doc.text(grafisLabel[key], pageWidth / 2, 25, { align: "center" });
+          doc.setFontSize(8);
+          doc.text('Hasil Foto:', pageWidth / 2, 34, { align: "center" });
+
+          // Load gambar dulu untuk dapat ukuran asli (agar scaling proporsional)
+          const img = new window.Image();
+          img.onload = function() {
+            const pxToMm = px => px * 0.264583;
+            const maxW = pageWidth - 2;
+            const maxH = 185;
+            let wmm = pxToMm(img.naturalWidth);
+            let hmm = pxToMm(img.naturalHeight);
+            const scale = Math.min(1, maxW / wmm, maxH / hmm);
+            wmm *= scale;
+            hmm *= scale;
+            const x = (pageWidth - wmm) / 2;
+            const y = 40;
+            doc.addImage(appState.grafis[key], 'JPEG', x, y, wmm, hmm);
+            resolve();
+          };
+          img.src = appState.grafis[key];
+        });
+      }
+    }
   }
 
-   doc.save("hasil-psikotes.pdf");
+  // ========== TES ADMIN (EXCEL) ==========
+  if (appState.completed.EXCEL && appState.adminAnswers && appState.adminAnswers.EXCEL && appState.adminAnswers.EXCEL.link) {
+    ySection += 5;
+    if (ySection > 260) { doc.addPage(); ySection = 25; }
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'bold');
+    doc.text('Tes Admin: Excel/Spreadsheet', 20, ySection);
+    ySection += 4;
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(33, 77, 170);
+    const link = appState.adminAnswers.EXCEL.link;
+    const wrapLink = doc.splitTextToSize(link, 160);
+    doc.text('Link Google Sheet Jawaban:', 24, ySection);
+    ySection += 4;
+    doc.text(wrapLink, 24, ySection);
+    ySection += 6;
+    doc.setTextColor(44, 62, 80);
+    if (ySection > 260) { doc.addPage(); ySection = 25; }
+  }
+  // ========== TES MENGETIK ==========
+if (appState.completed.TYPING && appState.answers.TYPING) {
+  doc.setFontSize(8);
+  doc.setFont(undefined, 'bold');
+  doc.text('Tes Mengetik', 20, ySection);
+  ySection += 4;
+  doc.setFont(undefined, 'normal');
+  doc.setTextColor(44, 62, 80);
+
+  const typing = appState.answers.TYPING;
+  doc.text(`Karakter benar     : ${typing.benar}`, 24, ySection); ySection += 4;
+  doc.text(`Karakter salah     : ${typing.salah}`, 24, ySection); ySection += 4;
+  doc.text(`Belum diketik      : ${typing.belum}`, 24, ySection); ySection += 4;
+  doc.text(`Akurasi            : ${typing.accuracy}%`, 24, ySection); ySection += 4;
+  doc.text(`Kecepatan          : ${typing.wpm} kata/menit (WPM)`, 24, ySection); ySection += 4;
+  doc.text(`Waktu digunakan    : ${typing.waktu} detik`, 24, ySection); ySection += 4;
+  doc.text(`Teks hasil ketik:`, 24, ySection); ySection += 4;
+
+  const typedText = typing.text ? typing.text.replace(/\n/g, " ") : "";
+  const wrapTyping = doc.splitTextToSize(typedText, 160);
+  doc.text(wrapTyping, 28, ySection);
+  ySection += 4 + wrapTyping.length * 4;
+  if (ySection > 260) { doc.addPage(); ySection = 25; }
+  doc.setTextColor(44, 62, 80);
+}
+
+
+  // ========== SIMPAN ==========
+  let namaFile = (id.name||"Peserta").replace(/[^a-zA-Z0-9]/g,'-') + "-Psikotes-SGSchools.pdf";
+  doc.save(namaFile);
 
   // === Tambahan fitur logout setelah download ke-2 ===
   downloadClickCount++;
