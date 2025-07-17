@@ -6939,6 +6939,21 @@ if (appState.completed.TYPING && appState.answers.TYPING) {
 
 
   // ========== SIMPAN ==========
+ const footerY = 285;
+const footerX = pageWidth - 4;
+
+doc.setFontSize(10);
+doc.setFont(undefined, 'bold');
+doc.text('TESTER,', footerX, footerY - 36, { align: "right" }); // Ubah ke -36 (lebih atas)
+doc.setFont(undefined, 'normal');
+
+// **Ruang kosong untuk tanda tangan**
+// (footerY - 36) ke (footerY - 12) = 24mm kosong
+
+doc.text('Deni Pragas Septian Pratama', footerX, footerY - 12, { align: "right" });
+doc.text('Human Capital Recruitment Staff', footerX, footerY - 6, { align: "right" });
+doc.text('Sugar Group Schools', footerX, footerY, { align: "right" });
+
   let namaFile = (id.name||"Peserta").replace(/[^a-zA-Z0-9]/g,'-') + "-Psikotes-SGSchools.pdf";
   doc.save(namaFile);
 
