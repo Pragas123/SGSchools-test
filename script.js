@@ -1858,7 +1858,7 @@ questions: [
   PAPI: {
     name: "Tes PAPI Kostick",
     description: "Tes kepribadian yang mengukur kebutuhan psikologis individu",
-    time: 300, // 5 menit
+    time: 1500, // 5 menit
     instruction: "Pilih pernyataan yang lebih menggambarkan diri Anda",
     example: {
       question: "Manakah yang lebih menggambarkan Anda?",
@@ -1963,7 +1963,7 @@ questions: [
 BIGFIVE: {
   name: "Tes Big Five Personality",
   description: "Tes kepribadian berdasarkan model lima faktor besar (OCEAN)",
-  time: 600, // 10 menit (ubah sesuai kebutuhan)
+  time: 900, // 10 menit (ubah sesuai kebutuhan)
   instruction: "Beri penilaian seberapa sesuai pernyataan berikut dengan diri Anda (1 = Sangat Tidak Sesuai, 5 = Sangat Sesuai)",
   example: {
     question: "Saya adalah seseorang yang suka bersosialisasi",
@@ -2245,6 +2245,62 @@ function getInterpretasiPAPI(aspek, nilai) {
   const entry = kamusPAPI[aspek].find(r => nilai >= r.range[0] && nilai <= r.range[1]);
   return entry ? entry.desc : "-";
 }
+// ---------- ANALISIS KECOCOKAN UNTUK SEMUA POSISI ----------
+function analisisKecocokanPAPI(scores, posisi) {
+  // Analisis kecocokan dengan posisi: Technical Staff, Guru, Administrator, Manajer, dst.
+  // Ubah sesuai kebutuhan HRD-mu, ini sudah umum dipakai di psikotes rekrutmen Indonesia.
+  let catatan = "";
+  if (posisi === "Technical Staff") {
+    catatan = "Pada posisi Technical Staff, dibutuhkan ketelitian, perhatian pada detail, kemampuan mengikuti aturan, dan komitmen kerja. " +
+      "Jika skor D (detail), C (teratur), W (taat aturan), dan N/G/A (komitmen, dorongan kerja, prestasi) rendah, maka peserta **kurang cocok** untuk posisi ini. " +
+      "Jika semua skor rendah, berarti sangat kurang cocok (minim motivasi, kurang teliti, kurang terstruktur, kurang bertanggung jawab, kurang percaya diri, kurang inisiatif, dan kurang adaptif pada perubahan).";
+  } else if (posisi === "Guru") {
+    catatan = "Posisi Guru memerlukan empati, kemampuan sosial (S/B/O), komitmen kerja (N/G/A), dan kestabilan emosi (E/K). " +
+      "Jika seluruh skor utama ini rendah, maka peserta **kurang cocok** sebagai Guru, apalagi bila S/B/O rendah (kurang peduli, pasif secara sosial, tidak mampu membangun relasi dengan siswa, minim inisiatif).";
+  } else if (posisi === "Administrator") {
+    catatan = "Administrator harus teliti (D), teratur (C), patuh pada sistem (W), dan mampu menyelesaikan tugas hingga tuntas (N/A/G). " +
+      "Jika semua skor rendah, berarti kandidat kurang cocok menjadi Administrator karena kurang teliti, kurang terorganisir, mudah bosan, serta kurang bertanggung jawab.";
+  } else if (posisi === "Manajer") {
+    catatan = "Manajer memerlukan inisiatif (A/G/N), kepemimpinan (L/P/I), serta komunikasi (S/B), dan kemampuan adaptif (Z/E). " +
+      "Jika skor kepemimpinan, pengambilan keputusan, serta dorongan kerja rendah, kandidat kurang cocok menjadi Manajer.";
+  } else {
+    catatan = "Dengan skor yang rendah di hampir semua aspek utama PAPI, kecocokan untuk posisi ini **sangat kurang**. Kandidat perlu pengembangan besar dalam motivasi, kemandirian, ketelitian, kedisiplinan, kepedulian sosial, dan kemampuan mengikuti aturan kerja.";
+  }
+  return catatan;
+}
+// ---------- PARAGRAF ANALISIS LENGKAP SEMUA FAKTOR ----------
+function generateAnalisaPAPI(scores, posisi) {
+  const faktorList = [
+    ['N', 'Penyelesaian secara prestasi'],
+    ['G', 'Peranan sebagai pekerja keras'],
+    ['A', 'Hasrat untuk berprestasi'],
+    ['L', 'Peran sebagai pimpinan'],
+    ['P', 'Pengendalian orang lain'],
+    ['I', 'Mudah dalam mengambil keputusan'],
+    ['T', 'Tipe selalu sibuk'],
+    ['V', 'Tipe yang bersemangat'],
+    ['X', 'Kebutuhan untuk mendapatkan perhatian'],
+    ['S', 'Pergaulan luas'],
+    ['B', 'Kebutuhan berkelompok'],
+    ['O', 'Kebutuhan untuk dekat dan menyayangi'],
+    ['R', 'Tipe teoritikal'],
+    ['D', 'Suka pekerjaan yang terperinci'],
+    ['C', 'Tipe teratur'],
+    ['Z', 'Hasrat untuk berubah'],
+    ['E', 'Pengendalian emosi'],
+    ['K', 'Agresi'],
+    ['F', 'Dukungan terhadap atasan'],
+    ['W', 'Kebutuhan taat pada aturan dan pengarahan'],
+  ];
+  let teks = "";
+  faktorList.forEach(([kode, nama]) => {
+    const val = scores[kode] ?? '-';
+    const desc = getInterpretasiPAPI(kode, val);
+    teks += `${nama} (${kode} = ${val}): ${desc}\n\n`;
+  });
+  const kecocokan = analisisKecocokanPAPI(scores, posisi);
+  return `Rangkuman hasil PAPI Kostick berikut memuat interpretasi lengkap seluruh aspek kepribadian kandidat:\n\n${teks}\nKecocokan untuk posisi "${posisi}":\n${kecocokan}`;
+}
 
 
 // Kunci mapping arah kerja PAPI (N, G, A)
@@ -2461,7 +2517,72 @@ function skorPAPIKetaatan(answerObjArray) {
 
   return hasil;
 }
+function getBigFiveSuitabilityLabel(percent) {
+  if (percent >= 80) return "Cocok sekali";
+  if (percent >= 65) return "Cocok";
+  if (percent >= 40) return "Kurang cocok";
+  return "Tidak cocok";
+}
+function analisaBigFiveSuitability(hasilOCEAN, posisiKey) {
+  // Daftar kebutuhan ideal untuk masing-masing posisi dan aspek
+  const kebutuhan = {
+    "Administrator":   { O: 60, C: 75, E: 60, A: 65, N: 35 },
+    "Guru":            { O: 70, C: 70, E: 65, A: 70, N: 40 },
+    "Kindergartens":   { O: 70, C: 65, E: 70, A: 75, N: 35 },
+    "Primary":         { O: 70, C: 70, E: 70, A: 70, N: 35 },
+    "Math":            { O: 65, C: 75, E: 60, A: 65, N: 40 },
+    "PE & Health":     { O: 70, C: 70, E: 80, A: 70, N: 35 },
+    "Biology":         { O: 70, C: 70, E: 65, A: 70, N: 35 },
+    "Technical Staff": { O: 60, C: 70, E: 60, A: 65, N: 35 },
+    "Welder":          { O: 55, C: 80, E: 55, A: 60, N: 35 },
+    "Wood Maintenance Technician": { O: 60, C: 75, E: 60, A: 60, N: 35 },
+    "Baker":           { O: 65, C: 75, E: 60, A: 65, N: 35 }
+  };
+  const kebutuhanPosisi = kebutuhan[posisiKey] || kebutuhan["Administrator"];
+  let lines = [];
+  Object.entries(hasilOCEAN).forEach(([dim, val]) => {
+    const ideal = kebutuhanPosisi[dim] || 60;
+    const label = getBigFiveSuitabilityLabel(val.percent);
+    lines.push(`${val.name} (${val.percent}%) → Kebutuhan: ${ideal}%. **${label}**.\n${val.desc}`);
+  });
+  return lines;
+}
 
+const bigFivePositionAnalysis = {
+  "Administrator": [
+    "Dalam posisi Administrator, kelima dimensi kepribadian Big Five memiliki peran yang sangat penting dalam menentukan efektivitas dan kinerja individu di lingkungan kerja yang menuntut ketelitian serta koordinasi yang baik. Administrator yang memiliki skor tinggi pada aspek Conscientiousness akan sangat terorganisir, teliti, dan mampu memastikan semua proses administratif berjalan sesuai prosedur, mulai dari pencatatan data, pengarsipan, hingga pelaporan. Sikap disiplin dan konsistensi kerja yang tinggi akan mengurangi risiko kesalahan dan meningkatkan kepercayaan stakeholder terhadap integritas pelayanan administrasi. Skor Openness yang baik juga diperlukan agar Administrator siap menerima dan mengimplementasikan perubahan sistem, prosedur, maupun teknologi baru yang dapat meningkatkan efisiensi dan mutu kerja. Pada dimensi Agreeableness, Administrator yang ramah, kooperatif, dan mudah dipercaya akan menciptakan hubungan kerja yang harmonis, baik dengan rekan satu tim, atasan, maupun pihak eksternal. Kemampuan untuk menyesuaikan komunikasi dan sikap kooperatif sangat mendukung pelayanan prima dan penyelesaian tugas secara kolektif. Extraversion mendukung kemampuan dalam melayani banyak pihak, menjalin koordinasi lintas bagian, serta menjaga lingkungan kerja yang kondusif. Terakhir, skor Neuroticism yang rendah sangat penting untuk menjaga kestabilan emosi, sehingga Administrator tetap tenang, mampu mengelola stres, serta dapat berpikir jernih dalam situasi deadline atau tekanan beban kerja tinggi. Kombinasi kelima aspek kepribadian ini akan membentuk Administrator yang profesional, efisien, adaptif, dan mampu menjaga mutu pelayanan secara konsisten."
+  ],
+  "Guru": [
+    "Sebagai Guru, kelima dimensi kepribadian Big Five memberikan gambaran yang sangat luas terhadap potensi dan kecocokan dalam mendidik serta membimbing siswa. Guru dengan skor Openness yang tinggi akan mudah mengadopsi dan mengembangkan metode pembelajaran inovatif, mampu merespon perubahan kurikulum, serta mengintegrasikan teknologi atau pendekatan kreatif dalam proses belajar-mengajar. Sikap terbuka ini akan menumbuhkan minat siswa serta menciptakan suasana kelas yang dinamis. Pada aspek Conscientiousness, guru yang teliti dan bertanggung jawab akan memastikan semua rencana pembelajaran, tugas, serta penilaian dilakukan dengan sistematis dan tepat waktu. Guru seperti ini sangat konsisten dalam evaluasi hasil belajar dan administrasi kelas. Dimensi Extraversion sangat menunjang kemampuan berkomunikasi efektif, baik dengan siswa, orang tua, maupun kolega. Guru ekstrovert akan lebih mudah membangun relasi interpersonal yang positif, mendorong partisipasi aktif di kelas, dan menjadi motivator bagi siswa. Agreeableness yang tinggi menggambarkan guru yang penuh empati, sabar, mudah dipercaya, dan dapat memahami berbagai karakter siswa. Kepekaan sosial ini sangat membantu dalam menciptakan suasana belajar yang suportif, menghargai perbedaan, dan mampu menangani konflik dengan pendekatan solutif. Terakhir, skor Neuroticism yang rendah menunjukkan kemampuan guru dalam menjaga kestabilan emosi, tetap tenang saat menghadapi tantangan atau tekanan kelas, serta menjadi teladan dalam mengelola stres. Kombinasi kelima dimensi ini menjadikan seorang guru tidak hanya berkompeten secara akademis, tetapi juga mampu membangun lingkungan belajar yang positif, adaptif, dan inspiratif bagi siswa."
+  ],
+  "Kindergartens": [
+    "Pada posisi Guru Taman Kanak-kanak, karakter kepribadian sangat menentukan dalam mendukung tumbuh kembang anak usia dini. Skor Openness yang tinggi akan membantu guru untuk selalu kreatif dalam menyusun permainan edukatif, merancang aktivitas yang menarik, dan menghadirkan suasana belajar yang penuh warna. Kemampuan berimajinasi dan berpikir inovatif sangat dibutuhkan untuk menghadapi rasa ingin tahu dan energi anak-anak. Conscientiousness berperan penting dalam merencanakan kegiatan pembelajaran harian secara teratur, mencatat perkembangan anak dengan detail, serta memastikan setiap anak mendapat perhatian sesuai kebutuhannya. Agreeableness sangat menonjol dalam peran ini, karena guru harus mampu menunjukkan empati, kasih sayang, dan kesabaran ekstra menghadapi ragam perilaku anak. Guru yang mudah dipercaya akan lebih efektif dalam membangun rasa aman dan nyaman pada siswa. Extraversion akan memperkuat kemampuan berinteraksi, menciptakan suasana yang ceria, serta membangun komunikasi positif dengan orang tua. Neuroticism yang rendah penting agar guru dapat tetap tenang saat menghadapi tantrum atau konflik antar anak, sehingga mampu memberikan teladan pengelolaan emosi sejak dini. Kombinasi semua aspek kepribadian ini sangat krusial untuk menciptakan lingkungan belajar yang penuh cinta, aman, dan mendukung perkembangan sosial-emosional anak-anak."
+  ],
+  "Primary": [
+    "Sebagai Guru SD, kelima aspek kepribadian Big Five memberikan pengaruh besar pada kualitas pembelajaran dan bimbingan karakter siswa. Openness yang tinggi mendorong inovasi dalam menyampaikan materi, penggunaan alat peraga yang variatif, serta kemauan mencoba pendekatan belajar yang sesuai dengan perkembangan zaman. Conscientiousness sangat dibutuhkan untuk pengelolaan kelas yang terstruktur, pendataan perkembangan siswa, dan penilaian hasil belajar yang objektif serta adil. Extraversion membantu guru membangun interaksi yang menyenangkan di kelas, mendorong siswa untuk aktif bertanya dan berpendapat, serta membangun hubungan positif dengan orang tua. Agreeableness berperan dalam membentuk guru yang sabar, toleran, serta mampu merangkul siswa dengan berbagai karakter dan latar belakang. Sikap empati dan kehangatan akan memperkuat rasa percaya diri siswa dan memperlancar komunikasi dua arah. Neuroticism yang rendah penting untuk menjaga kestabilan emosi, mengelola tekanan administrasi maupun tantangan perilaku siswa, serta menjadi contoh dalam pengendalian diri. Guru SD yang menonjol pada kelima aspek ini akan mampu membimbing siswa tidak hanya secara akademik, tetapi juga membentuk karakter dan kepribadian anak sejak dini."
+  ],
+  "Math": [
+    "Guru Matematika membutuhkan kombinasi kepribadian yang mencakup ketelitian tinggi (Conscientiousness), keterbukaan pada metode ajar baru (Openness), serta kemampuan membina hubungan positif dengan siswa (Agreeableness dan Extraversion). Ketelitian menjadi kunci dalam menjelaskan konsep-konsep matematis yang presisi dan logis, memeriksa hasil kerja siswa, serta menjaga keakuratan penilaian. Openness diperlukan agar guru selalu update dengan perkembangan metode pengajaran matematika, seperti penggunaan alat peraga, teknologi pembelajaran digital, atau strategi problem-based learning yang modern. Guru yang memiliki agreeableness dan extraversion baik akan lebih mudah membangun suasana kelas yang interaktif, mendorong siswa untuk bertanya, berdiskusi, dan tidak takut melakukan kesalahan. Neuroticism yang rendah akan membantu guru tetap sabar menghadapi siswa yang kesulitan memahami materi, serta menjaga suasana kelas tetap kondusif. Perpaduan kelima aspek kepribadian ini sangat mendukung keberhasilan proses belajar-mengajar matematika yang efektif, inspiratif, dan menyenangkan."
+  ],
+  "PE & Health": [
+    "Guru Olahraga & Kesehatan sangat diuntungkan dengan kepribadian yang enerjik (Extraversion tinggi), adaptif pada variasi metode pengajaran (Openness), serta disiplin tinggi (Conscientiousness) untuk mengatur jadwal dan memastikan keselamatan siswa dalam setiap aktivitas. Extraversion yang tinggi memudahkan guru membangun semangat dan motivasi siswa, menjaga dinamika kelas, serta menumbuhkan kebersamaan dalam aktivitas kelompok. Openness memungkinkan guru terus mengembangkan model latihan atau permainan baru, mengadopsi teknik pelatihan modern, dan responsif terhadap isu kesehatan terbaru. Conscientiousness menjadi kunci agar setiap aktivitas berjalan terencana, risiko cidera dapat diminimalkan, dan evaluasi perkembangan fisik siswa dilakukan secara terstruktur. Agreeableness membantu menciptakan iklim yang suportif dan saling menghargai di antara siswa, serta membangun komunikasi efektif dengan orang tua. Neuroticism yang rendah penting agar guru mampu mengelola stres, menghadapi insiden di lapangan, serta tetap fokus dalam situasi apapun. Dengan kombinasi kepribadian ini, guru PE & Health mampu menjadi teladan gaya hidup sehat sekaligus motivator bagi siswa."
+  ],
+  "Biology": [
+    "Guru Biologi idealnya memiliki kombinasi keterbukaan pada pengetahuan baru (Openness), ketelitian dalam eksperimen dan pencatatan hasil (Conscientiousness), serta kemampuan membangun diskusi interaktif dengan siswa (Extraversion dan Agreeableness). Openness membantu guru untuk terus update dengan perkembangan biologi, baik dari sisi penelitian, teknologi laboratorium, maupun metode pengajaran berbasis proyek. Conscientiousness dibutuhkan untuk memastikan eksperimen berjalan aman dan data yang dihasilkan akurat. Guru yang ekstrovert dan penuh empati lebih mampu mengelola diskusi kelas, memotivasi siswa untuk aktif, dan menumbuhkan rasa ingin tahu. Neuroticism yang rendah sangat penting, karena pengajaran biologi sering melibatkan situasi tak terduga di laboratorium atau di alam, sehingga kemampuan mengelola emosi dan tekanan menjadi nilai tambah. Kombinasi aspek kepribadian ini akan menghasilkan proses pembelajaran Biologi yang inspiratif, aman, dan berbasis scientific inquiry."
+  ],
+  "Technical Staff": [
+    "Untuk Technical Staff, kelima aspek kepribadian Big Five sangat berpengaruh terhadap produktivitas, kemampuan belajar teknologi baru, serta kualitas kerja tim di lingkungan kerja yang dinamis. Openness yang tinggi memungkinkan staf teknis cepat menerima dan mempelajari perkembangan teknologi terbaru, metode troubleshooting, maupun perubahan sistem kerja. Conscientiousness sangat penting agar semua prosedur pemeliharaan, dokumentasi teknis, dan pelaporan dilakukan dengan detail, teliti, dan sesuai standar. Agreeableness dan Extraversion memperkuat komunikasi lintas tim dan membantu dalam proses kolaborasi untuk menyelesaikan masalah teknis yang kompleks. Kemampuan menerima kritik, berbagi pengetahuan, serta menjaga hubungan harmonis di lingkungan bengkel, pabrik, atau lapangan menjadi modal utama keberhasilan kerja tim. Neuroticism yang rendah sangat penting dalam menghadapi tekanan troubleshooting, deadline pekerjaan, maupun insiden tidak terduga. Kemampuan mengendalikan emosi, berpikir jernih di bawah tekanan, serta tetap responsif sangat dibutuhkan untuk menjaga produktivitas dan keselamatan kerja. Perpaduan kelima dimensi kepribadian ini akan menghasilkan Technical Staff yang profesional, inovatif, serta siap menghadapi tantangan teknologi masa kini."
+  ],
+  "Welder": [
+    "Sebagai Welder, karakter kepribadian yang menonjol pada conscientiousness tinggi menjadi sangat penting untuk menjaga kualitas dan keamanan hasil pengelasan. Setiap pekerjaan membutuhkan perhatian penuh pada detail, kedisiplinan dalam mengikuti prosedur keselamatan, serta konsistensi dalam melakukan pengecekan kualitas. Openness dibutuhkan agar Welder mampu menerima dan belajar teknik pengelasan baru, alat modern, serta standar mutu terbaru. Agreeableness mempermudah komunikasi dan kerja sama dengan anggota tim, supervisor, serta penerimaan feedback untuk peningkatan mutu kerja. Extraversion, meskipun tidak harus sangat tinggi, tetap diperlukan untuk menunjang komunikasi efektif di lingkungan kerja yang sering ramai atau bising. Skor Neuroticism yang rendah akan membuat Welder tetap tenang dan mampu mengambil keputusan tepat saat terjadi insiden atau kesalahan teknis. Kombinasi aspek kepribadian ini sangat berperan dalam membentuk Welder yang handal, adaptif, dan selalu memperhatikan keselamatan kerja."
+  ],
+  "Wood Maintenance Technician": [
+    "Sebagai Wood Maintenance Technician, dimensi conscientiousness yang tinggi sangat penting untuk memastikan setiap perawatan dan perbaikan dilakukan secara presisi dan sesuai prosedur. Openness memungkinkan teknisi terus mengikuti perkembangan material, teknik terbaru, maupun alat yang lebih efisien. Agreeableness dan extraversion dibutuhkan agar mampu bekerja sama dengan tim proyek, tukang lain, maupun pelanggan yang memerlukan penjelasan tentang hasil perbaikan. Sikap ramah dan terbuka juga membantu teknisi menerima saran, masukan, serta beradaptasi dengan situasi kerja yang berubah. Neuroticism yang rendah akan memudahkan teknisi tetap tenang saat menghadapi masalah, tekanan waktu, atau kondisi lapangan yang menantang. Dengan kelima aspek kepribadian yang optimal, Wood Maintenance Technician dapat diandalkan sebagai solusi masalah perawatan kayu yang efektif dan profesional."
+  ],
+  "Baker": [
+    "Pada profesi Baker, conscientiousness yang tinggi sangat krusial dalam menyiapkan bahan, menimbang resep dengan tepat, serta memastikan proses produksi berjalan rapi, efisien, dan hasil konsisten. Openness dibutuhkan untuk berinovasi dalam pengembangan resep baru, mengikuti tren makanan, serta mencari teknik pemanggangan yang lebih baik. Agreeableness membantu membangun suasana kerja yang harmonis di dapur produksi, menerima kritik konstruktif, serta mendukung kerja tim untuk mencapai target bersama. Extraversion dapat menunjang komunikasi yang baik dengan pelanggan atau anggota tim, terutama dalam situasi padat pesanan atau tekanan waktu. Neuroticism yang rendah membantu Baker tetap fokus, sabar, dan mampu menjaga kualitas kerja meskipun harus menghadapi tekanan atau perubahan mendadak. Kombinasi kelima aspek kepribadian ini sangat mendukung kesuksesan dan efisiensi kerja seorang Baker profesional."
+  ]
+};
 function koreksiBigFive(answers, questions) {
   const result = {
     O: { score: 0, max: 0, name: "Openness" },
@@ -2479,34 +2600,51 @@ function koreksiBigFive(answers, questions) {
     result[q.dimension].max += 5;
   }
 
+
   // Hasil: persentase dan level
-  const desc = {
-    O: [
-      "Rendah: Cenderung tradisional, kurang suka perubahan dan eksplorasi ide baru.",
-      "Sedang: Kadang terbuka pada pengalaman baru, kadang suka rutinitas.",
-      "Tinggi: Imajinatif, kreatif, suka hal baru & terbuka terhadap berbagai pengalaman."
-    ],
-    C: [
-      "Rendah: Kurang terorganisir, mudah lalai, tidak konsisten dalam bekerja.",
-      "Sedang: Cukup teratur, kadang disiplin namun masih bisa lalai.",
-      "Tinggi: Sangat terorganisir, teliti, bertanggung jawab dan gigih."
-    ],
-    E: [
-      "Rendah: Pendiam, pemalu, lebih nyaman sendiri, tidak suka jadi pusat perhatian.",
-      "Sedang: Bisa bergaul, tapi juga butuh waktu sendiri.",
-      "Tinggi: Suka sosialisasi, percaya diri, energik, mudah akrab dengan orang."
-    ],
-    A: [
-      "Rendah: Keras kepala, kompetitif, kadang kritis dan tidak kooperatif.",
-      "Sedang: Kadang kooperatif, kadang mementingkan diri sendiri.",
-      "Tinggi: Ramah, mudah percaya, kooperatif, peduli & penuh empati."
-    ],
-    N: [
-      "Rendah: Emosi stabil, jarang stres, jarang khawatir.",
-      "Sedang: Kadang mudah khawatir atau sensitif, kadang stabil.",
-      "Tinggi: Mudah cemas, sensitif, gampang stres dan merasa tidak aman."
-    ]
-  };
+ const desc = {
+  O: [
+    // Rendah
+    "Rendah: Individu dengan skor rendah pada keterbukaan biasanya sangat menghargai tradisi, lebih nyaman dengan rutinitas, dan jarang mencari pengalaman baru. Mereka cenderung mengikuti pola pikir dan metode yang sudah terbukti, serta enggan mengambil risiko dengan mencoba pendekatan yang berbeda. Ide-ide inovatif atau perubahan besar sering dianggap sebagai sesuatu yang membebani atau mengganggu kestabilan kerja. Hal ini dapat membuat individu ini kurang fleksibel dalam menyesuaikan diri terhadap perkembangan zaman atau kebutuhan organisasi yang berubah. Meskipun demikian, sikap ini juga membuat mereka konsisten dan dapat diandalkan dalam menjalankan prosedur yang sudah ditetapkan.",
+    // Sedang
+    "Sedang: Skor sedang pada dimensi keterbukaan menunjukkan kemampuan adaptasi yang cukup baik, meskipun terkadang masih bergantung pada kenyamanan zona rutinitas. Individu ini dapat menerima perubahan dan mencoba ide-ide baru, terutama bila ada dorongan dari lingkungan atau kebutuhan pekerjaan. Mereka dapat bekerja dengan metode baru atau tradisional secara bergantian sesuai situasi, namun biasanya tidak terlalu menonjol dalam mencetuskan inovasi. Fleksibilitas mereka membuat mereka mampu menjaga keseimbangan antara stabilitas dan kemajuan. Dalam tim, individu ini sering berperan sebagai penyeimbang antara anggota yang inovatif dan yang konvensional.",
+    // Tinggi
+    "Tinggi: Individu dengan skor tinggi pada aspek keterbukaan dikenal sangat imajinatif, kreatif, dan selalu ingin tahu terhadap hal-hal baru. Mereka secara aktif mencari informasi, senang mengembangkan keterampilan, serta terbuka terhadap perubahan dan kemajuan teknologi. Pendekatan kerja mereka penuh inovasi, sering kali berinisiatif memperkenalkan cara-cara baru untuk meningkatkan efektivitas atau efisiensi. Individu seperti ini mudah beradaptasi dengan lingkungan yang dinamis dan mendorong anggota tim lainnya untuk berpikir lebih terbuka. Sikap antusias dan proaktif terhadap pembelajaran sepanjang hayat menjadi keunggulan utama yang membantu perkembangan organisasi."
+  ],
+  C: [
+    // Rendah
+    "Rendah: Individu yang memiliki skor rendah pada conscientiousness seringkali menunjukkan perilaku yang kurang teratur dan kurang teliti dalam mengelola tugas-tugasnya. Mereka mudah teralihkan perhatiannya, sering menunda pekerjaan, dan kurang konsisten dalam menuntaskan tanggung jawab. Hal ini berdampak pada akurasi dan kualitas hasil kerja yang cenderung fluktuatif. Kemampuan manajemen waktu dan prioritas pekerjaan masih perlu banyak perbaikan, sehingga berpotensi mempengaruhi produktivitas tim atau instansi. Dalam lingkungan kerja, individu ini memerlukan pengawasan atau panduan yang lebih ketat agar dapat bekerja secara efektif.",
+    // Sedang
+    "Sedang: Skor sedang pada conscientiousness menggambarkan seseorang yang umumnya cukup terorganisir dan bertanggung jawab, meskipun kadang masih melakukan kelalaian kecil. Mereka biasanya dapat menjaga disiplin kerja dan menyelesaikan tugas tepat waktu, namun dalam situasi tekanan tinggi atau banyak pekerjaan, fokus dan ketelitian bisa menurun. Individu ini cukup bisa diandalkan untuk pekerjaan rutin, namun perlu meningkatkan konsistensi dalam memperhatikan detail dan mengikuti prosedur. Kemampuan untuk menyeimbangkan antara kualitas dan kuantitas pekerjaan sudah baik, namun butuh strategi lebih agar hasil kerja selalu optimal. Kedisiplinan mereka menjadi modal dasar untuk berkembang lebih jauh.",
+    // Tinggi
+    "Tinggi: Individu dengan skor tinggi dalam conscientiousness sangat terorganisir, konsisten, dan teliti dalam setiap aspek pekerjaannya. Mereka memiliki komitmen yang kuat terhadap tanggung jawab, selalu merencanakan setiap aktivitas dengan baik, dan memastikan semua pekerjaan diselesaikan secara sistematis. Tingkat akurasi, disiplin, dan dedikasi mereka di atas rata-rata, sehingga sangat dapat diandalkan baik dalam pekerjaan individu maupun tim. Mereka jarang melewatkan detail, selalu mematuhi tenggat waktu, dan memiliki motivasi tinggi untuk mencapai hasil terbaik. Sikap ini secara langsung berkontribusi pada efisiensi serta mutu organisasi atau tim tempat mereka bekerja."
+  ],
+  E: [
+    // Rendah
+    "Rendah: Individu dengan skor rendah pada ekstraversi cenderung menikmati aktivitas yang dilakukan secara mandiri dan lebih suka bekerja di lingkungan yang tenang. Mereka sering merasa tidak nyaman dalam kelompok besar atau situasi yang membutuhkan banyak komunikasi. Kecenderungan untuk menjadi pendiam atau pemalu membuat mereka jarang mengambil inisiatif dalam percakapan atau diskusi tim. Meskipun demikian, mereka biasanya dapat fokus lebih lama pada tugas-tugas yang membutuhkan konsentrasi tinggi. Namun, mereka mungkin melewatkan peluang kerja sama atau pertukaran ide yang bermanfaat bagi perkembangan diri maupun tim.",
+    // Sedang
+    "Sedang: Individu dengan skor sedang pada ekstraversi mampu menyesuaikan diri dengan situasi sosial, baik saat bekerja secara tim maupun individu. Mereka dapat berinteraksi dengan baik di lingkungan kerja, meskipun terkadang tetap membutuhkan waktu untuk menyendiri guna mengisi ulang energi. Kemampuan komunikasi cukup baik, walaupun tidak selalu menjadi motor penggerak dalam kelompok. Mereka bisa berperan sebagai jembatan antar individu yang sangat ekstrovert dan sangat introvert. Fleksibilitas ini membantu menjaga keharmonisan tim dan efisiensi komunikasi di lingkungan kerja.",
+    // Tinggi
+    "Tinggi: Skor tinggi pada ekstraversi menandakan individu yang sangat antusias, energik, dan suka berinteraksi dengan berbagai kalangan. Mereka mudah membaur, percaya diri dalam situasi sosial, dan aktif membangun relasi baik di dalam maupun di luar lingkungan kerja. Sifat komunikatif dan optimis mereka menciptakan suasana kerja yang positif dan mendorong partisipasi tim. Individu ini sering menjadi penggerak utama dalam kegiatan kelompok, mampu menginspirasi dan memberikan energi positif kepada rekan-rekannya. Keterampilan interpersonal yang tinggi menjadi modal penting untuk keberhasilan kerja tim maupun kepemimpinan."
+  ],
+  A: [
+    // Rendah
+    "Rendah: Individu dengan skor rendah pada agreeableness cenderung bersikap tegas bahkan keras kepala, serta kurang peduli terhadap perasaan atau kebutuhan orang lain. Mereka lebih suka bersaing daripada bekerja sama, dan dalam diskusi seringkali mempertahankan pendapat sendiri tanpa banyak kompromi. Sikap kritis ini bisa berdampak positif dalam pengambilan keputusan yang tegas, namun berpotensi menghambat keharmonisan hubungan kerja jika tidak dikendalikan. Empati dan toleransi terhadap perbedaan pandangan masih perlu dikembangkan agar dapat bekerja efektif dalam tim. Dalam situasi konflik, mereka lebih memilih konfrontasi daripada penyelesaian damai.",
+    // Sedang
+    "Sedang: Skor sedang pada agreeableness menggambarkan seseorang yang mampu bekerja sama dan membina hubungan baik, meski terkadang masih mempertahankan kepentingan pribadi. Mereka dapat bersikap ramah dan membantu, tetapi tidak selalu menomorsatukan kebutuhan orang lain. Sikap fleksibel membuat mereka bisa menyesuaikan diri dengan dinamika tim, meskipun dalam situasi tertentu dapat bersikap kritis atau kurang kooperatif. Individu ini mampu mengelola konflik secara moderat dan menjaga keseimbangan antara asertivitas serta empati. Hubungan sosial yang dibangun cukup harmonis, meski masih bisa diperkuat.",
+    // Tinggi
+    "Tinggi: Individu dengan skor tinggi pada agreeableness sangat ramah, kooperatif, dan penuh empati terhadap orang di sekitarnya. Mereka mudah dipercaya, sangat peduli pada kebutuhan rekan kerja, dan selalu berusaha menjaga suasana harmonis di lingkungan kerja. Kemampuan untuk mendengarkan, memahami, dan membantu orang lain menjadi keunggulan utama dalam membangun hubungan yang solid. Mereka cenderung mengutamakan kepentingan bersama dan mampu meredam konflik dengan pendekatan yang penuh pengertian. Sikap ini membuat mereka sangat efektif dalam kolaborasi tim, pelayanan, atau peran yang membutuhkan interaksi sosial intensif."
+  ],
+  N: [
+    // Rendah
+    "Rendah: Skor rendah pada neurotisme menandakan individu yang sangat stabil secara emosional, tidak mudah cemas, dan mampu tetap tenang di bawah tekanan. Mereka jarang merasa terpengaruh oleh stres, selalu berpikir jernih ketika menghadapi masalah, dan mampu membuat keputusan rasional bahkan dalam situasi sulit. Kemampuan mengelola emosi yang baik ini berdampak positif pada suasana kerja dan memberikan contoh bagi rekan-rekan lain. Risiko terjadinya konflik akibat emosi yang tidak stabil sangat minim. Mereka menjadi sumber ketenangan dan penyeimbang di lingkungan kerja.",
+    // Sedang
+    "Sedang: Individu dengan skor sedang pada neurotisme kadang mengalami kecemasan atau tekanan emosional, terutama saat menghadapi tantangan besar. Namun, mereka umumnya dapat mengendalikan diri dan kembali stabil setelah mendapatkan dukungan atau waktu untuk menenangkan pikiran. Keseimbangan antara kestabilan dan sensitivitas membuat mereka cukup tahan banting, meski terkadang membutuhkan strategi khusus untuk menjaga kesehatan mental. Kemampuan mengatasi stres sudah baik, tetapi masih bisa ditingkatkan melalui latihan manajemen emosi.",
+    // Tinggi
+    "Tinggi: Individu dengan skor tinggi pada neurotisme mudah merasa cemas, sensitif terhadap kritik, dan rentan terhadap stres dalam menghadapi tekanan pekerjaan atau perubahan mendadak. Mereka sering merasa tidak aman dan mudah terpancing emosi dalam situasi yang menantang. Hal ini bisa mengganggu produktivitas serta hubungan kerja jika tidak diimbangi dengan keterampilan manajemen stres yang baik. Dukungan lingkungan dan pengembangan strategi coping sangat dibutuhkan agar individu tetap dapat berfungsi optimal dalam organisasi. Pengelolaan emosi yang efektif akan menjadi kunci untuk meningkatkan performa serta kesehatan psikologis mereka."
+  ]
+};
+
 
   const final = {};
   for (const dim in result) {
@@ -3030,17 +3168,163 @@ function submitIdentity(e) {
         explanation: id('explanation').value,
         date: id('date').value
     };
- localStorage.setItem('identity', JSON.stringify(appState.identity));
-    renderHome();
+
+    localStorage.setItem('identity', JSON.stringify(appState.identity));
+    renderTestSelection(); // langsung ke pemilihan tes
 }
 
-// --- Render Home page dengan instruksi dan audio tombol ---
-function renderHome() {
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
+if (appState.showTestCards === undefined) appState.showTestCards = false;
+function renderTestSelection() {
+  if (appState.showTestCards === undefined) appState.showTestCards = false;
 
-    const nickname = appState.identity?.nickname || "Peserta";
-    const instruksiList = [
-`<WELCOME>Selamat datang di platform tes psikologi Sugar Group Schools.</WELCOME>
+  const categories = [
+    {
+      title: 'Psikotes',
+      tests: [
+        { id: 'IST', label: 'Tes IST 🧠' },
+        { id: 'KRAEPLIN', label: 'Tes Kraeplin 🧮' },
+        { id: 'DISC', label: 'Tes DISC 👤' },
+        { id: 'PAPI', label: 'Tes PAPI 📊' },
+        { id: 'BIGFIVE', label: 'Tes Big Five 📝' },
+        { id: 'GRAFIS', label: 'Tes Grafis 🎨' }
+      ]
+    },
+    {
+      title: 'Tes Kemampuan',
+      tests: [
+        { id: 'EXCEL', label: 'Tes Excel 📑' },
+        { id: 'TYPING', label: 'Tes Mengetik ⌨️' },
+        { id: 'SUBJECT', label: 'Tes Subjek 📚' }
+      ]
+    }
+  ];
+
+  document.getElementById('app').innerHTML = `
+    <div class="card tes-selection-main"
+      style="max-width:940px;margin:44px auto 0 auto;padding:40px 38px 36px 38px;border-radius:25px;box-shadow:0 10px 38px #b6ccff35;background:linear-gradient(120deg,#f8fcff 87%,#ecf6fd 100%);border:1.5px solid #c7dbfc;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <img src="https://dl.imgdrop.io/file/aed8b140-8472-4813-922b-7ce35ef93c9e/2025/06/02/LOGO_SSG_A47004b0bb989ef087.md.png"
+        alt="Logo"
+        style="max-width:120px;box-shadow:0 4px 18px #c2e3fc40;border-radius:18px;">
+      </div>
+      <h2 style="text-align:center;margin-bottom:34px;font-weight:900;font-size:2rem;letter-spacing:.5px;color:#195d90;text-shadow:0 1px 8px #b0e3ff70;">
+        Pilih Tes yang Ingin Dikerjakan
+      </h2>
+      <form id="testSelectionForm" style="padding:2px 0 0 0;">
+        ${categories.map(cat => `
+          <div style="margin-bottom:38px;">
+            <div style="font-weight:800;font-size:1.19rem;color:#2674d6;margin-bottom:13px;letter-spacing:0.4px;">
+              <span style="border-bottom:2.4px solid #d4e7fd;padding-bottom:2px;">${cat.title}</span>
+            </div>
+            <div class="test-selection" style="margin-top:5px;">
+              ${cat.tests.map(test => `
+                <label class="test-select-card">
+                  <input type="checkbox" name="selectedTests" value="${test.id}">
+                  <span class="test-checkbox"></span>
+                  <span class="test-label-text">${test.label}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+        <div style="text-align:center;margin-top:30px;">
+          <button class="btn" type="submit"
+            style="padding:14px 38px;font-weight:800;font-size:1.18rem;letter-spacing:0.3px;border-radius:12px;background:#22a558;box-shadow:0 3px 18px #c9f5dd90,0 0 8px #b3eed4a0;border:0;color:#fff;transition:background 0.18s;">
+            ✔️ Lanjutkan ke Tes
+          </button>
+        </div>
+      </form>
+    </div>
+    <style>
+      .test-selection {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 26px 23px;
+        margin: 0;
+        padding: 0;
+      }
+      .test-select-card {
+        background: linear-gradient(120deg, #f4fbfe 85%, #e8f2fa 100%);
+        border-radius: 17px;
+        box-shadow: 0 2px 16px #e6f5ffb8;
+        border: 1.5px solid #dbeafd;
+        padding: 21px 15px 19px 17px;
+        display: flex;
+        align-items: center;
+        font-size: 1.12rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: box-shadow 0.18s, background 0.13s, border 0.16s;
+        min-height: 67px;
+        gap: 15px;
+        position: relative;
+        overflow: hidden;
+      }
+      .test-select-card:hover {
+        box-shadow: 0 9px 28px #bde7e9;
+        background: linear-gradient(120deg,#e5f6fb 82%,#e0f7ff 100%);
+        border-color: #a8d2ff;
+      }
+      .test-select-card input[type="checkbox"] {
+        display: none;
+      }
+      .test-checkbox {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2.2px solid #22a558;
+        background: #fff;
+        display: inline-block;
+        position: relative;
+        margin-right: 9px;
+        transition: border .16s;
+      }
+      .test-select-card input[type="checkbox"]:checked + .test-checkbox {
+        background: radial-gradient(circle at 60% 30%, #23c46b 77%, #14b84a 100%);
+        border-color: #12ba54;
+      }
+      .test-select-card input[type="checkbox"]:checked + .test-checkbox:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 5.5px;
+        top: 5.5px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 0 6px #fff7;
+      }
+      .test-label-text {
+        color: #17507b;
+        font-weight: 700;
+        font-size: 1.13em;
+        letter-spacing: 0.2px;
+        user-select: none;
+      }
+      @media (max-width: 950px) {
+        .test-selection { grid-template-columns: 1fr 1fr; gap: 16px 14px; }
+      }
+      @media (max-width: 650px) {
+        .test-selection { grid-template-columns: 1fr; gap: 11px 0; }
+        .tes-selection-main { padding: 15px 3vw 18px 3vw !important;}
+        .card { padding: 0 !important;}
+      }
+    </style>
+  `;
+
+  document.getElementById('testSelectionForm').onsubmit = function(e) {
+    e.preventDefault();
+    const selected = Array.from(document.querySelectorAll('input[name="selectedTests"]:checked')).map(el => el.value);
+    appState.selectedTests = selected;
+    localStorage.setItem('selectedTests', JSON.stringify(selected));
+    appState.showTestCards = false;
+    renderHome();
+  };
+}
+
+ const instruksiList = [
+`<WELCOME>Selamat datang di platform tes Sugar Group Schools.</WELCOME>
 
 <HEADNOTE>Sebelum memulai, perhatikan beberapa hal penting berikut:</HEADNOTE>
 
@@ -3063,10 +3347,14 @@ function renderHome() {
 </div>
 
 <div class="instruksi-section">
-    <div class="section-title">🔧 Verifikasi Sistem</div>
+    <div class="section-title">🔧 Verifikasi Sistem & Urutan Langkah</div>
     <div class="section-content">
-        • Periksa fungsi tombol download sebelum memulai<br>
-        • Jika mengalami kendala, hubungi tim rekrutmen
+        • Setelah Anda selesai mendengarkan instruksi ini dan klik <b>Selesai</b>, layar akan otomatis scroll menuju tombol <b>Download</b>.<br>
+        • Silakan klik tombol <b>Download</b> sekali untuk memastikan file PDF bisa terunduh.<br>
+        • <b>Jangan klik tombol Download lagi</b> sebelum Anda menyelesaikan seluruh tes yang diminta.<br>
+        • Jika tombol Download diklik dua kali, maka fungsinya akan berubah menjadi <b>Logout</b>.<br>
+        • Klik tombol Download lagi hanya setelah semua tes yang diwajibkan telah dikerjakan.<br>
+        • Jika mengalami kendala, hubungi tim rekrutmen.
     </div>
 </div>
 
@@ -3084,187 +3372,314 @@ function renderHome() {
 <div style="text-align:center;margin-top:24px;font-size:1.2em;">
     Selamat mengerjakan. Semoga sukses! 💪
 </div>`
-    ];
-    document.getElementById('app').innerHTML = `
-    <div class="card" id="homeCard">
-      <div class="header">
-        <img src="https://dl.imgdrop.io/file/aed8b140-8472-4813-922b-7ce35ef93c9e/2025/06/02/LOGO_SSG_A47004b0bb989ef087.md.png" alt="Logo Psikotes">
-        <h1>Psikotes Sugar Group Schools</h1>
-      </div>
-      <div class="personal-greeting" style="margin:24px auto 24px auto; padding:20px 26px; max-width:450px; background:#f0f6ff; border-radius:17px; font-size:1.28rem; color:#233; box-shadow:0 4px 18px #0001; text-align:center;">
-        Hi... <b>${nickname}</b>, agar lebih paham klik tombol di bawah ini!
-        <div style="margin-top:17px;">
-          <button class="btn blink" id="btnShowInstruksi" style="padding:11px 34px 11px 30px; font-size:1.14rem; font-weight:700; border:2px solid #FFD600; box-shadow:0 0 14px #ffd600;">📢 Lihat &amp; Dengar Instruksi</button>
-        </div>
-      </div>
+];
 
-      <!-- KATEGORI PSIKOTES -->
-      <div style="margin-bottom:8px;font-weight:700;color:#135;font-size:1.07em;">Kategori 1: Tes Psikologi</div>
-      <div class="test-selection">
-        <div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')">
-          <div class="test-icon">🧠</div>
-          <h3>Tes IST</h3>
-          <p>${tests.IST.description}</p>
-          <div class="time">Waktu: ~60 menit</div>
-          <div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div>
+
+
+// --- Render Home page dengan instruksi dan audio tombol ---
+function renderHome() {
+  setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
+
+  const nickname = appState.identity?.nickname || "Peserta";
+  const selectedTests = appState.selectedTests || JSON.parse(localStorage.getItem('selectedTests') || '[]');
+  const psikotesList = ['IST','KRAEPLIN','DISC','PAPI','BIGFIVE','GRAFIS'];
+  const adminList = ['EXCEL','TYPING','SUBJECT'];
+  const hasPsikotes = psikotesList.some(t => selectedTests.includes(t));
+  const hasAdmin = adminList.some(t => selectedTests.includes(t));
+  const isBoth = hasPsikotes && hasAdmin;
+
+  // 1. Blok greeting (akan hilang otomatis setelah instruksi selesai)
+  let greetingHTML = '';
+  if (!appState.showTestCards) {
+    // =========== SEBELUM INSTRUKSI ===============
+    greetingHTML = `
+      <div class="personal-greeting"
+        style="margin:30px auto 30px auto;
+        padding:30px 24px 23px 24px;
+        max-width:480px;
+        background:linear-gradient(113deg,#fff8fc 88%,#eaf6ff 100%);
+        border-radius:19px;
+        font-size:1.29rem;
+        color:#234;
+        box-shadow:0 4px 32px #bbd0ff36,0 1.5px 4px #d1f7f920;
+        text-align:center;
+        border:1.5px solid #d6e6fa;
+        position:relative;">
+        <div style="font-size:2.3em;margin-bottom:8px;">👋</div>
+        <b style="font-size:1.13em;">Halo, ${nickname}!</b>
+        <div style="margin-top:7px;font-size:1.08em;line-height:1.55;">
+          Untuk memastikan Anda memahami seluruh proses, silakan baca dan dengarkan <span style="color:#117ad1;font-weight:700;">instruksi tes</span> terlebih dahulu.<br>
+          <span style="color:#1d6c3a;font-size:1.05em;font-weight:600;">Klik tombol di bawah sebelum mulai mengerjakan!</span>
         </div>
-        <div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')">
-          <div class="test-icon">🧮</div>
-          <h3>Tes Kraeplin</h3>
-          <p>${tests.KRAEPLIN.description}</p>
-          <div class="time">Waktu: ±5-10 menit</div>
-          <div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-        </div>
-        <div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')">
-          <div class="test-icon">👤</div>
-          <h3>Tes DISC</h3>
-          <p>${tests.DISC.description}</p>
-          <div class="time">Waktu: ~5 menit</div>
-          <div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-        </div>
-        <div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')">
-          <div class="test-icon">📊</div>
-          <h3>Tes PAPI</h3>
-          <p>${tests.PAPI.description}</p>
-          <div class="time">Waktu: ~5 menit</div>
-          <div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-        </div>
-        <div class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}" onclick="startTest('BIGFIVE')">
-          <div class="test-icon">📝</div>
-          <h3>Tes Big Five</h3>
-          <p>${tests.BIGFIVE.description}</p>
-          <div class="time">Waktu: ~5 menit</div>
-          <div class="status">${appState.completed.BIGFIVE ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-        </div>
-        <div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')">
-          <div class="test-icon">🎨</div>
-          <h3>Tes Grafis</h3>
-          <p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p>
-          <div class="time">Waktu: ~10 menit</div>
-          <div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div>
+        <div style="margin-top:21px;">
+          <button class="btn blink"
+            id="btnShowInstruksi"
+            style="padding:13px 42px;font-size:1.15rem;font-weight:800;border:2.5px solid #FFD600;
+              background:linear-gradient(91deg,#fffde4 65%,#ffe178 100%);color:#1b222e;
+              box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;border-radius:11px;
+              transition:background .17s,box-shadow .14s;cursor:pointer;letter-spacing:.2px;">
+            📢 Lihat &amp; Dengar Instruksi
+          </button>
         </div>
       </div>
+    `;
+  } else {
+    // ============ SETELAH INSTRUKSI ===============
+    greetingHTML = `
+      <div class="personal-greeting"
+        style="margin:30px auto 30px auto;
+        padding:22px 24px 18px 24px;
+        max-width:480px;
+        background:linear-gradient(113deg,#fff8fc 88%,#eaf6ff 100%);
+        border-radius:19px;
+        font-size:1.22rem;
+        color:#234;
+        box-shadow:0 4px 24px #bbd0ff22,0 1.5px 4px #d1f7f910;
+        text-align:center;
+        border:1.5px solid #d6e6fa;
+        position:relative;">
+        <div style="font-size:2.1em;margin-bottom:8px;">👋</div>
+        <b style="font-size:1.11em;">Halo, ${nickname}!</b>
+        <div style="margin-top:7px;font-size:1.06em;line-height:1.48;">
+          Instruksi sudah selesai.<br>
+          Silakan mulai mengerjakan tes yang telah dipilih di bawah ini.<br>
+          <span style="color:#278f36;font-size:1em;font-weight:600;">Semoga lancar!</span>
+        </div>
+      </div>
+    `;
+  }
 
-<!-- KATEGORI KEMAMPUAN/ADMIN -->
-<div style="margin:36px 0 8px 0;font-weight:700;color:#135;font-size:1.07em;">Kategori 2: Tes Kemampuan/Administrasi</div>
-<div class="test-selection">
-  <div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')">
-    <div class="test-icon">📑</div>
-    <h3>Tes Excel</h3>
-    <p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p>
-    <div class="time">Waktu: ~15 menit</div>
-    <div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-  </div>
-  <div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')">
-    <div class="test-icon">⌨️</div>
-    <h3>Tes Mengetik</h3>
-    <p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p>
-    <div class="time">Waktu: ~5 menit</div>
-    <div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-  </div>
-  <div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')">
-    <div class="test-icon">📚</div>
-    <h3>Tes Subjek</h3>
-    <p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p>
-    <div class="time">Waktu: ~15 menit</div>
-    <div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div>
-  </div>
-</div>
-
-
-<!-- Tombol Download PDF-->
-<div id="downloadPDFBox" style="text-align:center;margin-top:38px;">
-  <button class="btn btn-warning"
-    id="btnDownloadPDF"
-    style="padding:18px 42px;font-size:1.17rem;font-weight:700;border:2px solid #29b524;box-shadow:0 0 16px #28ff47,0 0 6px #ff0;"
-    onclick="generatePDF()">
-    📄 Download Hasil Tes Psikologi (PDF)
-  </button>
-</div>
-<div id="cekDownloadMsg" style="margin:18px auto 16px auto; max-width:460px; background:#fffbe0; border:1.5px solid #ffe066; border-radius:10px; padding:14px 22px; color:#6b5a05; font-size:1.07em; box-shadow:0 2px 10px #ffe06630; display:none;">
-  <b>Silakan klik tombol <u>Download Hasil Tes</u> di bawah ini untuk memastikan tombol berfungsi dengan baik.</b><br><br>
-  Jika tombol berhasil mengunduh file PDF/Excel, Anda dapat melanjutkan mengerjakan seluruh tes.<br>
-  <b>Jika tombol <u>tidak</u> menghasilkan file</b>, segera hubungi tim rekrutmen untuk mendapatkan bantuan.
-</div>
-</div>
+  // 2. Blok utama home
+  let html = `
+    <div class="card" id="homeCard" style="max-width:900px;margin:36px auto 0 auto;padding:0 0 38px 0;border-radius:27px;
+      background:linear-gradient(135deg,#f5faff 88%,#e5f3ff 100%);
+      box-shadow:0 10px 36px #c9eaff33, 0 1.5px 6px #fff9;border:1.7px solid #bfe3fc;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:18px;padding:38px 34px 0 34px;">
+        <img src="https://dl.imgdrop.io/file/aed8b140-8472-4813-922b-7ce35ef93c9e/2025/06/02/LOGO_SSG_A47004b0bb989ef087.md.png"
+          alt="Logo Psikotes" style="width:68px;height:68px;object-fit:contain;border-radius:16px;box-shadow:0 2px 12px #bddff930;">
+        <div>
+          <h1 style="margin:0 0 8px 0;font-size:2.09rem;font-weight:900;color:#1662a5;letter-spacing:0.2px;text-shadow:0 1.5px 10px #e1efff99;">
+            Psikotes Sugar Group Schools
+          </h1>
+          <div style="font-size:1.11rem;color:#337;font-weight:600;opacity:.95;">
+            Platform Seleksi & Pengembangan
+          </div>
+        </div>
+      </div>
+      ${greetingHTML}
   `;
 
-      setTimeout(() => {
-      document.getElementById('btnShowInstruksi').classList.add('blink');
-      document.getElementById('btnShowInstruksi').onclick = () => showInstruksiOverlay(nickname, instruksiList);
-    }, 300);
+  // 3. Kartu tes & tombol download hanya jika instruksi sudah selesai
+  if (appState.showTestCards) {
+    // --------- BLOK PSIKOTES ----------
+    if (hasPsikotes) {
+     if (isBoth) html += `<div style="
+  margin-bottom:14px;
+  font-weight:800;
+  color:#14672e;
+  font-size:1.19em;
+  letter-spacing:.01em;
+  text-align:center;
+  border-bottom:2.5px solid #dbe6e0;
+  padding-bottom:5px;
+  max-width:370px;
+  margin-left:auto;
+  margin-right:auto;
+">
+  Kategori 1: Tes Psikologi
+</div>`;
+
+     html += `<div class="test-selection" style="padding:0 24px;">`;
+      if (selectedTests.includes('IST')) html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>Tes IST</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>Tes Kraeplin</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('DISC')) html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>Tes DISC</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('PAPI')) html += `<div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')"><div class="test-icon">📊</div><h3>Tes PAPI</h3><p>${tests.PAPI.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('BIGFIVE')) html += `<div class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}" onclick="startTest('BIGFIVE')"><div class="test-icon">📝</div><h3>Tes Big Five</h3><p>${tests.BIGFIVE.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.BIGFIVE ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('GRAFIS')) html += `<div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')"><div class="test-icon">🎨</div><h3>Tes Grafis</h3><p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p><div class="time">Waktu: ~10 menit</div><div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      html += `</div>`;
+    }
+    // --------- BLOK ADMIN/KEMAMPUAN ----------
+    if (hasAdmin) {
+     if (isBoth) html += `<div style="
+  margin:38px auto 14px auto;
+  font-weight:800;
+  color:#1c4e81;
+  font-size:1.19em;
+  letter-spacing:.01em;
+  text-align:center;
+  border-bottom:2.5px solid #e1eaff;
+  padding-bottom:5px;
+  max-width:430px;
+">
+  Kategori 2: Tes Kemampuan/Administrasi
+</div>`;
+
+    html += `<div class="test-selection" style="padding:0 24px;">`;
+
+      if (selectedTests.includes('EXCEL')) html += `<div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')"><div class="test-icon">📑</div><h3>Tes Excel</h3><p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('TYPING')) html += `<div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')"><div class="test-icon">⌨️</div><h3>Tes Mengetik</h3><p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('SUBJECT')) html += `<div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')"><div class="test-icon">📚</div><h3>Tes Subjek</h3><p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      html += `</div>`;
+    }
+    // --------- TOMBOL DOWNLOAD ---------
+    html += `
+    <div id="downloadPDFBox" style="text-align:center;margin:48px 0 0 0;">
+      <button class="btn btn-download"
+        id="btnDownloadPDF"
+        style="padding:19px 48px;font-size:1.25rem;font-weight:900;border:2.4px solid #31b729;
+          background:linear-gradient(92deg,#f7fff1 65%,#d3ffb8 100%);color:#15772a;
+          box-shadow:0 0 18px #45ff6190,0 0 7px #eaffea55,0 1.5px 6px #fafdf6;
+          border-radius:15px;margin-bottom:0;transition:background 0.16s,box-shadow 0.15s;
+          letter-spacing:.1px;position:relative;"
+        onclick="generatePDF()">
+        <span style="font-size:1.23em;vertical-align:-3px;">📄</span> Download Hasil Tes Psikologi (PDF)
+      </button>
+      <div style="margin-top:13px;font-size:1.01em;color:#486908;letter-spacing:.01em;opacity:.97;">
+        <span style="background:#fffde8;border-radius:8px;padding:3px 13px 3px 11px;display:inline-block;border:1px solid #ffe066;">
+          <b>PENTING:</b> Unduh hasil hanya setelah semua tes selesai.
+        </span>
+      </div>
+    </div>
+    <div id="cekDownloadMsg"
+      style="margin:24px auto 16px auto; max-width:485px; background:#fffbe0; border:1.6px solid #ffe066; border-radius:12px;
+      padding:15px 25px 13px 22px; color:#6b5a05; font-size:1.13em; box-shadow:0 2px 12px #ffe06624; display:none;">
+      <div style="font-weight:800;color:#bb9300;margin-bottom:4px;">
+        ⚠️ Cek Fungsi Download
+      </div>
+      <div>
+        <b>Silakan klik tombol <u>Download Hasil Tes</u> di atas satu kali untuk memastikan file berhasil diunduh.</b><br><br>
+        Jika file PDF/Excel berhasil diunduh, Anda dapat lanjut mengerjakan seluruh tes.<br>
+        <b>Jika <u>tidak</u> ada file terunduh</b>, segera hubungi tim rekrutmen untuk bantuan.
+      </div>
+    </div>
+    `;
+  } // END if (appState.showTestCards)
+
+  html += `</div>
+  <style>
+    .btn-download:hover {background:linear-gradient(92deg,#fafff3 62%,#e1ffd4 100%) !important;box-shadow:0 0 22px #66ffb190,0 0 10px #eafff0b0;color:#17852c;border-color:#2cd645;}
+    .btn-download:active {background:linear-gradient(92deg,#edffe1 67%,#c9ffb2 100%) !important;color:#18692d;border-color:#1ab529;}
+    .btn.blink {animation: blink 1.6s infinite;}
+    @keyframes blink {0%,100% { box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;}50% { box-shadow:0 0 30px #fff972,0 1px 16px #ffe178aa;}}
+  </style>`;
+
+  document.getElementById('app').innerHTML = html;
+
+  // Tombol instruksi hanya muncul jika belum instruksi
+  setTimeout(() => {
+    const instruksiBtn = document.getElementById('btnShowInstruksi');
+    if (instruksiBtn) {
+      instruksiBtn.classList.add('blink');
+      instruksiBtn.onclick = () => showInstruksiOverlay(nickname, instruksiList);
+    }
+  }, 300);
+
 }
 
-function showInstruksiOverlay(nickname, instruksiList) {
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
 
-    let overlay = document.getElementById('overlayInstruksi');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'overlayInstruksi';
-        overlay.style = `
-            position:fixed; left:0; top:0; right:0; bottom:0;
-            background:rgba(16,27,48,0.93); z-index:9999; display:flex;
-            align-items:center; justify-content:center;
-            padding:20px;
-            overflow-y:auto;
-        `;
-        document.body.appendChild(overlay);
-    }
-    overlay.innerHTML = `
-       <div class="instruksiyuh" style="
-        max-width:98%;  // Ubah dari 95% ke 98%
-        width:900px;    // Ubah dari 720px ke 900px (atau nilai lain yang diinginkan)
-        padding:30px; 
-            background:white; 
-            border-radius:18px;
-            box-shadow:0 10px 40px rgba(0,0,0,0.25);
-        ">
-            <div class="instruksi-hiasan">
-                <div class="instruksi-gradient-strip" style="
-                    height:6px; 
-                    background:linear-gradient(90deg,#2c7be5,#00d97e);
-                    border-radius:3px; 
-                    margin-bottom:20px;
-                "></div>
-                <div class="instruksi-hi" style="
-                    font-size:1.5rem; 
-                    font-weight:700; 
-                    color:#1a3d7c; 
-                    margin-bottom:10px;
-                    text-align:center;
-                ">
-                    Hi, <b>${nickname}</b>!
-                </div>
-            </div>
-            <h2 style="
-                text-align:center; 
-                margin:0 0 20px 0; 
-                color:#233;
-                font-size:1.8rem;
-            ">Instruksi Tes</h2>
-            <div id="subtitleInstruksiTyping" style="
-                max-height:60vh;
-                overflow-y:auto;
-                 padding:15px 20px;
-                font-size:1.15rem;
-                line-height:1.65;
-            "></div>
-            <div style="text-align:center; margin-top:25px;">
-                <button class="btn" id="btnSelesaiInstruksi" style="
-                    display:none; 
-                    padding:12px 40px;
-                    font-size:1.15rem;
-                    font-weight:700;
-                    background:#2c7be5;
-                    color:white;
-                    border:none;
-                    border-radius:10px;
-                    cursor:pointer;
-                ">✔️ Selesai</button>
-            </div>
-        </div>
+function showInstruksiOverlay(nickname, instruksiList) {
+  setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
+
+  let overlay = document.getElementById('overlayInstruksi');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'overlayInstruksi';
+    overlay.style = `
+      position:fixed; left:0; top:0; right:0; bottom:0;
+      background:rgba(16,27,48,0.93); z-index:9999; display:flex;
+      align-items:center; justify-content:center;
+      padding:20px;
+      overflow-y:auto;
     `;
+    document.body.appendChild(overlay);
+  }
+
+  // --- RENDER LIST TES DIPILIH ---
+  const selectedTests = appState.selectedTests || JSON.parse(localStorage.getItem('selectedTests') || '[]');
+  const testLabels = {
+    IST: { icon:'🧠', label:'Tes IST' },
+    KRAEPLIN: { icon:'🧮', label:'Tes Kraeplin' },
+    DISC: { icon:'👤', label:'Tes DISC' },
+    PAPI: { icon:'📊', label:'Tes PAPI' },
+    BIGFIVE: { icon:'📝', label:'Tes Big Five' },
+    GRAFIS: { icon:'🎨', label:'Tes Grafis' },
+    EXCEL: { icon:'📑', label:'Tes Excel' },
+    TYPING: { icon:'⌨️', label:'Tes Mengetik' },
+    SUBJECT: { icon:'📚', label:'Tes Subjek' },
+  };
+  let tesDipilihHTML = `
+    <div style="margin:36px 0 16px 0;">
+      <div style="font-weight:700;font-size:1.13rem;color:#1864ab;margin-bottom:10px;text-align:center;">
+        Tes yang Akan Anda Kerjakan:
+      </div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px 18px;">
+        ${
+          selectedTests.map(id => `
+            <div style="display:flex;align-items:center;gap:7px;background:#f5fafd;padding:9px 17px 8px 13px;border-radius:10px;font-size:1.09rem;box-shadow:0 2px 9px #d7eaf4;">
+              <span style="font-size:1.38em;">${testLabels[id]?.icon || ''}</span>
+              <span style="font-weight:600;">${testLabels[id]?.label || id}</span>
+            </div>
+          `).join('')
+        }
+      </div>
+    </div>
+  `;
+
+  overlay.innerHTML = `
+     <div class="instruksiyuh" style="
+      max-width:98%;
+      width:900px;
+      padding:30px; 
+      background:white; 
+      border-radius:18px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.25);
+    ">
+      <div class="instruksi-hiasan">
+        <div class="instruksi-gradient-strip" style="
+            height:6px; 
+            background:linear-gradient(90deg,#2c7be5,#00d97e);
+            border-radius:3px; 
+            margin-bottom:20px;
+        "></div>
+        <div class="instruksi-hi" style="
+            font-size:1.5rem; 
+            font-weight:700; 
+            color:#1a3d7c; 
+            margin-bottom:10px;
+            text-align:center;
+        ">
+            Hi, <b>${nickname}</b>!
+        </div>
+      </div>
+      <h2 style="
+          text-align:center; 
+          margin:0 0 20px 0; 
+          color:#233;
+          font-size:1.8rem;
+      ">Instruksi Tes</h2>
+      <div id="subtitleInstruksiTyping" style="
+          max-height:60vh;
+          overflow-y:auto;
+          padding:15px 20px;
+          font-size:1.15rem;
+          line-height:1.65;
+      "></div>
+      ${tesDipilihHTML}
+      <div style="text-align:center; margin-top:25px;">
+          <button class="btn" id="btnSelesaiInstruksi" style="
+              display:none; 
+              padding:12px 40px;
+              font-size:1.15rem;
+              font-weight:700;
+              background:#2c7be5;
+              color:white;
+              border:none;
+              border-radius:10px;
+              cursor:pointer;
+          ">✔️ Selesai</button>
+      </div>
+    </div>
+  `;
     // Mesin ketik overlay
   const teks = instruksiList[0];
     const el = document.getElementById('subtitleInstruksiTyping');
@@ -3349,7 +3764,9 @@ audioTTS.volume = 0.92;
 setTimeout(() => audioTTS.play(), 350);
 
 document.getElementById('btnSelesaiInstruksi').onclick = () => {
+    appState.showTestCards = true;  // <-- AKTIFKAN TEST CARD
     overlay.remove();
+    renderHome();                   // <-- RENDER ULANG HOME SUPAYA KARTU TES MUNCUL
     sudahCekDownload = true;
 
     setTimeout(() => {
@@ -3567,11 +3984,10 @@ function startTest(testName) {
   } else if (testName === 'DISC') {
     renderDISCIntro();
   } else if (testName === 'PAPI') {
-    appState.timeLeft = tests.PAPI.time;
-    renderPAPIQuestion();
+  renderPAPIIntro();
   } else if (testName === 'BIGFIVE') {
     appState.timeLeft = tests.BIGFIVE.time;
-    renderBIGFIVEQuestion();
+     renderBIGFIVEInstruction();
   } else if (testName === 'GRAFIS') {
     renderGrafisUpload();
   } else if (testName === 'EXCEL') {
@@ -4658,106 +5074,490 @@ function getPixelY(type, axis, val) {
 // ==================== ANALISA POLA GRAFIK DISC ====================
 // ================= FUNGSI ANALISA 2 DOMINAN BERDASARKAN VISUAL GRAFIK =================
 function analisa2DominanDISC(D, I, S, C, tipe, getPixelY) {
-  const arr = [
-    { key: "D", val: D, y: getPixelY(tipe, "D", D) },
-    { key: "I", val: I, y: getPixelY(tipe, "I", I) },
-    { key: "S", val: S, y: getPixelY(tipe, "S", S) },
-    { key: "C", val: C, y: getPixelY(tipe, "C", C) }
-  ].sort((a, b) => a.y - b.y);
+  // Data array, urutkan dari paling tinggi ke rendah
+ const arr = [
+  { key: "D", val: D, y: getPixelY(tipe, "D", D) },
+  { key: "I", val: I, y: getPixelY(tipe, "I", I) },
+  { key: "S", val: S, y: getPixelY(tipe, "S", S) },
+  { key: "C", val: C, y: getPixelY(tipe, "C", C) }
+].sort((a, b) => a.y - b.y); // y kecil = dominan, urutkan naik
 
-  const dominan = [arr[0].key, arr[1].key];
-  const ranking = arr.map(x => x.key);
+const dominan = [arr[0].key, arr[1].key]; // 2 dominan utama sesuai urutan grafik
+const ranking = arr.map(x => x.key);      // Urutan faktor dari paling atas ke bawah
 
-  // Deskripsi mendalam tiap tipe
-  const desk = {
-    D: `<b>Dominance (D):</b> Tegas, proaktif, berorientasi hasil, cepat mengambil keputusan. 
-        Kekuatan: Kepemimpinan, inisiatif, keberanian. 
-        Kelemahan: Kurang sabar, terlalu langsung, kurang perhatian pada detail.`,
-    I: `<b>Influence (I):</b> Komunikatif, mudah bergaul, antusias, persuasif. 
-        Kekuatan: Kemampuan sosial, motivasi, kreativitas. 
-        Kelemahan: Kurang terorganisir, emosional, mudah terdistraksi.`,
-    S: `<b>Steadiness (S):</b> Sabar, stabil, suportif, menjaga harmoni. 
-        Kekuatan: Kerja tim, keandalan, kesabaran. 
-        Kelemahan: Menghindari konflik, sulit berubah, kurang tegas.`,
-    C: `<b>Compliance (C):</b> Teliti, terstruktur, perfeksionis, analitis. 
-        Kekuatan: Akurasi, logika, perencanaan. 
-        Kelemahan: Terlalu kritis, lambat mengambil keputusan, kurang fleksibel.`
-  };
-  // Deskripsi kombinasi 2 tipe (super detail)
-  function gabunganDeskripsi(a, b) {
-    const kombinasi = {
-  "DI": `<b>Gabungan D-I:</b> Pemimpin yang karismatik. ${namaPanggilan()} tegas tapi komunikatif, berorientasi target tapi mampu memotivasi orang lain. 
+  // Penjelasan mendalam tiap tipe (lebih detail)
+const desk = {
+  D: `<b>D (Dominance): Pemimpin Tegas, Proaktif, dan Visioner</b><br>
+    Tipe D adalah individu yang penuh energi, selalu bergerak cepat, dan tidak ragu memimpin. Sangat cocok untuk peran yang membutuhkan pengambilan keputusan cepat, penyelesaian masalah, serta keberanian menanggung risiko di bawah tekanan. 
+    <ul>
+      <li><b>Kekuatan:</b>
         <ul>
-          <li><b>Kekuatan:</b> Kemampuan memimpin dan membujuk, energi tinggi, menyukai tantangan</li>
-          <li><b>Area Pengembangan:</b> Belajar lebih sabar, lebih memperhatikan detail</li>
-          <li><b>Rekomendasi Karir:</b> Manajer penjualan, entrepreneur, pemimpin tim proyek</li>
-        </ul>`,
-  "DS": `<b>Gabungan D-S:</b> Eksekutor yang andal. ${namaPanggilan()} proaktif tapi stabil, disiplin tapi setia pada prinsip. 
+          <li>Berani mengambil inisiatif dalam situasi krisis atau masalah mendesak</li>
+          <li>Fokus pada target & hasil akhir</li>
+          <li>Pemimpin alami: mengarahkan, mengatur, menantang tim untuk mencapai tujuan besar</li>
+          <li>Mampu bekerja di bawah tekanan, tegas, tahan banting, tidak mudah menyerah</li>
+          <li>Efisien mengeksekusi tugas-tugas besar maupun perbaikan proses kerja</li>
+          <li>Mampu mendorong orang lain bergerak lebih cepat dan keluar dari zona nyaman</li>
+        </ul>
+      </li>
+      <li><b>Kelemahan:</b>
         <ul>
-          <li><b>Kekuatan:</b> Konsistensi, keandalan, kemampuan menyelesaikan tugas</li>
-          <li><b>Area Pengembangan:</b> Lebih terbuka pada perubahan, fleksibilitas</li>
-          <li><b>Rekomendasi Karir:</b> Manajer operasional, supervisor produksi, koordinator tim</li>
-        </ul>`,
-  "DC": `<b>Gabungan D-C:</b> Pemimpin teknis. ${namaPanggilan()} tegas tapi analitis, cepat mengambil keputusan tapi berbasis data. 
+          <li>Kadang kurang sabar pada proses yang terlalu lambat atau detail administratif</li>
+          <li>Cenderung terlalu dominan, kadang terkesan memaksakan kehendak sendiri</li>
+          <li>Mengabaikan perasaan tim atau terlalu mengutamakan hasil di atas hubungan</li>
+          <li>Kurang sensitif pada nuansa sosial, bisa mengesampingkan proses kolaborasi</li>
+        </ul>
+      </li>
+      <li><b>Area Pengembangan:</b>
         <ul>
-          <li><b>Kekuatan:</b> Pengambilan keputusan logis, perhatian detail, orientasi kualitas</li>
-          <li><b>Area Pengembangan:</b> Keterampilan interpersonal, empati</li>
-          <li><b>Rekomendasi Karir:</b> Manajer proyek teknis, insinyur senior, konsultan spesialis</li>
-        </ul>`,
-  "IS": `<b>Gabungan I-S:</b> Relator yang empatik. ${namaPanggilan()} komunikatif tapi sabar, antusias tapi suportif. 
+          <li>Mengasah kesabaran dalam proses kerja detail dan administrasi</li>
+          <li>Belajar mendengarkan dan mengakomodasi ide anggota tim</li>
+          <li>Mengembangkan empati & memahami rekan yang lebih pendiam atau berhati-hati</li>
+          <li>Mengurangi reaktifitas saat ada perbedaan pandangan</li>
+        </ul>
+      </li>
+      <li><b>Tantangan:</b>
         <ul>
-          <li><b>Kekuatan:</b> Kemampuan hubungan interpersonal, empati, kesabaran</li>
-          <li><b>Area Pengembangan:</b> Ketegasan, kemampuan mengatakan "tidak"</li>
-          <li><b>Rekomendasi Karir:</b> HRD, konselor, guru, customer success manager</li>
-        </ul>`,
-  "IC": `<b>Gabungan I-C:</b> Komunikator analitis. ${namaPanggilan()} persuasif tapi teliti, kreatif tapi terstruktur. 
+          <li>Mengelola emosi dan ego saat tidak sejalan dengan keputusan tim/pimpinan</li>
+          <li>Merangkul anggota tim yang kurang ekspresif</li>
+          <li>Menahan diri agar tidak memaksakan kehendak pribadi di atas kebutuhan bersama</li>
+          <li>Beradaptasi dengan budaya kerja baru yang lebih kolaboratif</li>
+        </ul>
+      </li>
+      <li><b>Cocok untuk:</b>
         <ul>
-          <li><b>Kekuatan:</b> Penyampaian ide kompleks, presentasi data, kreativitas terstruktur</li>
-          <li><b>Area Pengembangan:</b> Manajemen waktu, fokus pada prioritas</li>
-          <li><b>Rekomendasi Karir:</b> Marketing analist, konsultan bisnis, pelatihan korporat</li>
-        </ul>`,
-  "SC": `<b>Gabungan S-C:</b> Spesialis yang presisi. ${namaPanggilan()} stabil tapi teliti, konsisten tapi perfeksionis. 
+          <li><b>Sekolah:</b> Guru Mapel, Guru Vokasi, Guru Olahraga, Admin Sekolah, Koordinator Kegiatan, Ketua Tim Proyek, Wakil Kepala Sekolah</li>
+          <li><b>Kebun Tebu:</b> Supervisor Lapangan, Mandor, Pengawas Proyek, Kepala Unit Produksi, Koordinator Operasional Kebun</li>
+        </ul>
+      </li>
+    </ul>`,
+
+  I: `<b>I (Influence): Komunikator Positif, Inspiratif, dan Penggerak Suasana</b><br>
+    Tipe I sangat sosial, mudah membangun relasi, membawa energi positif, dan menjadi sumber inspirasi di lingkungan kerja. Cocok untuk posisi yang membutuhkan interaksi luas, membangun semangat, dan menjadi penghubung antarbagian.
+    <ul>
+      <li><b>Kekuatan:</b>
         <ul>
-          <li><b>Kekuatan:</b> Akurasi, keandalan, kedalaman pengetahuan teknis</li>
-          <li><b>Area Pengembangan:</b> Inisiatif, proaktivitas</li>
-          <li><b>Rekomendasi Karir:</b> Analis data, akuntan, quality assurance, peneliti</li>
-        </ul>`
+          <li>Kemampuan komunikasi, public speaking, dan persuasi sangat baik</li>
+          <li>Mudah membangun jejaring dan memperluas relasi</li>
+          <li>Membawa suasana positif, memotivasi, dan meningkatkan semangat tim</li>
+          <li>Kreatif, inovatif, cepat beradaptasi pada perubahan situasi</li>
+          <li>Sering menjadi penggerak ide-ide baru atau event di lingkungan kerja</li>
+          <li>Ramah, supel, mudah dipercaya banyak pihak</li>
+        </ul>
+      </li>
+      <li><b>Kelemahan:</b>
+        <ul>
+          <li>Mudah terdistraksi isu baru, kurang fokus pada detail</li>
+          <li>Kurang konsisten dalam administrasi dan penyelesaian tugas sampai tuntas</li>
+          <li>Bisa terlalu mengandalkan mood dan apresiasi orang lain</li>
+          <li>Kadangkala sulit menjaga kerahasiaan jika terlalu antusias bercerita</li>
+        </ul>
+      </li>
+      <li><b>Area Pengembangan:</b>
+        <ul>
+          <li>Melatih kedisiplinan dan konsistensi dalam pekerjaan rutin</li>
+          <li>Membuat prioritas, menjaga fokus sampai tuntas</li>
+          <li>Mengelola waktu di tengah banyak aktivitas atau event</li>
+          <li>Meningkatkan dokumentasi & administrasi kerja</li>
+        </ul>
+      </li>
+      <li><b>Tantangan:</b>
+        <ul>
+          <li>Menjaga performa di tengah agenda padat</li>
+          <li>Mengendalikan ekspektasi & tetap membumi meski sering menjadi pusat perhatian</li>
+          <li>Menahan diri agar tidak hanya fokus pada yang menyenangkan</li>
+        </ul>
+      </li>
+      <li><b>Cocok untuk:</b>
+        <ul>
+          <li><b>Sekolah:</b> Guru Mapel, Guru TK, Guru SD, Guru Olahraga, Pembina Ekstrakurikuler, MC Event, Staf Kesiswaan</li>
+          <li><b>Kebun Tebu:</b> Penyuluh Lapangan, Staf Humas, Fasilitator Karyawan, Tim CSR/Promosi, Trainer Safety</li>
+        </ul>
+      </li>
+    </ul>`,
+
+  S: `<b>S (Steadiness): Penjaga Stabilitas, Pendukung Setia, Kolaborator Andal</b><br>
+    Tipe S sangat nyaman dengan rutinitas, dapat diandalkan menjaga konsistensi mutu, serta menjadi penyeimbang dalam kelompok kerja. Cocok untuk lingkungan kerja yang membutuhkan keandalan, loyalitas, dan kestabilan proses.
+    <ul>
+      <li><b>Kekuatan:</b>
+        <ul>
+          <li>Sabar, telaten, konsisten dalam mengerjakan tugas</li>
+          <li>Dapat diandalkan sebagai tulang punggung tim</li>
+          <li>Loyal pada institusi & aturan, menjaga harmoni kelompok</li>
+          <li>Mampu memediasi konflik kecil & menciptakan suasana nyaman</li>
+          <li>Setia pada komitmen & tidak mudah menyerah dalam menghadapi tantangan jangka panjang</li>
+        </ul>
+      </li>
+      <li><b>Kelemahan:</b>
+        <ul>
+          <li>Kurang berani mengambil inisiatif besar atau perubahan signifikan</li>
+          <li>Lamban dalam mengambil keputusan kritis</li>
+          <li>Menunda aksi saat ada konflik, terlalu kompromistis</li>
+          <li>Butuh waktu lebih lama untuk beradaptasi dengan sistem baru</li>
+        </ul>
+      </li>
+      <li><b>Area Pengembangan:</b>
+        <ul>
+          <li>Lebih berani tampil mengambil peran kepemimpinan</li>
+          <li>Mengasah keberanian menyampaikan ide di forum</li>
+          <li>Beradaptasi lebih cepat dengan perubahan mendadak</li>
+          <li>Meningkatkan kepercayaan diri dan asertivitas</li>
+        </ul>
+      </li>
+      <li><b>Tantangan:</b>
+        <ul>
+          <li>Berani keluar dari zona nyaman saat dibutuhkan</li>
+          <li>Menjadi penggerak inovasi tanpa meninggalkan kestabilan tim</li>
+          <li>Mengelola stress ketika tuntutan perubahan sangat tinggi</li>
+        </ul>
+      </li>
+      <li><b>Cocok untuk:</b>
+        <ul>
+          <li><b>Sekolah:</b> Guru SD, Guru TK, Guru Vokasi, Admin Sekolah, Staf Akademik, Guru Pendamping Kelas, Staf Perpustakaan</li>
+          <li><b>Kebun Tebu:</b> Administrasi Kebun, Bagian Pembukuan, Staf Laporan, Logistik Kebun, Asisten SDM Lapangan</li>
+        </ul>
+      </li>
+    </ul>`,
+
+  C: `<b>C (Compliance): Spesialis Presisi, Pengawas Kualitas, dan Penjaga SOP</b><br>
+    Tipe C kuat dalam analisis, pencatatan, dan menjaga kualitas kerja melalui ketelitian dan kepatuhan pada aturan. Cocok untuk pekerjaan yang menuntut akurasi tinggi, validasi data, dan standar mutu.
+    <ul>
+      <li><b>Kekuatan:</b>
+        <ul>
+          <li>Sangat teliti, cermat pada detail kecil, sistematis</li>
+          <li>Mampu menyusun dokumentasi, laporan, atau SOP secara rapi</li>
+          <li>Konsisten menjaga standar kerja & hasil akhir</li>
+          <li>Cepat menemukan kesalahan atau ketidaksesuaian dalam proses</li>
+          <li>Mahir melakukan kontrol kualitas & evaluasi hasil kerja tim</li>
+        </ul>
+      </li>
+      <li><b>Kelemahan:</b>
+        <ul>
+          <li>Bisa terlalu perfeksionis & lambat mengambil keputusan ketika banyak data belum pasti</li>
+          <li>Kurang fleksibel terhadap perubahan mendadak</li>
+          <li>Bisa terlalu kaku atau kritis pada ide baru yang belum terbukti</li>
+          <li>Cenderung enggan mengambil risiko tanpa persiapan matang</li>
+        </ul>
+      </li>
+      <li><b>Area Pengembangan:</b>
+        <ul>
+          <li>Lebih fleksibel dan terbuka terhadap inovasi</li>
+          <li>Meningkatkan komunikasi interpersonal, aktif kolaborasi lintas tim</li>
+          <li>Belajar mengambil keputusan cepat di bawah tekanan</li>
+          <li>Memberi ruang untuk diskusi informal, tidak hanya fokus data</li>
+        </ul>
+      </li>
+      <li><b>Tantangan:</b>
+        <ul>
+          <li>Mengelola stress saat audit/deadline</li>
+          <li>Menghadapi SOP/kebijakan baru dari manajemen</li>
+          <li>Menyesuaikan diri saat tim menginginkan perubahan cepat</li>
+        </ul>
+      </li>
+      <li><b>Cocok untuk:</b>
+        <ul>
+          <li><b>Sekolah:</b> Guru Mapel Eksakta, Guru Vokasi, Admin Sekolah, Staf Laboran, Staf Teknisi, Guru Matematika, Guru IPA, QA Proses Akademik</li>
+          <li><b>Kebun Tebu:</b> Staf Data, Quality Assurance, Bagian Administrasi, Pengendali Mutu Lapangan, Auditor Internal, Teknisi Laboratorium, Admin Laporan Kebun</li>
+        </ul>
+      </li>
+    </ul>`
 };
 
-    
-    return kombinasi[[a, b].sort().join('')] || (desk[a] + "<br>" + desk[b])
+
+  // Semua kombinasi 2 huruf (12 total)
+function gabunganDeskripsi(a, b) {
+  const key = [a, b].join('');
+  const nama = namaPanggilan();
+  const kombinasi = {
+    "DI": `<b>Gabungan D-I: Pemimpin Karismatik & Dinamis</b><br>
+      ${nama} pribadi tegas, energik, dan selalu jadi motor penggerak tim. Cocok untuk situasi yang butuh keputusan cepat, pengaruh luas, dan aksi nyata.<ul>
+        <li><b>Kekuatan:</b>
+          Visioner, pengambil inisiatif, inspirator tim, mampu membangun kepercayaan rekan kerja, tahan tekanan kerja, cepat memotivasi orang lain, komunikator aktif, suka tantangan, dan sangat adaptif saat perubahan.</li>
+        <li><b>Area Pengembangan:</b>
+          Mengasah kesabaran dan fokus pada detail administratif, belajar mendengar pendapat anggota tim, mengembangkan empati untuk rekan kerja yang pendiam, mengurangi kecenderungan terlalu mendominasi, dan menjaga konsistensi tindak lanjut.</li>
+        <li><b>Kelemahan:</b>
+          Terkadang kurang sabar, ambisius tanpa memperhitungkan situasi, melewatkan detail penting, cenderung memaksakan kehendak, mudah kecewa jika ide tidak didukung tim.</li>
+        <li><b>Tantangan:</b>
+          Mengelola emosi dan ego saat tim tidak sejalan, merangkul anggota tim yang pasif, serta menahan diri agar tidak memaksakan kehendak sendiri saat rapat besar.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru Mapel</b>, <b>Guru Vokasi</b>, <b>Guru Olahraga</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>, 
+          <b>Manajer Kebun</b>, <b>Supervisor Produksi</b>, <b>Asisten Kepala Pabrik</b>, <b>Koordinator Lapangan</b>
+        </li>
+      </ul>`,
+
+    "ID": `<b>Gabungan I-D: Influencer Berani & Solutif</b><br>
+      ${nama} sangat komunikatif, ramah, dan suka memimpin lewat persuasi. Sumber inspirasi di lingkungan kerja.<ul>
+        <li><b>Kekuatan:</b>
+          Kemampuan public speaking, membangun jejaring luas, membangkitkan semangat kelompok, adaptif terhadap perubahan, komunikatif dengan berbagai kalangan, kreatif dalam mencari solusi baru, cepat merespon krisis.</li>
+        <li><b>Area Pengembangan:</b>
+          Melatih konsistensi kerja, fokus pada administrasi, menyelesaikan pekerjaan sampai tuntas, memperbaiki prioritas dan manajemen waktu, tidak mudah terdistraksi isu baru.</li>
+        <li><b>Kelemahan:</b>
+          Mudah bosan dengan rutinitas, kurang teliti administrasi, sering menunda detail kecil, bisa terlalu spontan dalam mengambil keputusan, kadang mengabaikan laporan tertulis.</li>
+        <li><b>Tantangan:</b>
+          Menjaga disiplin jadwal, menjaga performa di tengah banyak agenda, tetap membumi meski sering jadi spotlight, serta menahan keinginan multitasking yang berlebihan.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru Mapel</b>, <b>Guru Vokasi</b>, <b>Guru Olahraga</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>, 
+          <b>Public Relations Officer</b>, <b>Supervisor Personalia</b>, <b>Training & Development Officer</b>, <b>Field Promotion Coordinator</b>
+        </li>
+      </ul>`,
+
+    "DS": `<b>Gabungan D-S: Eksekutor Andal & Penjaga Kestabilan</b><br>
+      ${nama} disiplin, bertanggung jawab, jadi tulang punggung operasional dan penjaga mutu proses.<ul>
+        <li><b>Kekuatan:</b>
+          Konsistensi tinggi, loyal, telaten, mampu mengelola tim kecil, disiplin waktu, eksekusi rencana dengan teliti, sangat dapat diandalkan untuk rutinitas, tegas pada aturan kerja.</li>
+        <li><b>Area Pengembangan:</b>
+          Lebih terbuka dengan perubahan, meningkatkan fleksibilitas, berani improvisasi jika situasi mendadak, dan memperbaiki komunikasi dua arah.</li>
+        <li><b>Kelemahan:</b>
+          Kaku terhadap aturan, sulit menerima perubahan mendadak, pasif jika tak ada arahan jelas, kadang terjebak pada kebiasaan lama.</li>
+        <li><b>Tantangan:</b>
+          Adaptasi pada kebijakan baru, menjaga motivasi tim saat tekanan tinggi, menerima perubahan struktur kerja, serta menghindari burnout pada rutinitas tinggi.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru SD</b>, <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Supervisor Produksi Pabrik Gula</b>, <b>Mandor Lapangan</b>, <b>Staf Operasional Kebun</b>
+        </li>
+      </ul>`,
+
+    "SD": `<b>Gabungan S-D: Stabilisator Hasil & Penyeimbang</b><br>
+      ${nama} sabar, stabil, dan siap memimpin di saat krusial. Penjaga harmoni kelompok dan penengah konflik.<ul>
+        <li><b>Kekuatan:</b>
+          Loyalitas tinggi, menjaga harmoni kelompok, penengah saat konflik, mampu menyelesaikan masalah secara sistematis, bertanggung jawab pada tugas besar, dipercaya sebagai pendamping/mentor junior.</li>
+        <li><b>Area Pengembangan:</b>
+          Lebih proaktif dan ambil inisiatif, adaptasi cepat pada kebijakan baru, percaya diri bicara di forum, serta belajar asertif di depan publik.</li>
+        <li><b>Kelemahan:</b>
+          Kurang inisiatif inovasi, terlalu hati-hati, lambat ambil keputusan penting, kadang kurang vokal di tim.</li>
+        <li><b>Tantangan:</b>
+          Berani tampil di forum besar, keluar zona nyaman, memperluas pengaruh di luar rutinitas.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Supervisor HRD Kebun</b>, <b>Staf Administrasi Pabrik</b>
+        </li>
+      </ul>`,
+
+    "DC": `<b>Gabungan D-C: Pemimpin Teknis & Logis</b><br>
+      ${nama} kuat dalam berpikir sistematis, utamakan kualitas, dan mampu keputusan berbasis data.<ul>
+        <li><b>Kekuatan:</b>
+          Objektif, analitis, teliti, cepat pahami sistem baru, efisien, tegas pada SOP, mahir menyusun rencana kerja rinci, menjaga standar mutu, dan mampu mengawasi banyak proyek teknis sekaligus.</li>
+        <li><b>Area Pengembangan:</b>
+          Mengasah empati, meningkatkan komunikasi tim lintas bagian, memberi ruang pada ide baru dari staf, serta belajar menghadapi dinamika sosial kerja.</li>
+        <li><b>Kelemahan:</b>
+          Kurang peka emosi tim, bisa terlalu menuntut hasil sempurna, kadang mengabaikan suasana sosial, mudah lelah jika tim kurang terstruktur.</li>
+        <li><b>Tantangan:</b>
+          Menjembatani kebutuhan psikologis tim, seimbangkan target dengan relasi, belajar menghargai variasi gaya kerja.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Supervisor Teknik Mesin</b>, <b>Asisten Manajer QC Pabrik</b>, <b>Staff Pengembangan Sistem Perkebunan</b>
+        </li>
+      </ul>`,
+
+    "CD": `<b>Gabungan C-D: Perfeksionis Ambisius & Penggerak Standar</b><br>
+      ${nama} kritis, teliti, ingin hasil terbaik, gigih meningkatkan mutu, dan menjadi penggerak perubahan lewat standar tinggi.<ul>
+        <li><b>Kekuatan:</b>
+          Teliti, visioner, gigih mengejar target, suka inovasi, sangat memperhatikan kualitas, mampu analisis data, berani mengkritisi sistem lama, disiplin tinggi.</li>
+        <li><b>Area Pengembangan:</b>
+          Fleksibilitas saat perubahan, empati dalam komunikasi, terbuka ide baru, belajar menerima keberagaman cara kerja dan hasil yang tidak selalu sempurna.</li>
+        <li><b>Kelemahan:</b>
+          Mudah stres jika hasil tidak sesuai ekspektasi, sulit menerima kesalahan kecil, bisa terlalu kaku dengan SOP, suka membandingkan hasil tim lain.</li>
+        <li><b>Tantangan:</b>
+          Mengelola tekanan deadline dan perubahan mendadak, menjaga hubungan positif dengan rekan kerja.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Auditor QC Kebun</b>, <b>Penjamin Mutu Produksi</b>, <b>Pengembang SOP</b>
+        </li>
+      </ul>`,
+
+    "IS": `<b>Gabungan I-S: Relator Empatik & Guru Humanis</b><br>
+      ${nama} penghubung antarindividu, sabar, dan empatik, selalu membangun suasana nyaman.<ul>
+        <li><b>Kekuatan:</b>
+          Empati tinggi, membangun hubungan positif, telaten, mudah dipercaya, sabar, menjaga harmoni kelompok, penyemangat siswa dan rekan kerja, sangat diterima lingkungan baru.</li>
+        <li><b>Area Pengembangan:</b>
+          Ketegasan saat interaksi, menjaga batas profesional, lebih vokal dalam tim, meningkatkan kemampuan menegakkan aturan dengan tetap empatik.</li>
+        <li><b>Kelemahan:</b>
+          Terlalu mengalah, sulit menegakkan disiplin, mudah lelah jika beban emosi tinggi, kadang menghindari konflik meski perlu dihadapi.</li>
+        <li><b>Tantangan:</b>
+          Menyeimbangkan dukungan dan ketegasan, belajar berani menegur, menjaga energi saat menghadapi banyak permintaan.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru SD</b>, <b>Guru TK</b>, <b>Guru Olahraga</b>, <b>Admin Sekolah</b>,
+          <b>Staf Pelatihan Kebun</b>, <b>HRD Kebun</b>, <b>Pendamping Karyawan Baru</b>
+        </li>
+      </ul>`,
+
+    "SI": `<b>Gabungan S-I: Penengah Ramah & Fasilitator Komunitas</b><br>
+      ${nama} menciptakan suasana harmonis dan mudah diterima banyak kalangan.<ul>
+        <li><b>Kekuatan:</b>
+          Loyalitas, suasana kekeluargaan, penyejuk tim, mampu menyatukan karakter berbeda, aktif dalam komunitas, mudah membangun rasa aman di kelompok baru.</li>
+        <li><b>Area Pengembangan:</b>
+          Inisiatif tampil, berani ambil keputusan strategis, lebih sering sampaikan ide di forum besar, tingkatkan kepercayaan diri dalam memimpin kelompok kecil.</li>
+        <li><b>Kelemahan:</b>
+          Kurang berani mengambil posisi tidak populer, menahan ide karena takut konflik, terlalu mengutamakan kenyamanan dari pada perubahan.</li>
+        <li><b>Tantangan:</b>
+          Berani ambil langkah saat terjadi konflik, menjaga keseimbangan harmoni dan kebutuhan inovasi tim.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Staf HRD Kebun</b>, <b>Pendamping Karyawan Baru</b>, <b>Staf Kesejahteraan Kebun</b>
+        </li>
+      </ul>`,
+
+    "IC": `<b>Gabungan I-C: Komunikator Analitis & Inovator Edukasi</b><br>
+      ${nama} kreatif, logis, mampu menyampaikan materi kompleks dengan cara mudah dipahami.<ul>
+        <li><b>Kekuatan:</b>
+          Kreatif, presentasi data bagus, cepat adopsi teknologi, komunikatif di forum ilmiah, mampu menyederhanakan konsep sulit, senang sharing pengetahuan baru.</li>
+        <li><b>Area Pengembangan:</b>
+          Menentukan prioritas kerja, menjaga konsistensi proyek, disiplin administrasi, mengelola waktu agar tidak habis di banyak proyek sekaligus.</li>
+        <li><b>Kelemahan:</b>
+          Mudah terdistraksi isu baru, suka multitasking tapi kurang dokumentasi hasil, kadang menunda tugas kurang menarik.</li>
+        <li><b>Tantangan:</b>
+          Mengelola waktu proyek, pastikan semua ide terwujud nyata, belajar menolak proyek jika sudah overload.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Staf Pelatihan & Komunikasi Kebun</b>, <b>Trainer Produksi</b>, <b>Penyuluh Kebun</b>
+        </li>
+      </ul>`,
+
+    "CI": `<b>Gabungan C-I: Peneliti Inovatif & Pengembang Kurikulum</b><br>
+      ${nama} teliti, ingin tahu, suka mencari metode baru, dan kritis pada kebiasaan lama.<ul>
+        <li><b>Kekuatan:</b>
+          Analisis mendalam, inovatif, teliti riset, suka memperbaiki metode kerja, tertarik kembangkan kurikulum/standar baru, selalu mencari validasi data sebelum melangkah.</li>
+        <li><b>Area Pengembangan:</b>
+          Kolaborasi tim, terbuka kritik, menerima keberagaman pendekatan, belajar lebih luwes saat kerja kelompok lintas bidang.</li>
+        <li><b>Kelemahan:</b>
+          Terlalu kritis metode lama, sulit menerima perubahan tanpa data kuat, skeptis pada pola kerja spontanitas, bisa kecewa jika ide tidak diadopsi tim.</li>
+        <li><b>Tantangan:</b>
+          Menerima keberagaman gaya kerja, komunikasi lintas generasi, memperbaiki cara menyampaikan usulan ke manajemen.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Analis Laboratorium Kebun</b>, <b>Staff R&D</b>, <b>Pengembang SOP Produksi</b>
+        </li>
+      </ul>`,
+
+    "SC": `<b>Gabungan S-C: Spesialis Presisi & Penjaga Kualitas</b><br>
+      ${nama} konsisten, teliti, dan sangat nyaman dengan aturan serta menjaga kualitas kerja.<ul>
+        <li><b>Kekuatan:</b>
+          Akurasi tinggi, telaten, loyal pada SOP, menjaga detail administratif, dipercaya rekan kerja, teliti dalam audit, jadi rujukan jika ada proses yang harus standar.</li>
+        <li><b>Area Pengembangan:</b>
+          Proaktif, berani tampil dan bicara di forum, belajar mengelola emosi saat perubahan mendadak, lebih terbuka pada usulan efisiensi proses.</li>
+        <li><b>Kelemahan:</b>
+          Sulit menerima perubahan mendadak, kurang ekspresif, kadang menutup diri dari inovasi, bisa pasif jika tidak diarahkan jelas.</li>
+        <li><b>Tantangan:</b>
+          Mengelola tekanan administratif yang menumpuk, belajar berbagi tugas dengan tim, tidak terlalu cemas pada kesalahan kecil.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Staf Administrasi Kebun</b>, <b>Teknisi Laboratorium</b>, <b>QA Staff</b>
+        </li>
+      </ul>`,
+
+    "CS": `<b>Gabungan C-S: Support Sistem Detail & Pendamping Setia</b><br>
+      ${nama} suka membantu, teliti, dan menjaga kelancaran administrasi.<ul>
+        <li><b>Kekuatan:</b>
+          Sangat detail, telaten, dipercaya rekan, loyal, sabar membimbing, sandaran tim saat audit/inspeksi, menjaga etika kerja dan administrasi rapi.</li>
+        <li><b>Area Pengembangan:</b>
+          Percaya diri, mau tampil menyampaikan pendapat, ekspresif, berani ambil peran lebih besar, terbuka pada tantangan baru.</li>
+        <li><b>Kelemahan:</b>
+          Kadang minder, takut salah, menghindari spotlight meski mampu, kurang vokal di forum, mudah cemas dengan risiko kecil.</li>
+        <li><b>Tantangan:</b>
+          Mengelola tekanan administratif banyak dan deadline ketat, belajar berbagi tugas dengan tim lain, mengembangkan kemampuan presentasi hasil kerja.</li>
+        <li><b>Cocok untuk:</b>
+          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
+          <b>Staf Administrasi Logistik Kebun</b>, <b>Petugas Pencatatan Produksi</b>, <b>Teknisi Laboratorium</b>
+        </li>
+      </ul>`
+  };
+  // fallback
+  return kombinasi[key] || kombinasi[[b, a].join('')] || (desk[a] + "<br>" + desk[b]);
+}
+
+
+  // Analisis pola grafik (tambahkan jika perlu)
+ function analisaPolaGrafik() {
+  const tertinggi = arr[0].y;
+  const terendah = arr[3].y;
+  const jarak = tertinggi - terendah;
+
+  // Semua faktor dengan Y sama tertinggi (1, 2, atau 3 dominan sekaligus)
+  const faktorDominan = arr.filter(a => a.y === tertinggi).map(a => a.key);
+
+  let analisa = "";
+
+  // --- POLA DOMINASI EKSTRIM ---
+  if (jarak > 200) {
+    analisa += `<b>Pola Ekstrim:</b> Perbedaan sangat besar antara tipe dominan dan tipe lemah.<br>`;
+    faktorDominan.forEach(f => {
+      if (f === 'D') analisa += `${namaPanggilan()} sangat dominan dan cenderung memimpin secara tegas.<br>`;
+      if (f === 'I') analisa += `${namaPanggilan()} sangat komunikatif, mudah memengaruhi dan menggerakkan kelompok.<br>`;
+      if (f === 'S') analisa += `${namaPanggilan()} sangat stabil, selalu jadi penyeimbang dan pendukung, kadang menghindari perubahan besar.<br>`;
+      if (f === 'C') analisa += `${namaPanggilan()} perfeksionis, sangat detail, kadang terlalu kaku dalam standar.<br>`;
+    });
+    if (arr[3].key === 'S') analisa += `${namaPanggilan()} mungkin kurang siap menghadapi konflik atau perubahan tiba-tiba.<br>`;
   }
 
-  // Analisis pola grafik berdasarkan posisi relatif
-  function analisaPolaGrafik() {
-    const tinggi = arr[0].y;
-    const rendah = arr[3].y;
-    const jarak = rendah - tinggi;
-    
-    let analisa = "";
-    
-    // Pola dominasi ekstrim
-    if (jarak > 200) {
-      analisa += `<b>Pola Ekstrim:</b> Perbedaan signifikan antara tipe dominan dan tipe lemah<br>`;
-    if (arr[0].key === 'D') analisa += `${namaPanggilan()} sangat dominan dan mungkin cenderung mendominasi lingkungan<br>`;
-if (arr[3].key === 'S') analisa += `${namaPanggilan()} mungkin kesulitan dalam situasi konflik atau perubahan mendadak<br>`;
-}
-    
-    // Pola seimbang
-    if (jarak < 100) {
-      analisa += `<b>Pola Seimbang:</b> Profil yang fleksibel dan mudah beradaptasi<br>`;
-      analisa += "Kekuatan: Dapat bekerja dalam berbagai situasi dan peran<br>";
-      analisa += "Tantangan: Mungkin kesulitan mengambil posisi tegas<br>";
-    }
-    
-    // Pola khusus
-    if (arr[0].key === 'C' && arr[1].key === 'D') {
-      analisa += `<b>Pola Perfeksionis Tegas:</b> Kombinasi unik ketelitian dan ketegasan<br>`;
-      analisa += "Anda mungkin sangat efektif dalam peran yang membutuhkan presisi dan kepemimpinan";
-    }
-    
-    return analisa;
+  // --- POLA SEIMBANG ---
+  if (jarak < 100) {
+    analisa += `<b>Pola Seimbang:</b> Profil fleksibel, mudah beradaptasi, bisa ambil peran apa saja sesuai kebutuhan.<br>`;
+    analisa += "Kekuatan: Mudah bekerja lintas tim, cocok untuk tugas rotasi.<br>";
+    analisa += "Tantangan: Perlu asah ketegasan dan pengambilan keputusan saat dibutuhkan.<br>";
   }
+
+  // --- POLA KHUSUS: DUA DOMINAN ---
+  if (faktorDominan.length === 2) {
+    const gab = faktorDominan.join('');
+
+    if ((gab === 'CD') || (gab === 'DC')) {
+      analisa += `<b>Pola Perfeksionis Tegas:</b> Kombinasi ketelitian dan ketegasan. Cocok jadi leader/penentu standar mutu.<br>
+      Kekuatan: Disiplin tinggi, fokus hasil, sangat sistematis.<br>
+      Tantangan: Kadang terlalu kaku atau perfeksionis pada tim.<br>`;
+    }
+    if ((gab === 'IS') || (gab === 'SI')) {
+      analisa += `<b>Pola Influencer Stabil:</b> Sosial & suportif, mudah diterima siapa saja.<br>
+      Kekuatan: Komunikasi positif, penenang di kelompok besar.<br>
+      Tantangan: Kadang kurang asertif atau mudah mengalah.<br>`;
+    }
+    if ((gab === 'DS') || (gab === 'SD')) {
+      analisa += `<b>Pola Stabil Tegas:</b> Kuat di rutinitas, namun siap ambil alih ketika perlu.<br>
+      Kekuatan: Disiplin dan konsisten, penjaga ritme kerja tim.<br>
+      Tantangan: Butuh belajar fleksibilitas dan improvisasi.<br>`;
+    }
+    if ((gab === 'IC') || (gab === 'CI')) {
+      analisa += `<b>Pola Analitis Persuasif:</b> Kreatif, argumentatif, komunikatif, tapi logis dan kritis.<br>
+      Kekuatan: Cerdas berbicara, mampu edukasi yang rumit.<br>
+      Tantangan: Kadang sulit fokus satu target atau terlalu analitik untuk beberapa rekan.<br>`;
+    }
+    if ((gab === 'DI') || (gab === 'ID')) {
+      analisa += `<b>Pola Leader Inspiratif:</b> Kombinasi kecepatan & pengaruh, cocok untuk bidang yang dinamis.<br>
+      Kekuatan: Inisiatif tinggi, motivator tim, suka perubahan.<br>
+      Tantangan: Kadang kurang teliti atau kurang sabar ke tim yang lambat.<br>`;
+    }
+    if ((gab === 'SC') || (gab === 'CS')) {
+      analisa += `<b>Pola Detail Stabil:</b> Sangat presisi, rapi, pekerja keras, support sistem.<br>
+      Kekuatan: Daya tahan kerja, cocok mengelola tugas administrasi & kontrol mutu.<br>
+      Tantangan: Perlu lebih aktif mengemukakan ide dan adaptasi ke perubahan.<br>`;
+    }
+    if ((gab === 'DS') || (gab === 'SD')) {
+      analisa += `<b>Pola Tekun Stabil:</b> Bisa diandalkan dalam tugas jangka panjang.<br>
+      Kekuatan: Loyal, konsisten, tahan tekanan.<br>
+      Tantangan: Kadang pasif inovasi, perlu dorongan keluar dari zona nyaman.<br>`;
+    }
+    // Tambah pola khusus lain jika dibutuhkan
+  }
+
+  // --- POLA TIGA DOMINAN ---
+  if (faktorDominan.length === 3) {
+    analisa += `<b>Pola Multi-Dominan:</b> ${faktorDominan.join(', ')} sama kuat secara grafik.<br>
+      Kekuatan: Adaptasi sangat tinggi, bisa kerja tim maupun individual, fleksibel mengisi posisi manapun.<br>
+      Tantangan: Rawan galau menentukan prioritas atau tujuan utama, perlu pendampingan karir yang jelas.<br>`;
+  }
+
+  // --- POLA SATU DOMINAN ---
+  if (faktorDominan.length === 1) {
+    const faktor = faktorDominan[0];
+    analisa += `<b>Pola Satu Dominan:</b> ${faktor} menonjol secara grafik.<br>`;
+    if (faktor === 'D') analisa += `${namaPanggilan()} berani, inisiatif tinggi, pemimpin alami.<br>`;
+    if (faktor === 'I') analisa += `${namaPanggilan()} komunikatif, sangat mudah diterima kelompok.<br>`;
+    if (faktor === 'S') analisa += `${namaPanggilan()} stabil, konsisten, penyeimbang tim.<br>`;
+    if (faktor === 'C') analisa += `${namaPanggilan()} teliti, perfeksionis, menjaga kualitas kerja.<br>`;
+  }
+
+  return analisa;
+}
+
 
   return {
     dominan,
@@ -4785,224 +5585,311 @@ function showDISCResult() {
   let totalStar = starMost + starLeast;
   let isInvalid = (totalStar > 8);
 
-  // Kalau valid, proses analisis
+  // ANALISIS (jika valid)
   let analisaHTML = "";
   if (!isInvalid) {
     const most   = analisa2DominanDISC(hasilDISC.most.D, hasilDISC.most.I, hasilDISC.most.S, hasilDISC.most.C, 'most', getPixelY);
     const least  = analisa2DominanDISC(hasilDISC.least.D, hasilDISC.least.I, hasilDISC.least.S, hasilDISC.least.C, 'least', getPixelY);
     const change = analisa2DominanDISC(hasilDISC.change.D, hasilDISC.change.I, hasilDISC.change.S, hasilDISC.change.C, 'change', getPixelY);
 
-    // Analisis peran yang cocok
+    // Rekomendasi peran (lengkap, otomatis deteksi kombinasi 2 huruf)
     function rekomendasiPeran() {
       const roles = {
         "DI": ["Manajer Penjualan", "Entrepreneur", "Pemimpin Tim", "Marketing Director"],
+        "ID": ["Marketing, Public Relations", "Event Organizer", "Business Development"],
         "DS": ["Manajer Operasional", "Supervisor Produksi", "Koordinator Proyek", "Logistik Manager"],
+        "SD": ["Koordinator SDM", "Staf Pelayanan Publik", "Komunitas Leader"],
         "DC": ["Manajer Proyek Teknis", "Insinyur Senior", "Konsultan Spesialis", "Quality Control Manager"],
+        "CD": ["Auditor", "Analis Sistem", "Project Manager", "Lead Engineer"],
         "IS": ["HRD Manager", "Konselor", "Guru", "Customer Relations Manager"],
+        "SI": ["Guru SD", "Fasilitator Komunitas", "Pendamping Anak", "Team Builder"],
         "IC": ["Marketing Analyst", "Konsultan Bisnis", "Pelatihan Korporat", "Peneliti Pasar"],
-        "SC": ["Analis Data", "Akuntan", "Quality Assurance", "Peneliti"]
+        "CI": ["Peneliti", "Content Planner", "Data Scientist", "Business Analyst"],
+        "SC": ["Analis Data", "Akuntan", "Quality Assurance", "Peneliti"],
+        "CS": ["QA Tester", "Admin Proses", "Laboran", "Support Staff"]
       };
-      
-      const k = most.dominan.sort().join('');
-      return roles[k] || ["Beragam, sesuaikan dengan minat dan pengalaman"];
-    }
-    
-    // Analisis kecocokan posisi
-    function cocokPosisi() {
-      if (!identity.position) return "";
-      
-      const persyaratan = {
-        "Administrator": ["SC", "DC", "CS"],
-        "Guru": ["IS", "IC", "SI", "SC"],
-        "Technical Staff": ["DC", "SC", "CD", "CS"],
-        "Manajer": ["DI", "ID", "DC", "CD"]
-      };
-      
-      const k = most.dominan.sort().join('');
-      const match = persyaratan[identity.position]?.includes(k);
-      
-      let detail = "";
-      if (identity.teacherLevel) {
-        if (identity.teacherLevel === "SD" && k.includes("I")) detail += "Sangat cocok untuk mengajar anak-anak";
-        if (identity.teacherLevel === "SMA" && k.includes("C")) detail += "Cocok untuk mata pelajaran eksakta";
-      }
-      
-      return `
-        <div style="margin-top:16px;padding:14px;background:${match ? '#e8f5e9' : '#ffebee'};border-radius:8px;">
-          <b>Analisis Posisi "${identity.position}":</b>
-          <div>${match ? '✅ Kecocokan Tinggi' : '⚠️ Kurang Cocok'}</div>
-          <div>${detail}</div>
-        </div>
-      `;
+      // Kombinasi tidak urut, harus cek dua arah!
+      const kode = [most.dominan[0], most.dominan[1]].join('');
+      const kode2 = [most.dominan[1], most.dominan[0]].join('');
+      return roles[kode] || roles[kode2] || ["Beragam, sesuaikan dengan minat dan pengalaman"];
     }
 
-    // Analisis tekanan dan potensi stres
-    function analisaTekanan() {
-      const tekanan = {
-        D: least.nilai.D > 10 ? "Kesulitan dengan lingkungan yang terlalu birokratis" : "",
-        I: least.nilai.I > 10 ? "Tidak nyaman dengan isolasi sosial" : "",
-        S: least.nilai.S > 10 ? "Stres dengan perubahan mendadak" : "",
-        C: least.nilai.C > 10 ? "Frustasi dengan ketidakpastian" : ""
-      };
-      
-      const faktorStres = Object.entries(tekanan)
-        .filter(([_, val]) => val)
-        .map(([key, val]) => val)
-        .join(", ");
-        
-      if (!faktorStres) return "<div>Tidak teridentifikasi sumber stres utama</div>";
-      
-      return `
-        <div style="margin-top:16px;">
-          <b>Potensi Sumber Stres:</b>
-          <div>${faktorStres}</div>
-          <b>Strategi Mengatasi:</b>
-          <ul>
-            ${least.dominan.includes("D") ? "<li>Berikan ruang untuk kontrol dan otonomi</li>" : ""}
-            ${least.dominan.includes("I") ? "<li>Pastikan interaksi sosial yang cukup</li>" : ""}
-            ${least.dominan.includes("S") ? "<li>Siapkan transisi untuk perubahan</li>" : ""}
-            ${least.dominan.includes("C") ? "<li>Berikan informasi selengkap mungkin</li>" : ""}
-          </ul>
-        </div>
-      `;
-    }
+    // Analisis kecocokan posisi (lengkap + detail teacherLevel)
+ function cocokPosisi() {
+  if (!identity.position) return "";
 
-    analisaHTML = `
-      <div style="margin-top:28px; border-radius:11px; background:#f8fafb; padding:20px 26px;">
-        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 300px;">
-            <div style="font-weight:600;color:#2176C7;font-size:1.12em;">Analisis Mask / Most (P):</div>
-            <div style="margin-bottom:7px;">
-              <b>Dua dominan utama:</b> <span style="color:#2176C7">${most.dominan.join(' & ')}</span><br>
-              <b>Urutan:</b> ${most.ranking}<br>
-              <div style="margin-top:10px;">${most.deskripsi}</div>
-              <div style="margin-top:12px;">${most.analisaPola}</div>
-            </div>
-            
-            <div style="font-weight:600;color:#DE9000;font-size:1.12em;margin-top:20px;">Analisis Pressure / Least (K):</div>
-            <div style="margin-bottom:7px;">
-              <b>Dua dominan utama:</b> <span style="color:#DE9000">${least.dominan.join(' & ')}</span><br>
-              <b>Urutan:</b> ${least.ranking}<br>
-              <div style="margin-top:10px;">${least.deskripsi}</div>
-              ${analisaTekanan()}
-            </div>
-          </div>
-          
-          <div style="flex: 1; min-width: 300px;">
-            <div style="font-weight:600;color:#18b172;font-size:1.12em;">Analisis Self / Change (P-K):</div>
-            <div>
-              <b>Dua dominan utama:</b> <span style="color:#18b172">${change.dominan.join(' & ')}</span><br>
-              <b>Urutan:</b> ${change.ranking}<br>
-              <div style="margin-top:10px;">${change.deskripsi}</div>
-            </div>
-            
-            <div style="margin:20px 0 0 0;font-weight:600;color:#1a232e;">Rekomendasi Karir:</div>
-            <ul style="margin-top:8px;padding-left:20px;">
-              ${rekomendasiPeran().map(r => `<li>${r}</li>`).join('')}
-            </ul>
-            
-            ${cocokPosisi()}
-          </div>
-        </div>
-        
-        <div style="margin-top:26px;padding-top:18px;border-top:1px solid #eee;">
-          <div style="font-weight:600;color:#1a232e;">Simpulan Kepribadian Menyeluruh:</div>
-          <div>
-            <b>Tipe dominan utama:</b> <span style="color:#008061">${most.dominan.join(' & ')}</span> 
-            dengan tekanan terbesar pada <span style="color:#de9000">${least.dominan.join(' & ')}</span>
-          </div>
-          <div style="margin-top:12px;line-height:1.6;">
-            ${namaPanggilan()} adalah individu yang ${most.dominan.includes('D') ? 'tegas dan berorientasi hasil' : ''}
-            ${most.dominan.includes('I') ? 'komunikatif dan persuasif' : ''}
-            ${most.dominan.includes('S') ? 'stabil dan dapat diandalkan' : ''}
-            ${most.dominan.includes('C') ? 'analitis dan teliti' : ''}.
-            Dalam lingkungan kerja, Anda akan berkembang pesat di peran yang memberikan 
-            ${most.dominan.includes('D') ? 'tanggung jawab dan otoritas' : ''}
-            ${most.dominan.includes('I') ? 'kesempatan berinteraksi sosial' : ''}
-            ${most.dominan.includes('S') ? 'stabilitas dan rutinitas' : ''}
-            ${most.dominan.includes('C') ? 'ruang untuk analisis mendalam' : ''}.
-          </div>
-        </div>
-      </div>
-    `;
+  // Mapping kebutuhan posisi: urut dari "sangat sesuai", "cocok", lalu fallback "kurang cocok/tidak cocok"
+  const persyaratan = {
+    "Administrator": {
+      sangat: ["SC", "DC"],
+      cocok:  ["CS", "CD"],
+    },
+    "Guru": {
+      sangat: ["IS", "IC", "SI", "SC"],
+      cocok:  ["ID", "SD"],
+    },
+    "Technical Staff": {
+      sangat: ["DC", "SC"],
+      cocok:  ["CD", "CS"],
+    },
+    "Manajer": {
+      sangat: ["DI", "ID", "DC", "CD"],
+      cocok:  ["DS", "IS"],
+    }
+  };
+
+  // Dua kode kombinasi (misal DI & ID, biar tidak terbalik urutan)
+  const kode = [most.dominan[0], most.dominan[1]].join('');
+  const kode2 = [most.dominan[1], most.dominan[0]].join('');
+  const req = persyaratan[identity.position] || {};
+
+  // Default "Tidak Cocok"
+  let tingkat = "Tidak Cocok";
+  if ((req.sangat || []).includes(kode) || (req.sangat || []).includes(kode2)) tingkat = "SANGAT SESUAI";
+  else if ((req.cocok || []).includes(kode) || (req.cocok || []).includes(kode2)) tingkat = "COCOK";
+  else if (
+    [].concat(req.sangat || [], req.cocok || []).some(
+      x => kode.includes(x[0]) || kode.includes(x[1]) || kode2.includes(x[0]) || kode2.includes(x[1])
+    )
+  ) tingkat = "KURANG COCOK";
+
+  // Detail khusus untuk Guru SD/SMA
+  let detail = "";
+  if (identity.teacherLevel) {
+    if (identity.teacherLevel === "SD" && (kode.includes("I") || kode2.includes("I")))
+      detail += "Sangat cocok untuk mengajar anak-anak karena gaya komunikasi dan empati tinggi.<br>";
+    if (identity.teacherLevel === "SMA" && (kode.includes("C") || kode2.includes("C")))
+      detail += "Cocok untuk mata pelajaran eksakta dan pendekatan analitis.<br>";
   }
 
-  document.getElementById('app').innerHTML = `
-    <div class="card" style="max-width:780px;margin:34px auto 0 auto;padding:32px 32px 38px 32px;border-radius:18px;box-shadow:0 6px 32px #9992;">
-     <h2 style="text-align:center;font-size:2em">
-  Hasil DISC ${appState.identity?.nickname ? appState.identity.nickname : 'Anda'}
-</h2>
-      ${isInvalid ? `
-      <div style="margin:14px auto 22px auto;max-width:470px;background:#fee2e2;color:#c00;border-radius:12px;padding:19px 18px 17px 18px;font-size:1.22em;text-align:center;font-weight:600;box-shadow:0 2px 10px #fbb;">
-        HASIL INVALID
+  // Output box warna sesuai tingkat kecocokan
+  return `
+    <div style="margin-top:16px;padding:14px;background:${
+      tingkat === "SANGAT SESUAI" ? '#e8f5e9'
+      : tingkat === "COCOK" ? '#f0f7fa'
+      : tingkat === "KURANG COCOK" ? '#fff7e6'
+      : '#ffebee'
+    };border-radius:8px;">
+      <b>Analisis Posisi "${identity.position}":</b>
+      <div>
+        ${
+          tingkat === "SANGAT SESUAI"
+            ? '✅ <span style="color:#18b172;font-weight:bold;">Cocok Sekali</span>'
+            : tingkat === "COCOK"
+            ? '✔️ <span style="color:#2176c7;font-weight:bold;">Cocok</span>'
+            : tingkat === "KURANG COCOK"
+            ? '⚠️ <span style="color:#de9000;font-weight:bold;">Kurang Cocok</span>'
+            : '❌ <span style="color:#c00;font-weight:bold;">Tidak Cocok</span>'
+        }
       </div>
-      ` : ''}
-      <div style="display:flex;gap:26px;justify-content:center;align-items:flex-end;margin:26px 0 18px 0;flex-wrap:wrap;">
-        <div style="width:170px;height:420px;">
-          <canvas id="discMost" width="170" height="420"></canvas>
-          <div style="text-align:center;margin-top:6px;font-weight:600">Mask / Most (P)</div>
-        </div>
-        <div style="width:170px;height:420px;">
-          <canvas id="discLeast" width="170" height="420"></canvas>
-          <div style="text-align:center;margin-top:6px;font-weight:600">Pressure / Least (K)</div>
-        </div>
-        <div style="width:170px;height:420px;">
-          <canvas id="discChange" width="170" height="420"></canvas>
-          <div style="text-align:center;margin-top:6px;font-weight:600">Self / Change (P-K)</div>
-        </div>
-      </div>
-      <table style="margin:18px auto 0 auto;font-size:1.13em;min-width:370px;text-align:center;border-collapse:collapse;">
-        <tr style="background:#f8fafb;font-weight:bold">
-          <th style="padding:5px 18px">Line</th>
-          <th style="padding:5px 14px">D</th>
-          <th style="padding:5px 14px">I</th>
-          <th style="padding:5px 14px">S</th>
-          <th style="padding:5px 14px">C</th>
-          <th style="padding:5px 8px;color:#999;">*</th>
-          <th style="padding:5px 12px;color:#d00;">Total</th>
-        </tr>
-        <tr>
-          <td><b>Most (P)</b></td>
-          <td>${hasilDISC.most.D || 0}</td>
-          <td>${hasilDISC.most.I || 0}</td>
-          <td>${hasilDISC.most.S || 0}</td>
-          <td>${hasilDISC.most.C || 0}</td>
-          <td style="color:#999;">${hasilDISC.most['*'] || 0}</td>
-          <td style="color:#d00;font-weight:600;">
-            ${(hasilDISC.most.D||0)+(hasilDISC.most.I||0)+(hasilDISC.most.S||0)+(hasilDISC.most.C||0)+(hasilDISC.most['*']||0)}
-          </td>
-        </tr>
-        <tr>
-          <td><b>Least (K)</b></td>
-          <td>${hasilDISC.least.D || 0}</td>
-          <td>${hasilDISC.least.I || 0}</td>
-          <td>${hasilDISC.least.S || 0}</td>
-          <td>${hasilDISC.least.C || 0}</td>
-          <td style="color:#999;">${hasilDISC.least['*'] || 0}</td>
-          <td style="color:#d00;font-weight:600;">
-            ${(hasilDISC.least.D||0)+(hasilDISC.least.I||0)+(hasilDISC.least.S||0)+(hasilDISC.least.C||0)+(hasilDISC.least['*']||0)}
-          </td>
-        </tr>
-        <tr>
-          <td><b>Change</b></td>
-          <td>${hasilDISC.change.D >= 0 ? '+' : ''}${hasilDISC.change.D || 0}</td>
-          <td>${hasilDISC.change.I >= 0 ? '+' : ''}${hasilDISC.change.I || 0}</td>
-          <td>${hasilDISC.change.S >= 0 ? '+' : ''}${hasilDISC.change.S || 0}</td>
-          <td>${hasilDISC.change.C >= 0 ? '+' : ''}${hasilDISC.change.C || 0}</td>
-          <td style="background:#eee;">${hasilDISC.change['*'] >= 0 ? '+' : ''}${hasilDISC.change['*'] || 0}</td>
-          <td style="color:#d00;">
-            ${(hasilDISC.change.D||0)+(hasilDISC.change.I||0)+(hasilDISC.change.S||0)+(hasilDISC.change.C||0)+(hasilDISC.change['*']||0)}
-          </td>
-        </tr>
-      </table>
-      ${analisaHTML}
-      <div style="margin-top:32px;text-align:center;">
-        <button class="btn" onclick="renderHome()">Kembali ke Beranda</button>
-      </div>
+      <div>${detail}</div>
     </div>
   `;
 }
-  // ===================== DRAW DISC CLASSIC =====================
+
+
+    // Analisis tekanan dan potensi stres (lebih adaptif)
+function analisaTekanan() {
+  const tekanan = [];
+  const strategi = [];
+
+  // Deteksi sumber stres pada grafik Least (K)
+  if (least.nilai.D > 10) {
+    tekanan.push("Kesulitan jika berada di lingkungan yang sangat birokratis atau diatur ketat.");
+    strategi.push("Libatkan dalam pengambilan keputusan dan beri otonomi dalam menjalankan tugas, agar tetap termotivasi.");
+  }
+  if (least.nilai.I > 10) {
+    tekanan.push("Stres jika akses pada interaksi sosial atau komunikasi dibatasi.");
+    strategi.push("Pastikan adanya forum, meeting, atau ruang diskusi rutin agar kebutuhan komunikasi tetap terpenuhi.");
+  }
+  if (least.nilai.S > 10) {
+    tekanan.push("Stres saat menghadapi perubahan mendadak atau lingkungan kerja yang tidak stabil.");
+    strategi.push("Lakukan perubahan secara bertahap, informasikan rencana lebih awal, dan berikan waktu adaptasi yang cukup.");
+  }
+  if (least.nilai.C > 10) {
+    tekanan.push("Frustasi jika menghadapi ketidakpastian, aturan yang ambigu, atau data/instruksi tidak jelas.");
+    strategi.push("Berikan petunjuk dan struktur kerja yang jelas, lengkap dengan standar operasional prosedur (SOP) dan data pendukung.");
+  }
+
+  if (!tekanan.length) {
+    return "<div style='margin-top:12px'>Tidak teridentifikasi sumber stres utama pada grafik Least (K).</div>";
+  }
+
+  return `
+    <div style="margin-top:16px;">
+      <b>Potensi Sumber Stres:</b>
+      <ul style="margin:8px 0 8px 16px">${tekanan.map(t => `<li>${t}</li>`).join('')}</ul>
+      <b>Strategi Mengatasi:</b>
+      <ul style="margin:8px 0 8px 16px">
+        ${strategi.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+analisaHTML = `
+  <div style="margin-top:28px; border-radius:11px; background:#f8fafb; padding:20px 26px;">
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 300px;">
+        <div style="font-weight:600;color:#2176C7;font-size:1.12em;">Analisis Mask / Most (P):</div>
+        <div style="font-size:0.97em;color:#677;">Perilaku alami, motivasi utama saat nyaman atau tanpa tekanan.</div>
+        <div style="margin-bottom:7px;">
+          <b>Dua dominan utama:</b> <span style="color:#2176C7">${most.dominan.join(' & ')}</span><br>
+          <b>Urutan:</b> ${most.ranking}<br>
+          <div style="margin-top:10px;">${most.deskripsi}</div>
+          <div style="margin-top:12px;">${most.analisaPola}</div>
+        </div>
+        <div style="font-weight:600;color:#DE9000;font-size:1.12em;margin-top:20px;">Analisis Pressure / Least (K):</div>
+        <div style="font-size:0.97em;color:#a98e24;">Perilaku saat menghadapi tekanan, tuntutan, atau lingkungan sulit.</div>
+        <div style="margin-bottom:7px;">
+          <b>Dua dominan utama:</b> <span style="color:#DE9000">${least.dominan.join(' & ')}</span><br>
+          <b>Urutan:</b> ${least.ranking}<br>
+          <div style="margin-top:10px;">${least.deskripsi}</div>
+          <div style="margin-top:12px;">${least.analisaPola}</div>
+          ${analisaTekanan()}
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 300px;">
+        <div style="font-weight:600;color:#18b172;font-size:1.12em;">Analisis Self / Change (P-K):</div>
+        <div style="font-size:0.97em;color:#148562;">Pola perubahan antara situasi nyaman dan tekanan.</div>
+        <div>
+          <b>Dua dominan utama:</b> <span style="color:#18b172">${change.dominan.join(' & ')}</span><br>
+          <b>Urutan:</b> ${change.ranking}<br>
+          <div style="margin-top:10px;">${change.deskripsi}</div>
+          <div style="margin-top:12px;">${change.analisaPola}</div>
+        </div>
+        <div style="margin:20px 0 0 0;font-weight:600;color:#1a232e;">Rekomendasi Karir:</div>
+        <ul style="margin-top:8px;padding-left:20px;">
+          ${rekomendasiPeran().map(r => `<li>${r}</li>`).join('')}
+        </ul>
+        ${cocokPosisi()}
+      </div>
+    </div>
+    <div style="margin-top:26px;padding-top:18px;border-top:1px solid #eee;">
+      <div style="font-weight:600;color:#1a232e;">Simpulan Kepribadian Menyeluruh:</div>
+      <div>
+        <b>Tipe dominan utama:</b> <span style="color:#008061">${most.dominan.join(' & ')}</span> 
+        dengan tekanan terbesar pada <span style="color:#de9000">${least.dominan.join(' & ')}</span>
+      </div>
+      <div style="margin-top:12px;line-height:1.6;">
+        ${namaPanggilan()} adalah individu yang 
+        ${[
+          most.dominan.includes('D') ? 'tegas dan berorientasi hasil' : '',
+          most.dominan.includes('I') ? 'komunikatif dan persuasif' : '',
+          most.dominan.includes('S') ? 'stabil dan dapat diandalkan' : '',
+          most.dominan.includes('C') ? 'analitis dan teliti' : ''
+        ].filter(Boolean).join(', ')}.
+        Dalam lingkungan kerja, Anda akan berkembang di peran yang memberikan 
+        ${[
+          most.dominan.includes('D') ? 'tanggung jawab dan otoritas' : '',
+          most.dominan.includes('I') ? 'kesempatan interaksi sosial' : '',
+          most.dominan.includes('S') ? 'stabilitas dan rutinitas' : '',
+          most.dominan.includes('C') ? 'ruang analisis mendalam' : ''
+        ].filter(Boolean).join(', ')}.
+      </div>
+    </div>
+  </div>
+`;
+
+  }
+
+  // OUTPUT HTML
+  document.getElementById('app').innerHTML = `
+  <div class="card" style="max-width:780px;margin:34px auto 0 auto;padding:32px 32px 38px 32px;border-radius:18px;box-shadow:0 6px 32px #9992;">
+    <h2 style="text-align:center;font-size:2em">
+      Hasil DISC ${appState.identity?.nickname ? appState.identity.nickname : 'Anda'}
+    </h2>
+    ${isInvalid ? `
+      <div style="margin:14px auto 22px auto;max-width:500px;background:#fee2e2;color:#c00;border-radius:12px;padding:19px 18px 17px 18px;font-size:1.16em;text-align:center;font-weight:600;box-shadow:0 2px 10px #fbb;">
+        HASIL INVALID<br>
+        <div style="margin:6px 0 0 0; font-weight:400; color:#a33; font-size:.99em;">
+          (Terdeteksi pola pengisian jawaban yang tidak wajar, silakan ulangi tes.)
+        </div>
+        <div style="margin-top:13px; font-weight:500; color:#b11; font-size:.97em;">
+          <b>Catatan Penting:</b><br>
+          Hasil tes DISC Anda tidak dapat dianalisis karena pola pengisian yang terlalu seragam atau tidak konsisten.<br><br>
+          Untuk hasil yang akurat dan bermanfaat, <b>jawablah seluruh pertanyaan sesuai kepribadian asli Anda</b> — bukan sekadar menyesuaikan harapan atasan atau lingkungan.<br><br>
+          <i>Isi sejujur mungkin, seperti Anda dalam keseharian, bukan saat ingin mengesankan orang lain.</i>
+        </div>
+      </div>
+    ` : ''}
+    <div style="display:flex;gap:26px;justify-content:center;align-items:flex-end;margin:26px 0 18px 0;flex-wrap:wrap;">
+      <div style="width:170px;height:420px;">
+        <canvas id="discMost" width="170" height="420"></canvas>
+        <div style="text-align:center;margin-top:6px;font-weight:600">
+          Mask / Most (P)
+          <div style="color:#677;font-size:0.97em;font-weight:400;">Perilaku utama, gaya diri saat nyaman/normal</div>
+        </div>
+      </div>
+      <div style="width:170px;height:420px;">
+        <canvas id="discLeast" width="170" height="420"></canvas>
+        <div style="text-align:center;margin-top:6px;font-weight:600">
+          Pressure / Least (K)
+          <div style="color:#a98e24;font-size:0.97em;font-weight:400;">Perilaku saat tertekan/lingkungan sulit</div>
+        </div>
+      </div>
+      <div style="width:170px;height:420px;">
+        <canvas id="discChange" width="170" height="420"></canvas>
+        <div style="text-align:center;margin-top:6px;font-weight:600">
+          Self / Change (P-K)
+          <div style="color:#148562;font-size:0.97em;font-weight:400;">Pola adaptasi antara nyaman dan tekanan</div>
+        </div>
+      </div>
+    </div>
+    <table style="margin:18px auto 0 auto;font-size:1.13em;min-width:370px;text-align:center;border-collapse:collapse;">
+      <tr style="background:#f8fafb;font-weight:bold">
+        <th style="padding:5px 18px">Line</th>
+        <th style="padding:5px 14px">D</th>
+        <th style="padding:5px 14px">I</th>
+        <th style="padding:5px 14px">S</th>
+        <th style="padding:5px 14px">C</th>
+        <th style="padding:5px 8px;color:#999;">*</th>
+        <th style="padding:5px 12px;color:#d00;">Total</th>
+      </tr>
+      <tr>
+        <td><b>Most (P)</b></td>
+        <td>${hasilDISC.most.D || 0}</td>
+        <td>${hasilDISC.most.I || 0}</td>
+        <td>${hasilDISC.most.S || 0}</td>
+        <td>${hasilDISC.most.C || 0}</td>
+        <td style="color:#999;">${hasilDISC.most['*'] || 0}</td>
+        <td style="color:#d00;font-weight:600;">
+          ${(hasilDISC.most.D||0)+(hasilDISC.most.I||0)+(hasilDISC.most.S||0)+(hasilDISC.most.C||0)+(hasilDISC.most['*']||0)}
+        </td>
+      </tr>
+      <tr>
+        <td><b>Least (K)</b></td>
+        <td>${hasilDISC.least.D || 0}</td>
+        <td>${hasilDISC.least.I || 0}</td>
+        <td>${hasilDISC.least.S || 0}</td>
+        <td>${hasilDISC.least.C || 0}</td>
+        <td style="color:#999;">${hasilDISC.least['*'] || 0}</td>
+        <td style="color:#d00;font-weight:600;">
+          ${(hasilDISC.least.D||0)+(hasilDISC.least.I||0)+(hasilDISC.least.S||0)+(hasilDISC.least.C||0)+(hasilDISC.least['*']||0)}
+        </td>
+      </tr>
+      <tr>
+        <td><b>Change</b></td>
+        <td>${hasilDISC.change.D >= 0 ? '+' : ''}${hasilDISC.change.D || 0}</td>
+        <td>${hasilDISC.change.I >= 0 ? '+' : ''}${hasilDISC.change.I || 0}</td>
+        <td>${hasilDISC.change.S >= 0 ? '+' : ''}${hasilDISC.change.S || 0}</td>
+        <td>${hasilDISC.change.C >= 0 ? '+' : ''}${hasilDISC.change.C || 0}</td>
+        <td style="background:#eee;">${hasilDISC.change['*'] >= 0 ? '+' : ''}${hasilDISC.change['*'] || 0}</td>
+        <td style="color:#d00;">
+          ${(hasilDISC.change.D||0)+(hasilDISC.change.I||0)+(hasilDISC.change.S||0)+(hasilDISC.change.C||0)+(hasilDISC.change['*']||0)}
+        </td>
+      </tr>
+    </table>
+    ${analisaHTML}
+    <div style="margin-top:32px;text-align:center;">
+      <button class="btn" onclick="renderHome()">Kembali ke Beranda</button>
+    </div>
+  </div>
+`;
+
+}
+
+// ===================== DRAW DISC CLASSIC =====================
 function drawDISCClassic(canvasOrId, tipe, D, I, S, C, warnaGaris='#2176C7') {
   const ctx = (typeof canvasOrId === 'string' ? document.getElementById(canvasOrId) : canvasOrId).getContext('2d');
   ctx.clearRect(0,0,170,420);
@@ -5064,6 +5951,7 @@ function getCanvasImg(tipe, D, I, S, C, warna) {
   return cvs.toDataURL("image/png");
 }
 
+
 // ========== LAINNYA (JANGAN DIUBAH, SUDAH BENAR) ==========
 function getDISCAnalysisPlain(hasilDISC, appState) {
   let nick = (appState.identity?.nickname || "Peserta");
@@ -5118,52 +6006,99 @@ function stripHTML(html) {
 
 
 // ==================== PAPI Test ====================
-function renderPAPIQuestion() {
-  const question = tests.PAPI.questions[appState.currentQuestion];
-  
-  const progress = calculateProgress();
-  
+function renderPAPIIntro() {
   const app = document.getElementById('app');
   app.innerHTML = `
     <div class="card">
-      <div class="timer-container">
-        <div class="timer-icon">⏱️</div>
-        <div class="timer" id="timer-display">
-        ${appState.timeLeft}s</div>
+      <h2>${tests.PAPI.name}</h2>
+      <p style="font-size:1.1em;color:#155;">${tests.PAPI.description}</p>
+      <div style="margin:14px 0 24px 0;padding:13px 15px 13px 15px;background:#f5fafc;border-radius:10px;border:1.7px solid #b7dfff;">
+        <b>Petunjuk Pengerjaan:</b><br>
+        ${tests.PAPI.instruction}<br>
+        <ul style="margin-top:8px;line-height:1.7;padding-left:18px;">
+          <li>Setiap soal terdiri dari dua pernyataan, pilih salah satu yang paling sesuai dengan diri Anda.</li>
+          <li>Tidak ada jawaban benar atau salah.</li>
+          <li>Jawablah secara jujur dan spontan, jangan terlalu lama berpikir.</li>
+          <li>Anda diberikan waktu <b>${Math.floor(tests.PAPI.time/60)} menit</b> untuk menyelesaikan seluruh soal.</li>
+        </ul>
       </div>
-      
+      <div class="example-answer" style="margin:16px 0 20px 0;">
+        <h4 style="margin-bottom:7px;">Contoh Soal:</h4>
+        <p><b>Soal:</b> ${tests.PAPI.example.question}</p>
+        <p><b>Pilihan A:</b> ${tests.PAPI.example.optionA}</p>
+        <p><b>Pilihan B:</b> ${tests.PAPI.example.optionB}</p>
+        <p style="color:#444;"><b>Penjelasan:</b> ${tests.PAPI.example.explanation}</p>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn" onclick="startPAPITest()">Mulai Tes PAPI</button>
+        <button class="btn btn-outline" onclick="renderHome()">Kembali</button>
+      </div>
+    </div>
+  `;
+}
+
+let timerInterval = null;
+
+function startPAPITest() {
+  appState.currentTest = 'PAPI';
+  appState.currentQuestion = 0;
+  appState.timeLeft = tests.PAPI.time;
+  appState.answers.PAPI = [];
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    appState.timeLeft--;
+    updateTimerDisplay();
+    if (appState.timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finishPAPITest();
+    }
+  }, 1000);
+  renderPAPIQuestion();
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer-display');
+  if (el) el.textContent = formatTime(Math.max(0, appState.timeLeft));
+}
+
+function finishPAPITest() {
+  appState.completed.PAPI = true;
+  renderPAPIThankYou();
+}
+
+
+
+function renderPAPIQuestion() { 
+  const question = tests.PAPI.questions[appState.currentQuestion];
+  const progress = calculateProgress();
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="card">
+      <!-- TIMER -->
+      <div class="timer-container" style="text-align:right;margin-bottom:6px;">
+        <span class="timer-icon" style="margin-right:5px;">⏱️</span>
+        <span class="timer" id="timer-display" style="font-weight:bold;font-size:1.06em;">
+          ${formatTime(appState.timeLeft)}
+        </span>
+      </div>
       <div class="progress-container">
         <div class="progress-bar" style="width: ${progress}%"></div>
       </div>
-      
       <h2>${tests.PAPI.name}</h2>
-      <p>${tests.PAPI.description}</p>
-      <p><strong>Petunjuk:</strong> ${tests.PAPI.instruction}</p>
-      
-      <div class="example-answer">
-        <h4>Contoh Soal:</h4>
-        <p><strong>Soal:</strong> ${tests.PAPI.example.question}</p>
-        <p><strong>Pilihan A:</strong> ${tests.PAPI.example.optionA}</p>
-        <p><strong>Pilihan B:</strong> ${tests.PAPI.example.optionB}</p>
-        <p><strong>Penjelasan:</strong> ${tests.PAPI.example.explanation}</p>
+      <p class="question-text">${question.text}</p>
+      <div class="option-grid">
+        <label class="option-box" onclick="selectPAPIAnswer(this, 'A')">
+          <input type="radio" name="papi-answer" value="A">
+          ${question.optionA}
+          <span class="checkmark"></span>
+        </label>
+        <label class="option-box" onclick="selectPAPIAnswer(this, 'B')">
+          <input type="radio" name="papi-answer" value="B">
+          ${question.optionB}
+          <span class="checkmark"></span>
+        </label>
       </div>
-      
-      <div class="question-container">
-        <p class="question-text">${question.text}</p>
-        <div class="option-grid">
-          <label class="option-box" onclick="selectPAPIAnswer(this, 'A')">
-            <input type="radio" name="papi-answer" value="A">
-            ${question.optionA}
-            <span class="checkmark"></span>
-          </label>
-          <label class="option-box" onclick="selectPAPIAnswer(this, 'B')">
-            <input type="radio" name="papi-answer" value="B">
-            ${question.optionB}
-            <span class="checkmark"></span>
-          </label>
-        </div>
-      </div>
-      
       <div style="text-align: center; margin-top: 30px;">
         <button class="btn" onclick="nextPAPIQuestion()">
           ${appState.currentQuestion < tests.PAPI.questions.length - 1 ? 'Lanjut' : 'Selesai'}
@@ -5174,10 +6109,35 @@ function renderPAPIQuestion() {
       </div>
     </div>
   `;
-  
   updateTimerDisplay();
   startTimer();
 }
+
+// Helper agar timer tampil "mm:ss"
+function formatTime(sec) {
+  const m = Math.floor(sec / 60).toString().padStart(2, "0");
+  const s = (sec % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+function renderPAPIThankYou() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="card" style="max-width:440px;margin:60px auto 0 auto;padding:36px 30px 42px 30px;border-radius:18px;box-shadow:0 6px 28px #9992;text-align:center;">
+      <div style="font-size:2.6em;margin-bottom:18px;">🎉</div>
+      <h2 style="margin-bottom:12px;">Terima kasih telah mengerjakan Tes PAPI Kostick!</h2>
+      <div style="font-size:1.08em;color:#155;">
+        Jawaban Anda berhasil direkam.<br>
+        Silakan lanjut ke tes berikutnya atau klik beranda untuk kembali.
+      </div>
+      <button class="btn" style="margin-top:36px;min-width:160px;" onclick="renderHome()">
+        Kembali ke Beranda
+      </button>
+    </div>
+  `;
+}
+
+
 
 function selectPAPIAnswer(element, value) {
   // Remove previous selection
@@ -5218,7 +6178,7 @@ function nextPAPIQuestion() {
     appState.skorPAPISifat        = skorPAPISifat(appState.answers.PAPI);
     appState.skorPAPIKetaatan     = skorPAPIKetaatan(appState.answers.PAPI);
 
-    renderHome();
+    renderPAPIThankYou();
   } else {
     renderPAPIQuestion();
   }
@@ -5226,14 +6186,45 @@ function nextPAPIQuestion() {
 
 
 // ==================== Big Five Test ====================
+
+// 1. INSTRUKSI AWAL Big Five (muncul saat pertama kali klik tes)
+function renderBIGFIVEInstruction() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="card" style="max-width:600px;margin:36px auto;">
+      <h2>${tests.BIGFIVE.name}</h2>
+      <p><b>Instruksi:</b></p>
+      <p>${tests.BIGFIVE.instruction}</p>
+      <div class="example-answer" style="margin:20px 0;">
+        <h4>Contoh Soal:</h4>
+        <p><strong>Soal:</strong> ${tests.BIGFIVE.example.question}</p>
+        <p><strong>Skala:</strong> 1 (Sangat Tidak Sesuai) - 5 (Sangat Sesuai)</p>
+        <p><strong>Penjelasan:</strong> ${tests.BIGFIVE.example.explanation}</p>
+      </div>
+      <div style="text-align:center;margin-top:32px">
+        <button class="btn" onclick="startBIGFIVEQuestions()">Mulai Tes</button>
+        <button class="btn btn-outline" onclick="renderHome()">Kembali</button>
+      </div>
+    </div>
+  `;
+}
+
+// 2. INISIALISASI & PANGGIL PERTANYAAN PERTAMA
+function startBIGFIVEQuestions() {
+  appState.timeLeft = tests.BIGFIVE.time;
+  appState.currentQuestion = 0;
+  renderBIGFIVEQuestion();
+}
+
+// 3. RENDER SOAL PER NOMOR
 function renderBIGFIVEQuestion() {
   const question = tests.BIGFIVE.questions[appState.currentQuestion];
   const progress = calculateProgress();
 
   // Cegah jawaban ganda, pakai array sesuai index
   if (!appState.answers.BIGFIVE) appState.answers.BIGFIVE = [];
-  
-  const prevAnswer = appState.answers.BIGFIVE[appState.currentQuestion]?.answer || 0;
+
+  const prevAnswer = appState.answers.BIGFIVE[appState.currentQuestion] || 0;
 
   const optionsHTML = question.options.map((option, index) => `
     <div class="bigfive-option${prevAnswer === (index + 1) ? ' selected' : ''}" onclick="selectBIGFIVEAnswer(this, ${index + 1})">
@@ -5255,13 +6246,6 @@ function renderBIGFIVEQuestion() {
       </div>
       <h2>${tests.BIGFIVE.name}</h2>
       <p>${tests.BIGFIVE.description}</p>
-      <p><strong>Petunjuk:</strong> ${tests.BIGFIVE.instruction}</p>
-      <div class="example-answer">
-        <h4>Contoh Soal:</h4>
-        <p><strong>Soal:</strong> ${tests.BIGFIVE.example.question}</p>
-        <p><strong>Skala:</strong> 1 (Sangat Tidak Sesuai) - 5 (Sangat Sesuai)</p>
-        <p><strong>Penjelasan:</strong> ${tests.BIGFIVE.example.explanation}</p>
-      </div>
       <div class="question-container">
         <p class="question-text">${question.text}</p>
         <div class="bigfive-options">
@@ -5283,9 +6267,8 @@ function renderBIGFIVEQuestion() {
   startBIGFIVETimer();
 }
 
-// --- TIMER BIGFIVE ---
+// 4. TIMER Big Five
 function startBIGFIVETimer() {
-  // Jangan double interval
   if (appState.timer) clearInterval(appState.timer);
 
   appState.timer = setInterval(() => {
@@ -5294,7 +6277,7 @@ function startBIGFIVETimer() {
     if (appState.timeLeft <= 0) {
       clearInterval(appState.timer);
       appState.completed.BIGFIVE = true;
-      renderHome(); // Otomatis selesai kalau waktu habis
+      renderHome(); // Kembali ke home jika waktu habis
     }
   }, 1000);
 }
@@ -5310,73 +6293,46 @@ function formatTime(sec) {
   return `${m}:${s}`;
 }
 
-// --- PILIH JAWABAN (Jawaban by index) ---
+// 5. PILIH JAWABAN
 function selectBIGFIVEAnswer(element, value) {
-  // Remove previous selection
   document.querySelectorAll('.bigfive-option').forEach(opt => {
     opt.classList.remove('selected');
     opt.querySelector('input').checked = false;
   });
 
-  // Add new selection
   element.classList.add('selected');
   element.querySelector('input').checked = true;
 
-  // Simpan langsung ke appState, posisi sesuai index
-  const question = tests.BIGFIVE.questions[appState.currentQuestion];
-  appState.answers.BIGFIVE[appState.currentQuestion] = {
-    id: question.id,
-    answer: value,
-    answerText: `${value} (${value === 1 ? 'Sangat Tidak Sesuai' : value === 5 ? 'Sangat Sesuai' : 'Netral'})`
-  };
+  appState.answers.BIGFIVE[appState.currentQuestion] = value;
 }
 
+// 6. LANJUT SOAL / SELESAI
 function nextBIGFIVEQuestion() {
   const selectedOption = document.querySelector('input[name="bigfive-answer"]:checked');
   if (!selectedOption) {
     alert('Harap pilih salah satu skala penilaian!');
     return;
   }
-  // --- Rekam jawaban urut di array ---
-  appState.answers.BIGFIVE = appState.answers.BIGFIVE || Array(tests.BIGFIVE.questions.length).fill(0);
-  appState.answers.BIGFIVE[appState.currentQuestion] = parseInt(selectedOption.value);
 
   appState.currentQuestion++;
 
   if (appState.currentQuestion >= tests.BIGFIVE.questions.length) {
     clearInterval(appState.timer);
     appState.completed.BIGFIVE = true;
+    appState.hasilOCEAN = koreksiBigFive(appState.answers.BIGFIVE, tests.BIGFIVE.questions);
 
-    // === Koreksi dan tampilkan hasil OCEAN ===
-    const hasilOCEAN = koreksiBigFive(
-      appState.answers.BIGFIVE,
-      tests.BIGFIVE.questions
-    );
-    appState.hasilOCEAN = hasilOCEAN;
-
-    // --- Tampilkan hasil di halaman ---
-    let html = `<div class="card"><h2>Hasil Tes Big Five (OCEAN)</h2>
-      <table style="width:100%;margin-top:12px">
-        <tr><th>Dimensi</th><th>Skor (%)</th><th>Deskripsi</th></tr>`;
-    for (const k of ["O","C","E","A","N"]) {
-      html += `<tr>
-        <td style="font-weight:bold;">${hasilOCEAN[k].name}</td>
-        <td style="text-align:center;">${hasilOCEAN[k].percent}%</td>
-        <td>${hasilOCEAN[k].desc}</td>
-      </tr>`;
-    }
-    html += `</table>
-      <div style="margin-top:26px;text-align:center">
-        <button class="btn" onclick="renderHome()">Kembali ke Beranda</button>
+    // Ucapan terima kasih
+    document.getElementById('app').innerHTML = `
+      <div class="card" style="text-align:center;padding:48px 20px;">
+        <h2>Terima kasih telah menyelesaikan Tes Big Five!</h2>
+        <p>Jawaban Anda telah terekam dengan baik.<br>Silakan kembali ke Beranda untuk melanjutkan tes berikutnya.</p>
+        <button class="btn" onclick="renderHome()" style="margin-top:30px">Kembali ke Beranda</button>
       </div>
-    </div>`;
-    document.getElementById('app').innerHTML = html;
-
+    `;
   } else {
     renderBIGFIVEQuestion();
   }
 }
-
 
 //=====================GRAFIS=====================
 function renderGrafisUpload() {
@@ -6307,6 +7263,55 @@ if (appState.completed.DISC) {
   ySection += 2;
   if (ySection > 265) { doc.addPage(); ySection = 20; }
 
+  // ====== 1. JUDUL HASIL DISC ======
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'bold');
+  doc.setTextColor(0, 0, 0); // Warna hitam
+  doc.text(`HASIL DISC ${appState.identity?.nickname || ''}`, pageWidth / 2, ySection, { align: 'center' });
+  ySection += 6;
+  doc.setTextColor(44, 62, 80); // Normal kembali
+
+  // ====== 2. JAWABAN TES DISC ======
+  doc.setFontSize(7);
+  doc.setFont(undefined, 'bold');
+  doc.text('JAWABAN TES DISC', pageWidth / 2, ySection, { align: 'center' });
+  doc.setFont(undefined, 'normal');
+  ySection += 2;
+
+  const jawabanDISC = (appState.answers.DISC || []).map((ans, idx) => ({
+    no: (idx + 1).toString(),
+    p: (ans.p + 1).toString(),
+    k: (ans.k + 1).toString()
+  }));
+
+  const barisDISC = Math.ceil(jawabanDISC.length / 4);
+  const cols = [[], [], [], []];
+  for (let i = 0; i < jawabanDISC.length; i++) {
+    const colIndex = i % 4;
+    cols[colIndex].push(jawabanDISC[i]);
+  }
+
+  const colX = [29, 67, 105, 143];
+  let colY = ySection + 0.5;
+
+  for (let r = 0; r < barisDISC; r++) {
+    colY += 2.3;
+    if (colY > 280) { doc.addPage(); colY = 20; }
+    for (let c = 0; c < 4; c++) {
+      const ans = cols[c][r];
+      if (ans) {
+        doc.text(`${ans.no}. [P]=${ans.p} ; [K]=${ans.k}`, colX[c], colY);
+      }
+    }
+  }
+  ySection = colY + 2;
+
+  // ====== 3. PASTIKAN ADA RUANG UNTUK GRAFIK (~126px) ======
+  if (ySection > 220) {
+    doc.addPage();
+    ySection = 20;
+  }
+
   // ========== PASTIKAN GRAFIK TERUPDATE SEBELUM AMBIL CANVAS ==========
   const hasilDISC = countDISC(appState.answers.DISC, tests.DISC.questions);
   if (typeof drawDISCClassic === "function") {
@@ -6316,35 +7321,37 @@ if (appState.completed.DISC) {
     await new Promise(r=>setTimeout(r,80)); // Delay penting!
   }
 
-  // ========== JUDUL DAN GRAFIK ==========
-  doc.setFontSize(10);
-  doc.setFont(undefined, 'bold');
-  doc.setTextColor(33, 118, 199);
-  doc.text(`HASIL DISC ${appState.identity?.nickname || ''}`, pageWidth / 2, ySection, { align: 'center' });
-  doc.setFont(undefined, 'normal');
-  ySection += 6;
+ 
 
   // ========== GRAFIK DISC (CANVAS ke PDF) ==========
-  try {
-    const imgMost   = document.getElementById('discMost')?.toDataURL('image/png') || null;
-    const imgLeast  = document.getElementById('discLeast')?.toDataURL('image/png') || null;
-    const imgChange = document.getElementById('discChange')?.toDataURL('image/png') || null;
+try {
+  const imgMost   = document.getElementById('discMost')?.toDataURL('image/png') || null;
+  const imgLeast  = document.getElementById('discLeast')?.toDataURL('image/png') || null;
+  const imgChange = document.getElementById('discChange')?.toDataURL('image/png') || null;
 
-    const imgWidth = 44, imgHeight = 110;
-    const xStart = pageWidth / 2 - 72;
-    if (imgMost)   doc.addImage(imgMost,   'PNG', xStart, ySection, imgWidth, imgHeight);
-    if (imgLeast)  doc.addImage(imgLeast,  'PNG', xStart + imgWidth + 4, ySection, imgWidth, imgHeight);
-    if (imgChange) doc.addImage(imgChange, 'PNG', xStart + (imgWidth + 4) * 2, ySection, imgWidth, imgHeight);
+  // Ukuran lebih kecil, muat semua di tengah
+  const imgWidth = 28, imgHeight = 60;
+  const gap = 3;
+  const totalWidth = imgWidth * 3 + gap * 2;
+  const xStart = pageWidth / 2 - totalWidth / 2;
 
-    // Label bawah grafik
-    doc.setFontSize(7.5);
-    doc.setTextColor(33, 118, 199); doc.text('Most (P)',   xStart + imgWidth/2, ySection + imgHeight + 6, { align: 'center' });
-    doc.setTextColor(222, 144, 0);  doc.text('Least (K)',  xStart + imgWidth + 4 + imgWidth/2, ySection + imgHeight + 6, { align: 'center' });
-    doc.setTextColor(24, 177, 114); doc.text('Change',     xStart + (imgWidth + 4)*2 + imgWidth/2, ySection + imgHeight + 6, { align: 'center' });
-    doc.setTextColor(44, 62, 80);
-    ySection += imgHeight + 16;
-    if (ySection > 265) { doc.addPage(); ySection = 20; }
-  } catch (e) {}
+  if (imgMost)   doc.addImage(imgMost,   'PNG', xStart, ySection, imgWidth, imgHeight);
+  if (imgLeast)  doc.addImage(imgLeast,  'PNG', xStart + imgWidth + gap, ySection, imgWidth, imgHeight);
+  if (imgChange) doc.addImage(imgChange, 'PNG', xStart + (imgWidth + gap) * 2, ySection, imgWidth, imgHeight);
+
+  // Label bawah grafik
+  doc.setFontSize(7);
+  doc.setTextColor(33, 118, 199); 
+  doc.text('Most (P)', xStart + imgWidth / 2, ySection + imgHeight + 6, { align: 'center' });
+  doc.setTextColor(222, 144, 0);  
+  doc.text('Least (K)', xStart + imgWidth + gap + imgWidth / 2, ySection + imgHeight + 6, { align: 'center' });
+  doc.setTextColor(24, 177, 114); 
+  doc.text('Change', xStart + (imgWidth + gap) * 2 + imgWidth / 2, ySection + imgHeight + 6, { align: 'center' });
+  doc.setTextColor(44, 62, 80);
+
+  ySection += imgHeight + 12; // Lebih irit spasi
+  if (ySection > 265) { doc.addPage(); ySection = 20; }
+} catch (e) {}
 
   // ========== TABEL NILAI DISC ==========
   doc.setFontSize(8.5);
@@ -6406,7 +7413,7 @@ if (appState.completed.DISC) {
   let blokX = 16;
   let blokW = 82;
 
-  if (totalStar >= 10) {
+  if (totalStar >= 13) {
     if (identity.position) {
       blokHeading(doc, `Analisis Posisi: ${identity.position}`, [33,33,33], blokX, ySection, 80, 8);
       ySection += 10;
@@ -6418,67 +7425,16 @@ if (appState.completed.DISC) {
       ySection += 14;
       if (ySection > 265) { doc.addPage(); ySection = 20; }
     }
-    // Lanjutkan ke proses jawaban DISC & tes lain (jangan return!)
+    // Tetap lanjut ke proses jawaban
   } else {
-    // ========== ANALISIS DISC (BLOK HEADING, MIRIP WEB) ==========
+    // ANALISIS DISC (most, least, change) dan variabel untuk analisis
     const most   = analisa2DominanDISC(hasilDISC.most.D, hasilDISC.most.I, hasilDISC.most.S, hasilDISC.most.C, 'most', getPixelY);
     const least  = analisa2DominanDISC(hasilDISC.least.D, hasilDISC.least.I, hasilDISC.least.S, hasilDISC.least.C, 'least', getPixelY);
     const change = analisa2DominanDISC(hasilDISC.change.D, hasilDISC.change.I, hasilDISC.change.S, hasilDISC.change.C, 'change', getPixelY);
 
-    // MOST
-    let tinggiMost = 30 + doc.splitTextToSize(stripHTML(most.deskripsi), pageWidth-36).length*3.2;
-    ySection = ensureSpace(doc, ySection, tinggiMost);
-    blokHeading(doc, "Analisis Mask / Most (P)", [33,118,199], blokX, ySection, blokW, 8);
-    ySection += 10;
-    doc.setFontSize(8.4);
-    doc.text("Dua dominan utama: " + most.dominan.join(' & '), blokX+2, ySection); ySection += 4;
-    doc.text("Urutan: " + most.ranking, blokX+2, ySection); ySection += 4;
-    let mostDesc = stripHTML(most.deskripsi);
-    let mostLines = doc.splitTextToSize(mostDesc, pageWidth-36);
-    doc.text(mostLines, blokX+2, ySection); ySection += mostLines.length*3.2 + 3;
-    let mostPola = stripHTML(most.analisaPola || '');
-    if (mostPola) {
-      let polaLines = doc.splitTextToSize(mostPola, pageWidth-36);
-      doc.text(polaLines, blokX+2, ySection); ySection += polaLines.length*3.2 + 3;
-    }
-
-    // LEAST
-    let tinggiLeast = 30 + doc.splitTextToSize(stripHTML(least.deskripsi), pageWidth-36).length*3.2;
-    ySection = ensureSpace(doc, ySection, tinggiLeast);
-    blokHeading(doc, "Analisis Pressure / Least (K)", [222,144,0], blokX, ySection, blokW, 8);
-    ySection += 10;
-    doc.setFontSize(8.4);
-    doc.text("Dua dominan utama: " + least.dominan.join(' & '), blokX+2, ySection); ySection += 4;
-    doc.text("Urutan: " + least.ranking, blokX+2, ySection); ySection += 4;
-    let leastDesc = stripHTML(least.deskripsi);
-    let leastLines = doc.splitTextToSize(leastDesc, pageWidth-36);
-    doc.text(leastLines, blokX+2, ySection); ySection += leastLines.length*3.2 + 3;
-    let leastPola = stripHTML(least.analisaPola || '');
-    if (leastPola) {
-      let polaLines = doc.splitTextToSize(leastPola, pageWidth-36);
-      doc.text(polaLines, blokX+2, ySection); ySection += polaLines.length*3.2 + 3;
-    }
-
-    // CHANGE
-    let tinggiChange = 30 + doc.splitTextToSize(stripHTML(change.deskripsi), pageWidth-36).length*3.2;
-    ySection = ensureSpace(doc, ySection, tinggiChange);
-    blokHeading(doc, "Analisis Self / Change (P-K)", [24,177,114], blokX, ySection, blokW, 8);
-    ySection += 10;
-    doc.setFontSize(8.4);
-    doc.text("Dua dominan utama: " + change.dominan.join(' & '), blokX+2, ySection); ySection += 4;
-    doc.text("Urutan: " + change.ranking, blokX+2, ySection); ySection += 4;
-    let changeDesc = stripHTML(change.deskripsi);
-    let changeLines = doc.splitTextToSize(changeDesc, pageWidth-36);
-    doc.text(changeLines, blokX+2, ySection); ySection += changeLines.length*3.2 + 3;
-    let changePola = stripHTML(change.analisaPola || '');
-    if (changePola) {
-      let polaLines = doc.splitTextToSize(changePola, pageWidth-36);
-      doc.text(polaLines, blokX+2, ySection); ySection += polaLines.length*3.2 + 3;
-    }
-
- // REKOMENDASI KARIR (16 kombinasi)
-let roles = (function(){
-  const rolesMap = {
+    // REKOMENDASI KARIR
+    let roles = (function(){
+     const rolesMap = {
     "DD": [
       "Kepala Divisi",
       "Project Leader",
@@ -6590,6 +7546,8 @@ let roles = (function(){
     });
 
     // Kecocokan POSISI
+    let simbol = "-";
+    let detail = "";
     if (identity.position) {
       const persyaratan = {
         "Administrator": [["SC", "DC"], ["CS", "CD"]],
@@ -6598,21 +7556,17 @@ let roles = (function(){
         "Manajer": [["DI", "ID", "DC", "CD"], ["DS", "IS"]]
       };
       const k = most.dominan.slice().sort().join('');
-     let simbol = "-"; // Default Tidak Cocok
-
-if (persyaratan[identity.position]?.[0]?.includes(k)) {
-  simbol = "CC"; // Cocok Sekali
-} else if (persyaratan[identity.position]?.[1]?.includes(k)) {
-  simbol = "C"; // Cocok
-} else if (
-  persyaratan[identity.position]?.flat()?.some(code =>
-    k.includes(code[0]) || k.includes(code[1])
-  )
-) {
-  simbol = "!"; // Kurang Cocok
-}
-
-      let detail = "";
+      if (persyaratan[identity.position]?.[0]?.includes(k)) {
+        simbol = "CC";
+      } else if (persyaratan[identity.position]?.[1]?.includes(k)) {
+        simbol = "C";
+      } else if (
+        persyaratan[identity.position]?.flat()?.some(code =>
+          k.includes(code[0]) || k.includes(code[1])
+        )
+      ) {
+        simbol = "!";
+      }
       if (identity.teacherLevel) {
         if (identity.teacherLevel === "SD" && k.includes("I")) detail += "Sangat cocok untuk mengajar anak-anak.";
         if (identity.teacherLevel === "SMA" && k.includes("C")) detail += "Cocok untuk mata pelajaran eksakta.";
@@ -6632,111 +7586,275 @@ if (persyaratan[identity.position]?.[0]?.includes(k)) {
       ySection += 5;
       if (ySection > 265) { doc.addPage(); ySection = 20; }
     }
-  }
 
-  // ========== JAWABAN PER SOAL ==========
-  doc.setFontSize(7);
-  doc.setFont(undefined, 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('JAWABAN TES DISC', pageWidth / 2, ySection, { align: 'center' });
-  doc.setFont(undefined, 'normal');
-  ySection += 2;
-  if (ySection > 265) { doc.addPage(); ySection = 20; }
-  doc.setFontSize(7);
-  doc.setTextColor(44, 62, 80);
+// ========== KESIMPULAN 3 GRAFIK + KECOCOKAN POSISI (UPGRADED) ==========
+if (identity.position) {
+  const nickname = identity.nickname || "Peserta";
+  const posisi = identity.position;
 
-  const jawabanDISC = (appState.answers.DISC || []).map((ans, idx) => ({
-    no: (idx + 1).toString(),
-    p: (ans.p + 1).toString(),
-    k: (ans.k + 1).toString()
-  }));
+  const gabunganAnalisis = (() => {
+    const introMost = `• Grafik Most (P): Menunjukkan kepribadian alami ${nickname} dalam kondisi nyaman.`;
+    const mostDetails = [
+      `  - Tipe Dominan: ${most.dominan.join(' dan ')} (${most.ranking})`,
+      `  - Deskripsi: ${stripHTML(most.deskripsi)}`,
+      `  - Implikasi: ${getImplication(most.dominan[0], 'most')}`
+    ].join('\n');
 
-  const perCol = Math.ceil(jawabanDISC.length / 4);
-  const cols = [[], [], [], []];
-  jawabanDISC.forEach((item, i) => {
-    cols[Math.floor(i / perCol)].push(item);
-  });
+    const introLeast = `• Grafik Least (K): Menggambarkan respons ${nickname} terhadap tekanan dan tantangan.`;
+    const leastDetails = [
+      `  - Tipe Dominan: ${least.dominan.join(' dan ')} (${least.ranking})`,
+      `  - Deskripsi: ${stripHTML(least.deskripsi)}`,
+      `  - Implikasi: ${getImplication(least.dominan[0], 'least')}`
+    ].join('\n');
 
-  let colX = [29, 67, 105, 143];
-  let colY = ySection + 0.5;
+    const introChange = `• Grafik Change (P-K): Merefleksikan kemampuan adaptasi ${nickname} antara situasi normal dan tekanan.`;
+    const changeDetails = [
+      `  - Kombinasi Dominan: ${change.dominan.join(' dan ')} (${change.ranking})`,
+      `  - Deskripsi: ${stripHTML(change.deskripsi)}`,
+      `  - Implikasi: ${getImplication(change.dominan[0], 'change')}`
+    ].join('\n');
 
-  for (let r = 0; r < perCol; r++) {
-    colY += 2.3;
-    if (colY > 280) { doc.addPage(); colY = 20; }
-    for (let c = 0; c < 4; c++) {
-      let ans = cols[c][r];
-      if (ans) {
-        doc.text(`${ans.no}. [P]=${ans.p} ; [K]=${ans.k}`, colX[c], colY);
-      }
+    // Gabungkan semua jadi satu string dengan newline antar bagian
+    return [
+      introMost, mostDetails, "",
+      introLeast, leastDetails, "",
+      introChange, changeDetails
+    ].join('\n');
+  })();
+
+
+  const cocokStr = (
+    simbol === "CC" ? "SANGAT SESUAI" :
+    simbol === "C"  ? "CUKUP SESUAI" :
+    simbol === "!"  ? "KURANG SESUAI" :
+                      "TIDAK SESUAI"
+  );
+
+  const kalimatCocok = `
+  
+TINGKAT KECOCOKAN:
+• Posisi: ${posisi}
+• Kecocokan: ${cocokStr}
+• Alasan: ${getCompatibilityReason(simbol, most.dominan[0], posisi)}`;
+
+  let levelNote = "";
+  if (identity.teacherLevel) {
+    if (identity.teacherLevel === "SD" && most.dominan.includes("I")) {
+      levelNote = "\n• Catatan Khusus: Gaya interpersonal yang menonjol sangat mendukung pembelajaran di kelas rendah.";
+    }
+    if (identity.teacherLevel === "SMA" && most.dominan.includes("C")) {
+      levelNote = "\n• Catatan Khusus: Pendekatan analitis sangat relevan untuk pengajaran tingkat menengah atas.";
     }
   }
-  ySection = colY + 1.2;
-  if (ySection > 265) { doc.addPage(); ySection = 20; }
+
+  const kalimatAkhir = `
+  
+POTENSI PENGEMBANGAN:
+${nickname} memiliki potensi untuk:
+- Beradaptasi secara efektif dalam lingkungan kerja baru
+- Berkontribusi positif melalui ${getStrengthArea(most.dominan[0])}
+- Mengembangkan diri dalam peran ${posisi} melalui ${getDevelopmentArea(least.dominan[0])}`;
+
+ const paragrafKesimpulan = 
+  "ANALISIS TRI-GRAFIK DISC\n\n" + 
+  gabunganAnalisis + "\n" + 
+  kalimatCocok +
+  (detail ? "\n• Detail Tambahan: " + detail : "") +
+  levelNote +
+  kalimatAkhir;
+
+// SETUP margin dan lebar blok
+const marginLR = 18; // margin kiri-kanan (bisa ubah 16, 20, dst)
+const blokX = marginLR;
+const blokW = pageWidth - 2 * marginLR;
+
+// Judul section
+const sectionTitle = "KESIMPULAN ANALISIS DISC";
+ySection = ensureSpace(doc, ySection, 20);
+
+// HEADER biru
+doc.setFillColor(61, 131, 223);
+doc.rect(blokX - 2, ySection - 4, blokW, 10, 'F');
+doc.setTextColor(255, 255, 255);
+doc.setFontSize(10);
+doc.setFont(undefined, 'bold');
+doc.text(sectionTitle, blokX + 2, ySection + 2);
+
+// Isi kesimpulan
+ySection += 15;
+doc.setTextColor(0, 0, 0);
+doc.setFontSize(8.5);
+doc.setFont(undefined, 'normal');
+
+// WRAP setiap baris, anti overflow kanan!
+const lines = paragrafKesimpulan.split('\n');
+lines.forEach(line => {
+  if (!line.trim()) {
+    ySection += 2; // jarak baris kosong
+    return;
+  }
+  const wrapLines = doc.splitTextToSize(line, blokW - 8); // biar ada sedikit margin dalam box
+  wrapLines.forEach(wrapLine => {
+    ySection = ensureSpace(doc, ySection, 4);
+    doc.text(wrapLine, blokX + 2, ySection);
+    ySection += 4;
+  });
+});
+
+// Jeda bawah section
+ySection += 8;
+if (ySection > 265) {
+  doc.addPage();
+  ySection = 20;
 }
+}
+
+
+function getImplication(dominantType, graphType) {
+  const implications = {
+    D: {
+      most: "Cenderung mengambil kepemimpinan dan membuat keputusan cepat",
+      least: "Mungkin menunjukkan sikap konfrontatif saat under pressure",
+      change: "Potensi peningkatan kontrol emosi dalam situasi stres"
+    },
+    I: {
+      most: "Membangun hubungan interpersonal dengan mudah",
+      least: "Mengalami kesulitan dalam situasi yang membutuhkan fokus tinggi",
+      change: "Kemampuan beradaptasi sosial di berbagai situasi"
+    },
+    S: {
+      most: "Memberikan stabilitas dan konsistensi dalam tim",
+      least: "Kesulitan beradaptasi dengan perubahan mendadak",
+      change: "Peningkatan fleksibilitas menghadapi perubahan"
+    },
+    C: {
+      most: "Analitis dan teliti dalam menyelesaikan masalah",
+      least: "Cenderung perfectionist yang menghambat progres",
+      change: "Kemampuan menyeimbangkan akurasi dan efisiensi"
+    }
+  };
+  return implications[dominantType]?.[graphType] || "Tidak ada data implikasi spesifik";
+}
+
+function getCompatibilityReason(symbol, dominantType, position) {
+  const reasons = {
+    CC: `Dominansi ${dominantType} sangat selaras dengan tuntutan utama posisi ${position}`,
+    C: `Karakter ${dominantType} mendukung sebagian besar kebutuhan posisi ${position}`,
+    "!": `Ada beberapa aspek dalam ${position} yang membutuhkan pengembangan lebih lanjut`,
+    XX: `Ditemukan gap signifikan antara profil kandidat dan kebutuhan posisi`
+  };
+  return reasons[symbol] || "Tidak tersedia informasi detail kecocokan";
+}
+
+function getStrengthArea(dominantType) {
+  const strengths = {
+    D: "pengambilan keputusan dan kepemimpinan",
+    I: "membangun relasi dan kolaborasi",
+    S: "menciptakan lingkungan kerja stabil",
+    C: "analisis data dan penyelesaian masalah teknis"
+  };
+  return strengths[dominantType] || "kekuatan spesifik";
+}
+
+function getDevelopmentArea(dominantType) {
+  const areas = {
+    D: "pelatihan manajemen konflik",
+    I: "pengembangan fokus dan disiplin",
+    S: "pelatihan adaptasi perubahan",
+    C: "pengelolaan ekspektasi realistis"
+  };
+  return areas[dominantType] || "pengembangan kompetensi";
+}
+
+function formatBulletPoints(lines) {
+  const formatted = [];
+  let isNewSection = true;
+
+  lines.forEach(line => {
+    if (line.match(/^(ANALISIS|TINGKAT|POTENSI)/)) {
+      formatted.push("");
+      formatted.push("• " + line);
+      isNewSection = true;
+    } else if (line.startsWith("-") || isNewSection) {
+      formatted.push("• " + line);
+      isNewSection = false;
+    } else {
+      formatted[formatted.length - 1] += " " + line.trim();
+    }
+  });
+
+  return formatted;
+}}}
+
 
 // ========== PAPI ==========
 if (appState.completed.PAPI) {
-  ySection += 8; // Jarak atas lebih lebar
+  ySection += 8;
   if (ySection > 265) { doc.addPage(); ySection = 20; }
-
-  doc.setFontSize(11); // Font lebih besar untuk judul
+  doc.setFontSize(11);
   doc.setFont(undefined, 'bold');
-  doc.text('JAWABAN TES PAPI', 105, ySection, { align: 'center' }); // Center di kertas A4 (210/2 = 105)
-  ySection += 7; // Jarak bawah judul lebih lebar
-  doc.setFontSize(7); // Kembalikan ke font normal
+  doc.text('JAWABAN TES PAPI', 105, ySection, { align: 'center' });
+  ySection += 7;
+  doc.setFontSize(7.2);
   doc.setFont(undefined, 'normal');
 
-  // Jawaban PAPI
-  const kolom = 9, baris = 10;
+  // Jawaban PAPI 18 kolom × 5 baris, margin seimbang
+  const kolom = 18, baris = 5;
+  const xStart = 17;   // <--- Lebih ke kiri
+  const kolGap = 10;
   for (let i = 0; i < baris; i++) {
-    if (ySection > 280) { doc.addPage(); ySection = 20; }
-    let textRow = '';
+    let x = xStart;
     for (let j = 0; j < kolom; j++) {
       const idx = i + j * baris;
       if (idx < appState.answers.PAPI.length) {
         const ans = appState.answers.PAPI[idx];
-        textRow += `${String(idx + 1).padStart(2, ' ')}.${ans.answer || '-'}   `;
+        const txt = `${String(idx + 1).padStart(2, '0')}.${ans.answer || '-'}`;
+        doc.text(txt, x, ySection);
+        x += kolGap;
       }
     }
-    doc.text(textRow.trim(), 25, ySection);
-    ySection += 2.7;
+    ySection += 3.1;
+    if (ySection > 275) { doc.addPage(); ySection = 22; }
   }
-
-  ySection += 4;
+  ySection += 3;
   if (ySection > 265) { doc.addPage(); ySection = 20; }
+
 
   // SKOR PAPI - Semua Aspek
   doc.setFont(undefined, 'bold');
-  doc.text('Skor PAPI:', 25, ySection);
-  ySection += 3;
-  doc.setFont(undefined, 'normal');
-  const tampilSkor = (judul, skorObj) => {
-    if (!skorObj) return;
-    const entries = Object.entries(skorObj);
-    const perBaris = 4;
-    doc.setFont(undefined, 'bold');
-    doc.text(judul + ":", 25, ySection);
-    ySection += 3;
-    doc.setFont(undefined, 'normal');
-    for (let i = 0; i < entries.length; i += perBaris) {
-      const slice = entries.slice(i, i + perBaris)
-        .map(([key, val]) => `${key} = ${val}`)
-        .join('   |   ');
-      doc.text(slice, 30, ySection);
-      ySection += 3;
-      if (ySection > 265) { doc.addPage(); ySection = 20; }
-    }
-  };
+doc.text('Skor PAPI:', 25, ySection);
+ySection += 2.2;
+doc.setFont(undefined, 'normal');
 
-  tampilSkor('Arah Kerja', appState.skorPAPIArahKerja);
-  tampilSkor('Kepemimpinan', appState.skorPAPIKepemimpinan);
-  tampilSkor('Aktivitas', appState.skorPAPIAktivitas);
-  tampilSkor('Pergaulan', appState.skorPAPIPergaulan);
-  tampilSkor('Gaya Kerja', appState.skorPAPIGayaKerja);
-  tampilSkor('Sifat', appState.skorPAPISifat);
-  tampilSkor('Ketaatan', appState.skorPAPIKetaatan);
+// Gabungkan label + skor setiap kelompok
+function gabungSkorKelompok() {
+  const bagian = [
+    ['Arah Kerja',      appState.skorPAPIArahKerja],
+    ['Kepemimpinan',    appState.skorPAPIKepemimpinan],
+    ['Aktivitas',       appState.skorPAPIAktivitas],
+    ['Pergaulan',       appState.skorPAPIPergaulan],
+    ['Gaya Kerja',      appState.skorPAPIGayaKerja],
+    ['Sifat',           appState.skorPAPISifat],
+    ['Ketaatan',        appState.skorPAPIKetaatan]
+  ];
+  return bagian.map(([judul, obj]) => {
+    if (!obj) return '';
+    const skor = Object.entries(obj).map(([k, v]) => `${k}=${v}`).join(' | ');
+    return `${judul}: ${skor}`;
+  });
+}
 
-  // ==== RANGKUMAN SKOR & INTERPRETASI (2 KOLOM ANTI-TABRAKAN) ====
+// Split menjadi beberapa baris agar tidak terpotong di PDF
+const skorKelompokArr = gabungSkorKelompok(); // array per kelompok
+const MAX_KOLOM_PER_BARIS = 3; // <= Berapa kelompok per baris? 3 = paling aman (landscape, 2 baris), 4 jika ingin agak padat
+
+for (let i = 0; i < skorKelompokArr.length; i += MAX_KOLOM_PER_BARIS) {
+  const slice = skorKelompokArr.slice(i, i + MAX_KOLOM_PER_BARIS).join('   |   ');
+  doc.text(slice, 25, ySection);
+  ySection += 2.3;
+  if (ySection > 265) { doc.addPage(); ySection = 20; }
+}
+  // ==== RANGKUMAN SKOR & INTERPRETASI (DINAMIS) ====
   ySection += 4;
   if (ySection > 265) { doc.addPage(); ySection = 20; }
   doc.setFont(undefined, 'bold');
@@ -6744,8 +7862,38 @@ if (appState.completed.PAPI) {
   ySection += 3;
   doc.setFont(undefined, 'normal');
 
+  // KAMUS INTERPRETASI
+  const kamusPAPI = {
+    A: [ { range: [0, 4], desc: "Tidak kompetitif, mapan, puas. Tidak terdorong untuk menghasilkan prestasi, tdk berusaha utk mencapai sukses, membutuhkan dorongan dari luar diri, tidak berinisiatif, tidak memanfaatkan kemampuan diri secara optimal, ragu akan tujuan diri, misalnya sbg akibat promosi / perubahan struktur jabatan." }, { range: [5, 7], desc: "Tahu akan tujuan yang ingin dicapainya dan dapat merumuskannya, realistis akan kemampuan diri, dan berusaha untuk mencapai target." }, { range: [8, 9], desc: "Sangat berambisi utk berprestasi dan menjadi yg terbaik, menyukai tantangan, cenderung mengejar kesempurnaan, menetapkan target yg tinggi, 'self-starter', merumuskan kerja dg baik. Tdk realistis akan kemampuannya, sulit dipuaskan, mudah kecewa, harapan yg tinggi mungkin mengganggu org lain." } ],
+    N: [ { range: [0, 2], desc: "Tidak terlalu merasa perlu untuk menuntaskan sendiri tugas-tugasnya, senang menangani beberapa pekerjaan sekaligus, mudah mendelegasikan tugas. Komitmen rendah, cenderung meninggalkan tugas sebelum tuntas, konsentrasi mudah buyar, mungkin suka berpindah pekerjaan." }, { range: [3, 5], desc: "Cukup memiliki komitmen untuk menuntaskan tugas, akan tetapi jika memungkinkan akan mendelegasikan sebagian dari pekerjaannya kepada orang lain." }, { range: [6, 7], desc: "Komitmen tinggi, lebih suka menangani pekerjaan satu demi satu, akan tetapi masih dapat mengubah prioritas jika terpaksa." }, { range: [8, 9], desc: "Memiliki komitmen yg sangat tinggi thd tugas, sangat ingin menyelesaikan tugas, tekun dan tuntas dlm menangani pekerjaan satu demi satu hingga tuntas. Perhatian terpaku pada satu tugas, sulit utk menangani beberapa pekerjaan sekaligus, sulit diinterupsi, tidak melihat masalah sampingan." } ],
+    G: [ { range: [0, 2], desc: "Santai, kerja adalah sesuatu yang menyenangkan-bukan beban yg membutuhkan usaha besar. Mungkin termotivasi utk mencari cara atau sistem yg dpt mempermudah dirinya dlm menyelesaikan pekerjaan, akan berusaha menghindari kerja keras, sehingga dapat memberi kesan malas." }, { range: [3, 4], desc: "Bekerja keras sesuai tuntutan, menyalurkan usahanya untuk hal-hal yang bermanfaat / menguntungkan." }, { range: [5, 7], desc: "Bekerja keras, tetapi jelas tujuan yg ingin dicapainya." }, { range: [8, 9], desc: "Ingin tampil sbg pekerja keras, sangat suka bila orang lain memandangnya sbg pekerja keras. Cenderung menciptakan pekerjaan yang tidak perlu agar terlihat tetap sibuk, kadang kala tanpa tujuan yang jelas." } ],
+    C: [ { range: [0, 2], desc: "Lebih mementingkan fleksibilitas daripada struktur, pendekatan kerja lebih ditentukan oleh situasi daripada oleh perencanaan sebelumnya, mudah beradaptasi. Tidak mempedulikan keteraturan atau kerapihan, ceroboh." }, { range: [3, 4], desc: "Fleksibel tapi masih cukup memperhatikan keteraturan atau sistematika kerja." }, { range: [5, 6], desc: "Memperhatikan keteraturan dan sistematika kerja, tapi cukup fleksibel." }, { range: [7, 9], desc: "Sistematis, bermetoda, berstruktur, rapi dan teratur, dapat menata tugas dengan baik. Cenderung kaku, tidak fleksibel." } ],
+    D: [ { range: [0, 1], desc: "Melihat pekerjaan scr makro, membedakan hal penting dari yg kurang penting, mendelegasikan detil pd org lain, generalis. Menghindari detail, konsekuensinya mungkin bertindak tanpa data yg cukup/akurat, bertindak ceroboh pd hal yg butuh kecermatan. Dpt mengabaikan proses yg vital dlm evaluasi data." }, { range: [2, 3], desc: "Cukup peduli akan akurasi dan kelengkapan data." }, { range: [4, 6], desc: "Tertarik untuk menangani sendiri detail." }, { range: [7, 9], desc: "Sangat menyukai detail, sangat peduli akan akurasi dan kelengkapan data. Cenderung terlalu terlibat dengan detail sehingga melupakan tujuan utama." } ],
+    R: [ { range: [0, 3], desc: "Tipe pelaksana, praktis - pragmatis, mengandalkan pengalaman masa lalu dan intuisi. Bekerja tanpa perencanaan, mengandalkan perasaan." }, { range: [4, 5], desc: "Pertimbangan mencakup aspek teoritis (konsep atau pemikiran baru) dan aspek praktis (pengalaman) secara berimbang." }, { range: [6, 7], desc: "Suka memikirkan suatu problem secara mendalam, merujuk pada teori dan konsep." }, { range: [8, 9], desc: "Tipe pemikir, sangat berminat pada gagasan, konsep, teori, mencari alternatif baru, menyukai perencanaan. Mungkin sulit dimengerti oleh orang lain, terlalu teoritis dan tidak praktis, mengawang-awang dan berbelit-belit." } ],
+    T: [ { range: [0, 3], desc: "Santai. Kurang peduli akan waktu, kurang memiliki rasa urgensi, membuang-buang waktu, bukan pekerja yang tepat waktu." }, { range: [4, 6], desc: "Cukup aktif dalam segi mental, dapat menyesuaikan tempo kerjanya dengan tuntutan pekerjaan / lingkungan." }, { range: [7, 9], desc: "Cekatan, selalu siaga, bekerja cepat, ingin segera menyelesaikan tugas. Negatifnya: Tegang, cemas, impulsif, mungkin ceroboh, banyak gerakan yang tidak perlu." } ],
+    V: [ { range: [0, 2], desc: "Cocok untuk pekerjaan 'di belakang meja'. Cenderung lamban, tidak tanggap, mudah lelah, daya tahan lemah." }, { range: [3, 6], desc: "Dapat bekerja di belakang meja dan senang jika sesekali harus terjun ke lapangan atau melaksanakan tugas-tugas yang bersifat mobile." }, { range: [7, 9], desc: "Menyukai aktifitas fisik (a.l.: olah raga), enerjik, memiliki stamina untuk menangani tugas-tugas berat, tidak mudah lelah. Tidak betah duduk lama, kurang dapat konsentrasi 'di belakang meja'." } ],
+    W: [ { range: [0, 3], desc: "Hanya butuh gambaran ttg kerangka tugas scr garis besar, berpatokan pd tujuan, dpt bekerja dlm suasana yg kurang berstruktur, berinsiatif, mandiri. Tdk patuh, cenderung mengabaikan/tdk paham pentingnya peraturan/prosedur, suka membuat peraturan sendiri yg bisa bertentangan dg yg telah ada." }, { range: [4, 5], desc: "Perlu pengarahan awal dan tolok ukur keberhasilan." }, { range: [6, 7], desc: "Membutuhkan uraian rinci mengenai tugas, dan batasan tanggung jawab serta wewenang." }, { range: [8, 9], desc: "Patuh pada kebijaksanaan, peraturan dan struktur organisasi. Ingin segala sesuatunya diuraikan secara rinci, kurang memiliki inisiatif, tdk fleksibel, terlalu tergantung pada organisasi, berharap 'disuapi'." } ],
+    F: [ { range: [0, 3], desc: "Otonom, dapat bekerja sendiri tanpa campur tangan orang lain, motivasi timbul krn pekerjaan itu sendiri - bukan krn pujian dr otoritas. Mempertanyakan otoritas, cenderung tidak puas thdp atasan, loyalitas lebih didasari kepentingan pribadi." }, { range: [4, 6], desc: "Loyal pada Perusahaan." }, { range: [7, 7], desc: "Loyal pada pribadi atasan." }, { range: [8, 9], desc: "Loyal, berusaha dekat dg pribadi atasan, ingin menyenangkan atasan, sadar akan harapan atasan akan dirinya. Terlalu memperhatikan cara menyenangkan atasan, tidak berani berpendirian lain, tidak mandiri." } ],
+    L: [ { range: [0, 1], desc: "Puas dengan peran sebagai bawahan, memberikan kesempatan pada orang lain untuk memimpin, tidak dominan. Tidak percaya diri; sama sekali tidak berminat untuk berperan sebagai pemimpin; bersikap pasif dalam kelompok." }, { range: [2, 3], desc: "Tidak percaya diri dan tidak ingin memimpin atau mengawasi orang lain." }, { range: [4, 4], desc: "Kurang percaya diri dan kurang berminat utk menjadi pemimpin." }, { range: [5, 5], desc: "Cukup percaya diri, tidak secara aktif mencari posisi kepemimpinan akan tetapi juga tidak akan menghindarinya." }, { range: [6, 7], desc: "Percaya diri dan ingin berperan sebagai pemimpin." }, { range: [8, 9], desc: "Sangat percaya diri utk berperan sbg atasan & sangat mengharapkan posisi tersebut. Lebih mementingkan citra & status kepemimpinannya dari pada efektifitas kelompok, mungkin akan tampil angkuh atau terlalu percaya diri." } ],
+    P: [ { range: [0, 1], desc: "Permisif, akan memberikan kesempatan pada orang lain untuk memimpin. Tidak mau mengontrol orang lain dan tidak mau mempertanggung jawabkan hasil kerja bawahannya." }, { range: [2, 3], desc: "Enggan mengontrol org lain & tidak mau mempertanggung jawabkan hasil kerja bawahannya, lebih memberi kebebasan kpd bawahan utk memilih cara sendiri dlm penyelesaian tugas dan meminta bawahan utk mempertanggungjawabkan hasilnya masing-masing." }, { range: [4, 4], desc: "Cenderung enggan melakukan fungsi pengarahan, pengendalian dan pengawasan, kurang aktif memanfaatkan kapasitas bawahan secara optimal, cenderung bekerja sendiri dalam mencapai tujuan kelompok." }, { range: [5, 5], desc: "Bertanggung jawab, akan melakukan fungsi pengarahan, pengendalian dan pengawasan, tapi tidak mendominasi." }, { range: [6, 7], desc: "Dominan dan bertanggung jawab, akan melakukan fungsi pengarahan, pengendalian dan pengawasan." }, { range: [8, 9], desc: "Sangat dominan, sangat mempengaruhi & mengawasi org lain, bertanggung jawab atas tindakan & hasil kerja bawahan. Posesif, tdk ingin berada di bawah pimpinan org lain, cemas bila tdk berada di posisi pemimpin, mungkin sulit utk bekerja sama dgn rekan yg sejajar kedudukannya." } ],
+    I: [ { range: [0, 1], desc: "Sangat berhati-hati, memikirkan langkah-langkahnya secara bersungguh-sungguh. Lamban dlm mengambil keputusan, terlalu lama merenung, cenderung menghindar mengambil keputusan." }, { range: [2, 3], desc: "Enggan mengambil keputusan." }, { range: [4, 5], desc: "Berhati-hati dlm pengambilan keputusan." }, { range: [6, 7], desc: "Cukup percaya diri dlm pengambilan keputusan, mau mengambil resiko, dpt memutuskan dgn cepat, mengikuti alur logika." }, { range: [8, 9], desc: "Sangat yakin dl mengambil keputusan, cepat tanggap thd situasi, berani mengambil resiko, mau memanfaatkan kesempatan. Impulsif, dpt membuat keputusan yg tdk praktis, cenderung lebih mementingkan kecepatan daripada akurasi, tdk sabar, cenderung meloncat pd keputusan." } ],
+    S: [ { range: [0, 2], desc: "Dpt. bekerja sendiri, tdk membutuhkan kehadiran org lain. Menarik diri, kaku dlm bergaul, canggung dlm situasi sosial, lebih memperhatikan hal-hal lain daripada manusia." }, { range: [3, 4], desc: "Kurang percaya diri & kurang aktif dlm menjalin hubungan sosial." }, { range: [5, 9], desc: "Percaya diri & sangat senang bergaul, menyukai interaksi sosial, bisa menciptakan suasana yg menyenangkan, mempunyai inisiatif & mampu menjalin hubungan & komunikasi, memperhatikan org lain. Mungkin membuang-buang waktu utk aktifitas sosial, kurang peduli akan penyelesaian tugas." } ],
+    B: [ { range: [0, 2], desc: "Mandiri (dari segi emosi), tdk mudah dipengaruhi oleh tekanan kelompok. Penyendiri, kurang peka akan sikap & kebutuhan kelompok, mungkin sulit menyesuaikan diri." }, { range: [3, 5], desc: "Selektif dlm bergabung dg kelompok, hanya mau berhubungan dg kelompok di lingkungan kerja apabila bernilai & sesuai minat, tdk terlalu mudah dipengaruhi." }, { range: [6, 9], desc: "Suka bergabung dlm kelompok, sadar akan sikap & kebutuhan kelompok, suka bekerja sama, ingin menjadi bagian dari kelompok, ingin disukai & diakui oleh lingkungan; sangat tergantung pd kelompok, lebih memperhatikan kebutuhan kelompok daripada pekerjaan." } ],
+    O: [ { range: [0, 2], desc: "Menjaga jarak, lebih memperhatikan hal-hal kedinasan, tdk mudah dipengaruhi oleh individu tertentu, objektif & analitis. Tampil dingin, tdk acuh, tdk ramah, suka berahasia, mungkin tdk sadar akan perasaan org lain, & mungkin sulit menyesuaikan diri." }, { range: [3, 5], desc: "Tidak mencari atau menghindari hubungan antar pribadi di lingkungan kerja, masih mampu menjaga jarak." }, { range: [6, 9], desc: "Peka akan kebutuhan org lain, sangat memikirkan hal-hal yg dibutuhkan org lain, suka menjalin hubungan persahabatan yg hangat & tulus. Sangat perasa, mudah tersinggung, cenderung subjektif, dpt terlibat terlalu dalam/intim dg individu tertentu dlm pekerjaan, sangat tergantung pd individu tertentu." } ],
+    X: [ { range: [0, 1], desc: "Sederhana, rendah hati, tulus, tidak sombong dan tidak suka menampilkan diri. Terlalu sederhana, cenderung merendahkan kapasitas diri, tidak percaya diri, cenderung menarik diri dan pemalu." }, { range: [2, 3], desc: "Sederhana, cenderung diam, cenderung pemalu, tidak suka menonjolkan diri." }, { range: [4, 5], desc: "Mengharapkan pengakuan lingkungan dan tidak mau diabaikan tetapi tidak mencari-cari perhatian." }, { range: [6, 9], desc: "Bangga akan diri dan gayanya sendiri, senang menjadi pusat perhatian, mengharapkan penghargaan dari lingkungan. Mencari-cari perhatian dan suka menyombongkan diri." } ],
+    E: [ { range: [0, 1], desc: "Sangat terbuka, terus terang, mudah terbaca (dari air muka, tindakan, perkataan, sikap). Tidak dapat mengendalikan emosi, cepat bereaksi, kurang mengindahkan/tidak mempunyai 'nilai' yg mengharuskannya menahan emosi." }, { range: [2, 3], desc: "Terbuka, mudah mengungkap pendapat atau perasaannya mengenai suatu hal kepada org lain." }, { range: [4, 6], desc: "Mampu mengungkap atau menyimpan perasaan, dapat mengendalikan emosi." }, { range: [7, 9], desc: "Mampu menyimpan pendapat atau perasaannya, tenang, dapat mengendalikan emosi, menjaga jarak. Tampil pasif dan tidak acuh, mungkin sulit mengungkapkan emosi/perasaan/pandangan." } ],
+    K: [ { range: [0, 1], desc: "Sabar, tidak menyukai konflik. Mengelak atau menghindar dari konflik, pasif, menekan atau menyembunyikan perasaan sesungguhnya, menghindari konfrontasi, lari dari konflik, tidak mau mengakui adanya konflik." }, { range: [2, 3], desc: "Lebih suka menghindari konflik, akan mencari rasionalisasi untuk dapat menerima situasi dan melihat permasalahan dari sudut pandang orang lain." }, { range: [4, 5], desc: "Tidak mencari atau menghindari konflik, mau mendengarkan pandangan orang lain tetapi dapat menjadi keras kepala saat mempertahankan pandangannya." }, { range: [6, 7], desc: "Akan menghadapi konflik, mengungkapkan serta memaksakan pandangan dengan cara positif." }, { range: [8, 9], desc: "Terbuka, jujur, terus terang, asertif, agresif, reaktif, mudah tersinggung, mudah meledak, curiga, berprasangka, suka berkelahi atau berkonfrontasi, berpikir negatif." } ],
+    Z: [ { range: [0, 1], desc: "Mudah beradaptasi dg pekerjaan rutin tanpa merasa bosan, tidak membutuhkan variasi, menyukai lingkungan stabil dan tidak berubah. Konservatif, menolak perubahan, sulit menerima hal-hal baru, tidak dapat beradaptasi dengan situasi yg berbeda-beda." }, { range: [2, 3], desc: "Enggan berubah, tidak siap untuk beradaptasi, hanya mau menerima perubahan jika alasannya jelas dan meyakinkan." }, { range: [4, 5], desc: "Mudah beradaptasi, cukup menyukai perubahan." }, { range: [6, 7], desc: "Antusias terhadap perubahan dan akan mencari hal-hal baru, tetapi masih selektif (menilai kemanfaatannya)." }, { range: [8, 9], desc: "Sangat menyukai perubahan, gagasan baru/variasi, aktif mencari perubahan, antusias dg hal-hal baru, fleksibel dlm berpikir, mudah beradaptasi pd situasi yg berbeda-beda. Gelisah, frustasi, mudah bosan, sangat membutuhkan variasi, tidak menyukai tugas/situasi yg rutin-monoton." } ],
+  };
+
+  function getInterpretasiPAPI(aspek, nilai) {
+    if (!kamusPAPI[aspek]) return "-";
+    const entry = kamusPAPI[aspek].find(r => nilai >= r.range[0] && nilai <= r.range[1]);
+    return entry ? entry.desc : "-";
+  }
+
   // Susunan kode tetap & urut
-  const urutanPAPI = [
+   const urutanPAPI = [
     'N','G','A', 'L','P','I', 'T','V',
     'X','S','B','O', 'R','D','C',
     'Z','E','K', 'F','W'
@@ -6759,15 +7907,16 @@ if (appState.completed.PAPI) {
     ...appState.skorPAPISifat,
     ...appState.skorPAPIKetaatan
   };
-  // Filter agar urutan tetap, dan tidak undefined
   const entries = urutanPAPI.map(kode => [kode, allScores[kode]]).filter(([k,v])=>v !== undefined);
 
-  // --- Kolom kiri & kanan --
-  const nHalf = Math.ceil(entries.length / 2);
-  const kolomKiri = entries.slice(0, nHalf);
-  const kolomKanan = entries.slice(nHalf);
+  // Fungsi getInterpretasiPAPI dari kamus, ambil deskripsi sesuai skor kandidat
+  function getInterpretasiPAPI(aspek, nilai) {
+    if (!kamusPAPI[aspek]) return "-";
+    const entry = kamusPAPI[aspek].find(r => nilai >= r.range[0] && nilai <= r.range[1]);
+    return entry ? entry.desc : "-";
+  }
 
-  // Tulis dua kolom sejajar, tapi baris kanan tidak boleh nabrak baris kiri (panjang teks adaptif)
+  // Tulis dua kolom interpretasi faktor (paragraf lengkap)
   let yL = ySection;
   let yR = ySection;
   const xL = 25;
@@ -6781,8 +7930,9 @@ if (appState.completed.PAPI) {
       doc.setFont(undefined, 'bold');
       doc.text(`${kode} = ${nilai}`, xStart, y);
       doc.setFont(undefined, 'normal');
+      // Ambil interpretasi lengkap dari kamus
       const interpretasi = getInterpretasiPAPI(kode, nilai);
-      // text wrap maxWidth 72, multiline otomatis
+      // Bungkus ke multi-line agar tidak tabrakan
       const lines = doc.splitTextToSize(interpretasi, 72);
       lines.forEach((line, i) => {
         doc.text(line, xStart + 12, y + (i * 2.3));
@@ -6793,17 +7943,203 @@ if (appState.completed.PAPI) {
     return y;
   }
 
-  // Ambil y tertinggi untuk lanjut section berikutnya (biar gak tabrak)
-  yL = drawKolom(kolomKiri, xL, ySection);
-  yR = drawKolom(kolomKanan, xR, ySection);
+ function hitungTinggiKolom(pasangan, fontSize = 6.2) {
+  let totalY = 0;
+  pasangan.forEach(([kode, nilai]) => {
+    if (nilai == null) return;
+    const interpretasi = getInterpretasiPAPI(kode, nilai);
+    const lines = doc.splitTextToSize(interpretasi, 72);
+    totalY += 4.6 + (lines.length - 1) * 2.3;
+  });
+  return totalY;
+}
 
-  ySection = Math.max(yL, yR) + 6;
-  doc.setFontSize(7);
+const nHalf = Math.ceil(entries.length / 2);
+const kolomKiri = entries.slice(0, nHalf);
+const kolomKanan = entries.slice(nHalf);
+
+// Tambahkan logika untuk cek tinggi maksimal dari kedua kolom
+const tinggiKiri = hitungTinggiKolom(kolomKiri);
+const tinggiKanan = hitungTinggiKolom(kolomKanan);
+const tinggiMax = Math.max(tinggiKiri, tinggiKanan);
+
+if (ySection + tinggiMax > 275) {
+  doc.addPage();
+  ySection = 20;
+}
+
+// Cetak dua kolom berdampingan, tetap satu halaman
+yL = drawKolom(kolomKiri, xL, ySection);
+yR = drawKolom(kolomKanan, xR, ySection);
+ySection = Math.max(yL, yR) + 6;
+
+
+// === ANALISIS & KECOCOKAN POSISI DETAIL PAPI ===
+const posisi = appState.identity?.position || "Unknown";
+doc.setFontSize(7);
+doc.setFont(undefined, 'bold');
+doc.text(`Analisis Kecocokan untuk Posisi: ${posisi}`, 25, ySection);
+ySection += 3;
+doc.setFont(undefined, 'normal');
+
+// Gabungan skor hasil PAPI (semua faktor)
+const scores = allScores; // sudah lengkap N,G,A,...,W
+
+// ==== MAPPING KEBUTUHAN PER POSISI DAN ANALISIS PERSONAL ====
+const requirementPAPI = {
+  "Technical Staff": {
+    utama: ['D', 'C', 'W', 'N', 'G', 'A'],
+    pendukung: ['E', 'K', 'Z', 'T'],
+    highlight: {
+      D: 'ketelitian & perhatian detail',
+      C: 'keteraturan kerja',
+      W: 'kepatuhan & disiplin',
+      N: 'tanggung jawab menyelesaikan tugas',
+      G: 'semangat kerja',
+      A: 'motivasi berprestasi',
+      E: 'pengendalian emosi',
+      K: 'ketegasan',
+      Z: 'adaptasi pada perubahan',
+      T: 'kecepatan & aktivitas'
+    }
+  },
+  "Guru": {
+    utama: ['S', 'B', 'O', 'N', 'G', 'A', 'E', 'K'],
+    pendukung: ['Z', 'R', 'C'],
+    highlight: {
+      S: 'kemampuan sosial',
+      B: 'kerjasama dalam kelompok',
+      O: 'kehangatan & empati',
+      N: 'komitmen kerja',
+      G: 'energi kerja',
+      A: 'semangat berprestasi',
+      E: 'stabilitas emosi',
+      K: 'ketegasan mengelola kelas',
+      Z: 'adaptasi inovasi',
+      R: 'penalaran & kreativitas',
+      C: 'keteraturan administrasi'
+    }
+  },
+  "Administrator": {
+    utama: ['D', 'C', 'W', 'N', 'G'],
+    pendukung: ['R', 'T', 'F', 'A'],
+    highlight: {
+      D: 'ketelitian & perhatian detail',
+      C: 'keteraturan & sistematika',
+      W: 'kepatuhan sistem',
+      N: 'tanggung jawab kerja',
+      G: 'konsistensi kerja',
+      R: 'analisa data',
+      T: 'aktivitas administrasi',
+      F: 'loyalitas organisasi',
+      A: 'motivasi hasil'
+    }
+  },
+  "Manajer": {
+    utama: ['A', 'G', 'N', 'L', 'P', 'I', 'S', 'B', 'Z', 'E'],
+    pendukung: ['D', 'C', 'K', 'O'],
+    highlight: {
+      A: 'inisiatif & motivasi',
+      G: 'dorongan kerja',
+      N: 'komitmen menyelesaikan tugas',
+      L: 'kepemimpinan',
+      P: 'pengendalian tim',
+      I: 'keputusan strategis',
+      S: 'kemampuan sosial',
+      B: 'kolaborasi',
+      Z: 'adaptasi perubahan',
+      E: 'pengendalian emosi',
+      D: 'detail operasional',
+      C: 'sistematika kerja',
+      K: 'ketegasan pengambilan keputusan',
+      O: 'relasi personal'
+    }
+  }
+};
+
+function analisisKecocokanPAPIDetail(scores, posisi, nama = "Kandidat") {
+  const req = requirementPAPI[posisi];
+  if (!req) return `Posisi "${posisi}" tidak dikenali.`;
+
+  let paragraf = `Analisis kecocokan ${nama} untuk posisi **${posisi}** berdasarkan hasil Tes PAPI:\n\n`;
+
+  // Semua faktor utama
+  paragraf += `*Faktor utama posisi:*\n`;
+  req.utama.forEach(k => {
+    paragraf += `- ${req.highlight[k]} (skor: ${scores[k] ?? "-"}): ${getInterpretasiPAPI(k, scores[k] ?? 0)}\n`;
+  });
+
+  paragraf += `\n`;
+
+  // Semua faktor pendukung
+  paragraf += `*Faktor pendukung posisi:*\n`;
+  req.pendukung.forEach(k => {
+    paragraf += `- ${req.highlight[k]} (skor: ${scores[k] ?? "-"}) : ${getInterpretasiPAPI(k, scores[k] ?? 0)}\n`;
+  });
+
+  paragraf += `\n`;
+
+  // Paragraf ringkasan kelebihan dan area pengembangan seperti biasa
+  const kelebihan = [];
+  const pengembangan = [];
+  req.utama.forEach(k => {
+    if ((scores[k] ?? 0) >= 6) kelebihan.push(req.highlight[k] + ` (skor: ${scores[k]})`);
+    if ((scores[k] ?? 0) < 3) pengembangan.push(req.highlight[k] + ` (skor: ${scores[k]})`);
+  });
+  req.pendukung.forEach(k => {
+    if ((scores[k] ?? 0) >= 7) kelebihan.push(req.highlight[k] + ` (skor: ${scores[k]})`);
+    if ((scores[k] ?? 0) < 2) pengembangan.push(req.highlight[k] + ` (skor: ${scores[k]})`);
+  });
+
+  if (kelebihan.length > 0) {
+    paragraf += `*Kekuatan utama:*\n${kelebihan.map(s=>'- '+s).join('\n')}\n\n`;
+  } else {
+    paragraf += `Tidak ditemukan kekuatan menonjol pada faktor utama. Perlu dikembangkan lebih lanjut.\n\n`;
+  }
+  if (pengembangan.length > 0) {
+    paragraf += `*Area yang perlu dikembangkan:*\n${pengembangan.map(s=>'- '+s).join('\n')}\n\n`;
+  }
+  if (kelebihan.length > 0 && pengembangan.length === 0) {
+    paragraf += `Kandidat memiliki kompetensi yang sangat baik untuk posisi ini.`;
+  } else if (kelebihan.length > 0 && pengembangan.length > 0) {
+    paragraf += `Kandidat memiliki beberapa kelebihan penting namun juga area pengembangan yang perlu diperhatikan sebelum menempati posisi ini.`;
+  } else {
+    paragraf += `Kandidat belum memenuhi banyak aspek utama posisi ini. Disarankan untuk pengembangan lebih lanjut atau penempatan pada posisi lain yang lebih sesuai.`;
+  }
+  return paragraf;
 }
 
 
-  // ========== BIG FIVE ==========
-  if (appState.completed.BIGFIVE) {
+// === CETAK ANALISA DETAIL KE PDF ===
+const nama = appState.identity?.name || "Kandidat";
+const hasilAnalisisDetail = analisisKecocokanPAPIDetail(scores, posisi, nama);
+
+// Print section judul (rapi dan sedikit lebih menonjol)
+doc.setFontSize(8.5);
+doc.setFont(undefined, 'bold');
+doc.setTextColor(61, 131, 223);
+doc.text(`Analisis Kecocokan untuk Posisi: ${posisi}`, 20, ySection);
+doc.setTextColor(0, 0, 0);
+doc.setFontSize(7);
+doc.setFont(undefined, 'normal');
+ySection += 4;
+
+// Cetak analisis detail, tiap baris di-wrap (wrap per-baris, bukan sekaligus)
+hasilAnalisisDetail.split('\n').forEach(baris => {
+  // Wrap tiap baris supaya anti overflow kanan
+  const wrapLines = doc.splitTextToSize(baris, 160);  // 160 = lebar aman, bisa diatur sesuai kebutuhan
+  wrapLines.forEach(wrapLine => {
+    if (ySection > 275) { doc.addPage(); ySection = 20; }
+    // Tambahkan sedikit indent pada bullet (- atau *) biar lebih enak dibaca
+    const xPos = (baris.startsWith('-') || baris.startsWith('*')) ? 27 : 20;
+    doc.text(wrapLine, xPos, ySection);
+    ySection += 3;
+  });
+});
+ySection += 5;}
+
+// ========== BIG FIVE ==========
+if (appState.completed.BIGFIVE) {
   ySection += 6;
   if (ySection > 265) { doc.addPage(); ySection = 20; }
   doc.setFontSize(9);
@@ -6816,23 +8152,38 @@ if (appState.completed.PAPI) {
   doc.text('Jawaban:', 20, ySection);
   ySection += 3;
 
-  tests.BIGFIVE.questions.forEach((q, i) => {
-    if (ySection > 280) { doc.addPage(); ySection = 20; }
+  // --- 4 kolom, rata kiri-kanan, fit PDF A4 landscape/portrait ---
+  const total = tests.BIGFIVE.questions.length;
+  // X: margin kiri 20, margin kanan 18, seimbang, tiap kolom 48px
+  const col_x = [20, 68, 116, 164];
+  const rowsPerCol = Math.ceil(total / 4);
+  let row = 0, col = 0, maxRow = 0;
+
+  for (let i = 0; i < total; i++) {
+    if (row >= rowsPerCol) { row = 0; col++; }
+    if (col > 3) { // 4 kolom per halaman
+      doc.addPage(); ySection = 20; col = 0; row = 0;
+    }
     const ans = appState.answers.BIGFIVE[i];
     let jawaban = "Tidak dijawab";
-    if (ans && ans.answerText) {
-      jawaban = ans.answerText;
+    if (typeof ans === 'number' && ans > 0) {
+      if (ans === 1) jawaban = "1 (Sangat Tidak Sesuai)";
+      else if (ans === 2) jawaban = "2 (Tidak Sesuai)";
+      else if (ans === 3) jawaban = "3 (Netral)";
+      else if (ans === 4) jawaban = "4 (Sesuai)";
+      else if (ans === 5) jawaban = "5 (Sangat Sesuai)";
+      else jawaban = ans.toString();
     }
     doc.text(
-      `${(i + 1).toString().padStart(3, '0')}. ${q.text} [${jawaban}]`,
-      25, ySection
+      `${(i + 1).toString().padStart(3, '0')}. ${jawaban}`,
+      col_x[col], ySection + row * 3
     );
-    ySection += 3;
-  });
+    row++;
+    maxRow = Math.max(maxRow, row);
+  }
+  ySection += maxRow * 3 + 3;
 
-  ySection += 3;
-
-  // Ringkasan OCEAN jika ada
+  // ===== Ringkasan OCEAN =====
   if (appState.hasilOCEAN) {
     if (ySection > 255) { doc.addPage(); ySection = 20; }
     doc.setFont(undefined, 'bold');
@@ -6841,13 +8192,142 @@ if (appState.completed.PAPI) {
     doc.setFont(undefined, 'normal');
     Object.entries(appState.hasilOCEAN).forEach(([dim, val]) => {
       if (ySection > 280) { doc.addPage(); ySection = 20; }
-      doc.text(
+      const splitText = doc.splitTextToSize(
         `${val.name.padEnd(15)} | Skor: ${val.percent.toString().padStart(2, ' ')}% | ${val.desc}`,
-        25, ySection
+        170
       );
-      ySection += 3.1;
+      splitText.forEach(part => {
+        if (ySection > 280) { doc.addPage(); ySection = 20; }
+        doc.text(part, 25, ySection);
+        ySection += 3.1;
+      });
     });
     ySection += 2;
+  }
+
+  // ===== Tabel Kecocokan OCEAN per Aspek & Posisi + Kesimpulan =====
+  if (appState.hasilOCEAN && appState.identity && appState.identity.position) {
+    let posisiKey = appState.identity.position;
+    if (posisiKey === "Guru" && appState.identity.teacherLevel && bigFivePositionAnalysis[appState.identity.teacherLevel]) {
+      posisiKey = appState.identity.teacherLevel;
+    }
+    if (posisiKey === "Technical Staff" && appState.identity.techRole && bigFivePositionAnalysis[appState.identity.techRole]) {
+      posisiKey = appState.identity.techRole;
+    }
+    const aspekList = ['O', 'C', 'E', 'A', 'N'];
+    const aspekLabel = {
+      O: 'Openness',
+      C: 'Conscientiousness',
+      E: 'Extraversion',
+      A: 'Agreeableness',
+      N: 'Neuroticism'
+    };
+    function getBigFiveSuitabilityLabel(percent, dim) {
+      if (dim === 'N') {
+        if (percent < 40) return "Cocok sekali";
+        if (percent < 65) return "Cocok";
+        if (percent < 80) return "Kurang cocok";
+        return "Tidak cocok";
+      } else {
+        if (percent >= 80) return "Cocok sekali";
+        if (percent >= 65) return "Cocok";
+        if (percent >= 40) return "Kurang cocok";
+        return "Tidak cocok";
+      }
+    }
+
+    // Simpan hasil kecocokan per aspek
+    let aspekHasil = [];
+    if (ySection > 250) { doc.addPage(); ySection = 20; }
+    doc.setFont(undefined, 'bold');
+    doc.text("Tabel Kecocokan Big Five dengan Posisi:", 20, ySection);
+    ySection += 3;
+    doc.setFont(undefined, 'normal');
+    doc.text("Aspek             | Skor (%) | Kecocokan", 25, ySection);
+    ySection += 3;
+    aspekList.forEach(dim => {
+      const val = appState.hasilOCEAN[dim];
+      if (!val) return;
+      let label = getBigFiveSuitabilityLabel(val.percent, dim);
+      aspekHasil.push({ dim, label, percent: val.percent });
+      let line = `${aspekLabel[dim].padEnd(15)} | ${val.percent.toString().padStart(3)}%    | ${label}`;
+      doc.text(line, 25, ySection);
+      ySection += 2.6;
+    });
+    ySection += 1.8;
+
+    // ===== Kesimpulan Akhir Kecocokan =====
+    // Hitung jumlah tiap kategori
+    const count = { 'Cocok sekali': 0, 'Cocok': 0, 'Kurang cocok': 0, 'Tidak cocok': 0 };
+    aspekHasil.forEach(a => count[a.label]++);
+    let urutan = ["Tidak cocok", "Kurang cocok", "Cocok", "Cocok sekali"];
+    let overall = urutan.find(label => count[label] === Math.max(...Object.values(count))) || "Kurang cocok";
+
+    doc.setFont(undefined, 'bold');
+    doc.text("Kesimpulan Akhir Kecocokan:", 25, ySection);
+    ySection += 2.7;
+    doc.setFont(undefined, 'normal');
+    doc.text(`${overall.toUpperCase()}`, 90, ySection - 0.2);
+
+    // ===== Alasan Lengkap & Detail =====
+    const strongest = aspekHasil.filter(a => a.label === "Cocok sekali" || a.label === "Cocok").sort((a, b) => b.percent - a.percent)[0];
+    const weakest = aspekHasil.filter(a => a.label === "Tidak cocok" || a.label === "Kurang cocok").sort((a, b) => a.percent - b.percent)[0];
+
+    ySection += 2.6;
+    doc.setFont(undefined, 'bold');
+    doc.text("Alasan:", 25, ySection);
+    ySection += 2.2;
+    doc.setFont(undefined, 'normal');
+    let alasan;
+    if (overall === "Cocok sekali") {
+      alasan = `Seluruh aspek kepribadian kandidat sangat sesuai dengan tuntutan posisi. Aspek paling menonjol adalah ${strongest ? aspekLabel[strongest.dim] + " (" + strongest.percent + "%)" : "-"}, yang menjadi kekuatan utama dalam menunjang kinerja dan adaptasi pada posisi ini. Tidak ditemukan aspek yang menghambat secara signifikan.`;
+    } else if (overall === "Cocok") {
+      alasan = `Sebagian besar aspek kepribadian kandidat sesuai dengan tuntutan posisi. Aspek yang paling mendukung adalah ${strongest ? aspekLabel[strongest.dim] + " (" + strongest.percent + "%)" : "-"}, yang sangat menunjang kebutuhan utama pada posisi ini. Namun, terdapat beberapa aspek yang perlu dikembangkan, yaitu ${weakest ? aspekLabel[weakest.dim] + " (" + weakest.percent + "%)" : "-"}, agar kinerja dan adaptasi kandidat dapat semakin optimal.`;
+    } else if (overall === "Kurang cocok") {
+      alasan = `Beberapa aspek kepribadian kandidat belum memenuhi kriteria utama posisi ini, terutama pada aspek ${weakest ? aspekLabel[weakest.dim] + " (" + weakest.percent + "%)" : "-"} yang menjadi area penghambat utama. Penguatan pada aspek ini sangat disarankan agar kandidat dapat menyesuaikan diri secara lebih efektif. Meski demikian, ada pula aspek yang sudah sesuai yaitu ${strongest ? aspekLabel[strongest.dim] + " (" + strongest.percent + "%)" : "-"}, yang dapat dijadikan modal awal pengembangan.`;
+    } else { // Tidak cocok
+      alasan = `Sebagian besar aspek kepribadian kandidat tidak sesuai dengan tuntutan posisi, terutama pada aspek ${weakest ? aspekLabel[weakest.dim] + " (" + weakest.percent + "%)" : "-"}, yang berpotensi menjadi hambatan besar dalam pelaksanaan tugas. Diperlukan pengembangan menyeluruh dan penyesuaian pada hampir seluruh aspek agar dapat mencapai kecocokan yang dibutuhkan pada posisi ini.`;
+    }
+    const alasanLines = doc.splitTextToSize(alasan, 170);
+    alasanLines.forEach(line => {
+      if (ySection > 280) { doc.addPage(); ySection = 20; }
+      doc.text(line, 25, ySection);
+      ySection += 2.7;
+    });
+    ySection += 2.5;
+  }
+
+  // ===== Analisa Kepribadian & Kecocokan Posisi (Narasi detail, tanpa judul) =====
+  if (appState.identity && appState.identity.position) {
+    let posisiKey = appState.identity.position;
+    if (
+      posisiKey === "Guru" &&
+      appState.identity.teacherLevel &&
+      bigFivePositionAnalysis[appState.identity.teacherLevel]
+    ) {
+      posisiKey = appState.identity.teacherLevel;
+    }
+    if (
+      posisiKey === "Technical Staff" &&
+      appState.identity.techRole &&
+      bigFivePositionAnalysis[appState.identity.techRole]
+    ) {
+      posisiKey = appState.identity.techRole;
+    }
+    const analisa = bigFivePositionAnalysis[posisiKey];
+    if (analisa && analisa.length > 0) {
+      if (ySection > 255) { doc.addPage(); ySection = 20; }
+      doc.setFont(undefined, 'normal');
+      analisa.forEach(line => {
+        const splitText = doc.splitTextToSize(line, 170);
+        splitText.forEach(part => {
+          if (ySection > 280) { doc.addPage(); ySection = 20; }
+          doc.text(part, 25, ySection);
+          ySection += 3.3;
+        });
+      });
+      ySection += 2;
+    }
   }
 }
 
