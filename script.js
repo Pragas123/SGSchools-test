@@ -1963,7 +1963,7 @@ questions: [
 BIGFIVE: {
   name: "Tes Big Five Personality",
   description: "Tes kepribadian berdasarkan model lima faktor besar (OCEAN)",
-  time: 900, // 10 menit (ubah sesuai kebutuhan)
+  time: 1800, // 10 menit (ubah sesuai kebutuhan)
   instruction: "Beri penilaian seberapa sesuai pernyataan berikut dengan diri Anda (1 = Sangat Tidak Sesuai, 5 = Sangat Sesuai)",
   example: {
     question: "Saya adalah seseorang yang suka bersosialisasi",
@@ -6663,6 +6663,15 @@ const adminExcelQuestions = [
 // Render tes Excel:
 
 function renderAdminExcelSheet() {
+  let timeLeft = 40 * 60; // 11 menit, tinggal ubah angka ini saja kalau perlu durasi lain!
+  let timerInterval;
+  let sudahStart = false;
+  let ttsPlayed10M = false;
+  let ttsPlayed30Dtk = false;
+
+  // Generate waktu awal "MM:00" sesuai timeLeft
+  const timerStr = Math.floor(timeLeft / 60).toString().padStart(2, '0') + ':00';
+
   document.getElementById('app').innerHTML = `
     <div class="card">
       <div class="header"><h2>Tes Admin: Excel (Google Sheet)</h2></div>
@@ -6673,7 +6682,7 @@ function renderAdminExcelSheet() {
           <li>Kerjakan langsung di Google Sheet tersebut.</li>
           <li><b>PENTING!</b> Setelah selesai, <b>bagikan link Sheet Anda</b> ke panitia dengan akses 
           <span style="color:#0277bd;font-weight:600;">“Siapa saja yang memiliki link”</span> dan <span style="color:#388e3c;font-weight:600;">Editor</span>.</li>
-          <li><b>Waktu pengerjaan: <span id="timer" style="font-weight:bold;color:#d32f2f;">01:00</span></b></li>
+          <li><b>Waktu pengerjaan: <span id="timer" style="font-weight:bold;color:#d32f2f;">${timerStr}</span></b></li>
         </ul>
       </div>
       <div style="background:#f7fbff;border-radius:12px;padding:18px 18px 6px 18px;border:1.5px solid #b5d6f9;text-align:center;max-width:540px;margin:0 auto 12px auto;">
@@ -6711,11 +6720,6 @@ function renderAdminExcelSheet() {
     </div>
   `;
 
-  let timerInterval;
-  let timeLeft = 1 * 60; // 1 menit (60 detik)
-  let sudahStart = false;
-  let ttsPlayed = false;
-
   function updateTimer() {
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
@@ -6731,19 +6735,27 @@ function renderAdminExcelSheet() {
     const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
     const s = (timeLeft % 60).toString().padStart(2, '0');
     document.getElementById('timer').textContent = `${m}:${s}`;
-    if (timeLeft === 30 && !ttsPlayed) {
+    
+    if (timeLeft === 600 && !ttsPlayed10M) {
+      playTTS10Menit();
+      ttsPlayed10M = true;
+    }
+    if (timeLeft === 30 && !ttsPlayed30Dtk) {
       playTTS30Detik();
-      ttsPlayed = true;
+      ttsPlayed30Dtk = true;
     }
     timeLeft--;
   }
 
-  function playTTS30Detik() {
+  function playTTS10Menit() {
     try {
-      const audio = new Audio('https://files.catbox.moe/fakj6r.mp3');
+      const audio = new Audio('https://files.catbox.moe/e5bbaq.mp3');
       audio.volume = 1;
       audio.play();
     } catch {}
+  }
+  function playTTS30Detik() {
+    // Tambahkan suara peringatan jika ada, jika tidak bisa kosongkan saja
   }
 
   // Mulai timer saat klik sheet
@@ -6780,6 +6792,7 @@ function renderAdminExcelSheet() {
     renderHome();
   };
 }
+
 
 // ==================== TES KETIK ====================
 
@@ -7413,24 +7426,39 @@ try {
   let blokX = 16;
   let blokW = 82;
 
-  if (totalStar >= 13) {
-    if (identity.position) {
-      blokHeading(doc, `Analisis Posisi: ${identity.position}`, [33,33,33], blokX, ySection, 80, 8);
-      ySection += 10;
-      doc.setFontSize(16);
-      doc.setTextColor(200,24,44);
-      doc.text("❌ INVALID", blokX+2, ySection);
-      doc.setTextColor(44,62,80);
-      doc.setFontSize(8.2);
-      ySection += 14;
-      if (ySection > 265) { doc.addPage(); ySection = 20; }
-    }
-    // Tetap lanjut ke proses jawaban
-  } else {
-    // ANALISIS DISC (most, least, change) dan variabel untuk analisis
-    const most   = analisa2DominanDISC(hasilDISC.most.D, hasilDISC.most.I, hasilDISC.most.S, hasilDISC.most.C, 'most', getPixelY);
-    const least  = analisa2DominanDISC(hasilDISC.least.D, hasilDISC.least.I, hasilDISC.least.S, hasilDISC.least.C, 'least', getPixelY);
-    const change = analisa2DominanDISC(hasilDISC.change.D, hasilDISC.change.I, hasilDISC.change.S, hasilDISC.change.C, 'change', getPixelY);
+ if (totalStar >= 13) {
+  if (identity.position) {
+    blokHeading(doc, `Analisis Posisi: ${identity.position}`, [33,33,33], blokX, ySection, 80, 8);
+    ySection += 10;
+    doc.setFontSize(16);
+    doc.setTextColor(200,24,44);
+    doc.text("❌ INVALID", blokX+2, ySection);
+    doc.setTextColor(44,62,80);
+    doc.setFontSize(8.2);
+    ySection += 14;
+    if (ySection > 265) { doc.addPage(); ySection = 20; }
+  }
+  // Tambahkan paragraf penjelasan detail, jangan menyebut bintang!
+  const invalidMsg = [
+    "Berdasarkan analisis terhadap pola jawaban yang Anda berikan pada tes DISC, hasil tes ini dinyatakan tidak valid untuk digunakan dalam penilaian kepribadian. Ketidaksesuaian ini menunjukkan bahwa respons yang diberikan tidak merefleksikan kecenderungan kepribadian Anda yang sebenarnya, sehingga analisis lebih lanjut tidak dapat dilakukan secara objektif.",
+    "Perlu ditekankan bahwa setiap alat psikotes, termasuk DISC, telah didesain dengan prinsip validitas dan reliabilitas yang tinggi sehingga tidak dapat dimanipulasi. Mengisi tes dengan mencoba menampilkan citra tertentu atau menyesuaikan jawaban dengan ekspektasi hasil hanya akan menghasilkan data yang bias dan tidak mencerminkan diri Anda yang sesungguhnya.",
+    "Integritas dalam mengisi tes kepribadian sangat penting untuk memperoleh gambaran yang akurat mengenai potensi, pola perilaku, serta area pengembangan diri. Jawaban yang jujur dan sesuai kondisi diri sendiri merupakan kunci agar hasil analisis benar-benar dapat digunakan untuk tujuan pengembangan, penempatan posisi, atau konsultasi psikologi secara efektif.",
+    "Apabila Anda merasa hasil ini tidak mencerminkan diri Anda, penting untuk merenungkan kembali cara pengisian tes di masa mendatang. Isilah setiap tes psikologi dengan kejujuran, spontanitas, dan sesuai instruksi, tanpa upaya untuk mengarahkan hasil, demi memperoleh manfaat yang utuh dari proses psikotes yang Anda jalani."
+  ];
+  invalidMsg.forEach(par => {
+    const lines = doc.splitTextToSize(par, 152);
+    lines.forEach(line => {
+      doc.text(line, blokX+2, ySection);
+      ySection += 3.1;
+    });
+    ySection += 1.5;
+  });
+  // Tetap lanjut ke proses jawaban (tidak usah break, biar selesai bagian jawaban)
+} else {
+  // ANALISIS DISC (most, least, change) dan variabel untuk analisis
+  const most   = analisa2DominanDISC(hasilDISC.most.D, hasilDISC.most.I, hasilDISC.most.S, hasilDISC.most.C, 'most', getPixelY);
+  const least  = analisa2DominanDISC(hasilDISC.least.D, hasilDISC.least.I, hasilDISC.least.S, hasilDISC.least.C, 'least', getPixelY);
+  const change = analisa2DominanDISC(hasilDISC.change.D, hasilDISC.change.I, hasilDISC.change.S, hasilDISC.change.C, 'change', getPixelY);
 
     // REKOMENDASI KARIR
     let roles = (function(){
@@ -8335,68 +8363,70 @@ ySection += maxRow * 3 + 3;
     }
   }
 }
+// ========== GRAFIS ==========
+// Full page, tanpa margin, gambar proporsional dan diperbesar maksimal
+const grafisLabel = {
+  orang: "Tes DAP (Draw A Person) - Gambar Orang",
+  rumah: "Tes HTP (House-Tree-Person) - Gambar Rumah, Pohon, Orang",
+  pohon: "Tes BAUM (Tree Drawing Test) - Gambar Pohon"
+};
 
+if (appState.completed.GRAFIS && appState.grafis) {
+  const grafisKeys = ["orang", "rumah", "pohon"];
+  for (const key of grafisKeys) {
+    if (appState.grafis[key]) {
+      await new Promise(resolve => {
+        doc.addPage();
+        // Tidak ada teks/judul apapun
 
+        // Load gambar untuk dapat ukuran asli (agar scaling proporsional)
+        const img = new window.Image();
+        img.onload = function() {
+          const pxToMm = px => px * 0.264583;
+          const pageW = doc.internal.pageSize.getWidth();
+          const pageH = doc.internal.pageSize.getHeight();
 
-  // ========== GRAFIS ==========
-  const grafisLabel = {
-    orang: "Tes DAP (Draw A Person) - Gambar Orang",
-    rumah: "Tes HTP (House-Tree-Person) - Gambar Rumah, Pohon, Orang",
-    pohon: "Tes BAUM (Tree Drawing Test) - Gambar Pohon"
-  };
-  if (appState.completed.GRAFIS && appState.grafis) {
-    const grafisKeys = ["orang", "rumah", "pohon"];
-    for (const key of grafisKeys) {
-      if (appState.grafis[key]) {
-        await new Promise(resolve => {
-          doc.addPage();
-          doc.setFontSize(10);
-          doc.text(grafisLabel[key], pageWidth / 2, 25, { align: "center" });
-          doc.setFontSize(8);
-          doc.text('Hasil Foto:', pageWidth / 2, 34, { align: "center" });
+          let imgWmm = pxToMm(img.naturalWidth);
+          let imgHmm = pxToMm(img.naturalHeight);
+          const scale = Math.min(pageW / imgWmm, pageH / imgHmm);
+          imgWmm *= scale;
+          imgHmm *= scale;
+          const x = (pageW - imgWmm) / 2;
+          const y = (pageH - imgHmm) / 2;
 
-          // Load gambar dulu untuk dapat ukuran asli (agar scaling proporsional)
-          const img = new window.Image();
-          img.onload = function() {
-            const pxToMm = px => px * 0.264583;
-            const maxW = pageWidth - 2;
-            const maxH = 185;
-            let wmm = pxToMm(img.naturalWidth);
-            let hmm = pxToMm(img.naturalHeight);
-            const scale = Math.min(1, maxW / wmm, maxH / hmm);
-            wmm *= scale;
-            hmm *= scale;
-            const x = (pageWidth - wmm) / 2;
-            const y = 40;
-            doc.addImage(appState.grafis[key], 'JPEG', x, y, wmm, hmm);
-            resolve();
-          };
-          img.src = appState.grafis[key];
-        });
-      }
+          doc.addImage(appState.grafis[key], 'JPEG', x, y, imgWmm, imgHmm);
+          resolve();
+        };
+        img.src = appState.grafis[key];
+      });
     }
   }
+  // === Pastikan pindah halaman setelah blok GRAFIS, reset ySection ===
+  doc.addPage();
+  ySection = 25;
+}
 
-  // ========== TES ADMIN (EXCEL) ==========
-  if (appState.completed.EXCEL && appState.adminAnswers && appState.adminAnswers.EXCEL && appState.adminAnswers.EXCEL.link) {
-    ySection += 5;
-    if (ySection > 260) { doc.addPage(); ySection = 25; }
-    doc.setFontSize(8);
-    doc.setFont(undefined, 'bold');
-    doc.text('Tes Admin: Excel/Spreadsheet', 20, ySection);
-    ySection += 4;
-    doc.setFont(undefined, 'normal');
-    doc.setTextColor(33, 77, 170);
-    const link = appState.adminAnswers.EXCEL.link;
-    const wrapLink = doc.splitTextToSize(link, 160);
-    doc.text('Link Google Sheet Jawaban:', 24, ySection);
-    ySection += 4;
-    doc.text(wrapLink, 24, ySection);
-    ySection += 6;
-    doc.setTextColor(44, 62, 80);
-    if (ySection > 260) { doc.addPage(); ySection = 25; }
-  }
-  // ========== TES MENGETIK ==========
+// ========== TES ADMIN (EXCEL) ==========
+if (appState.completed.EXCEL && appState.adminAnswers && appState.adminAnswers.EXCEL && appState.adminAnswers.EXCEL.link) {
+  ySection += 5;
+  if (ySection > 260) { doc.addPage(); ySection = 25; }
+  doc.setFontSize(8);
+  doc.setFont(undefined, 'bold');
+  doc.text('Tes Admin: Excel/Spreadsheet', 20, ySection);
+  ySection += 4;
+  doc.setFont(undefined, 'normal');
+  doc.setTextColor(33, 77, 170);
+  const link = appState.adminAnswers.EXCEL.link;
+  const wrapLink = doc.splitTextToSize(link, 160);
+  doc.text('Link Google Sheet Jawaban:', 24, ySection);
+  ySection += 4;
+  doc.text(wrapLink, 24, ySection);
+  ySection += 6;
+  doc.setTextColor(44, 62, 80);
+  if (ySection > 260) { doc.addPage(); ySection = 25; }
+}
+
+// ========== TES MENGETIK ==========
 if (appState.completed.TYPING && appState.answers.TYPING) {
   doc.setFontSize(8);
   doc.setFont(undefined, 'bold');
@@ -8422,7 +8452,6 @@ if (appState.completed.TYPING && appState.answers.TYPING) {
   doc.setTextColor(44, 62, 80);
 }
 
-
 // ========== FOOTER UNTUK TANDA TANGAN ==========
 let footerY = 285;
 if (ySection > 245) { doc.addPage(); footerY = 285; }
@@ -8439,26 +8468,27 @@ doc.text('Sugar Group Schools', footerX, footerY, { align: "right" });
 
 // Simpan file
 
-  let namaFile = (id.name||"Peserta").replace(/[^a-zA-Z0-9]/g,'-') + "-Psikotes-SGSchools.pdf";
-  doc.save(namaFile);
+let namaFile = (id.name||"Peserta").replace(/[^a-zA-Z0-9]/g,'-') + "-Psikotes-SGSchools.pdf";
+doc.save(namaFile);
 
-  // === Tambahan fitur logout setelah download ke-2 ===
-  downloadClickCount++;
-  if (downloadClickCount === 2) {
-    const box = document.getElementById('downloadPDFBox');
-    if (box) {
-      box.innerHTML = `
-        <button class="btn btn-danger" id="btnLogoutPDF" style="padding:18px 40px;font-size:1.17rem;font-weight:700;">
-          🔒 Logout
-        </button>
-      `;
-      document.getElementById('btnLogoutPDF').onclick = function() {
-        localStorage.setItem('usedPragas', '1'); // Password jadi "pragass"
-        localStorage.removeItem('identity');     // Hapus data user
-        setTimeout(() => {
-          location.reload();
-        }, 250);
-      };
-    }
+// === Tambahan fitur logout setelah download ke-2 ===
+downloadClickCount++;
+if (downloadClickCount === 2) {
+  const box = document.getElementById('downloadPDFBox');
+  if (box) {
+    box.innerHTML = `
+      <button class="btn btn-danger" id="btnLogoutPDF" style="padding:18px 40px;font-size:1.17rem;font-weight:700;">
+        🔒 Logout
+      </button>
+    `;
+    document.getElementById('btnLogoutPDF').onclick = function() {
+      localStorage.setItem('usedPragas', '1'); // Password jadi "pragass"
+      localStorage.removeItem('identity');     // Hapus data user
+      setTimeout(() => {
+        location.reload();
+      }, 250);
+    };
   }
+}
+
 }
