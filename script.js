@@ -8153,36 +8153,41 @@ if (appState.completed.BIGFIVE) {
   ySection += 3;
 
   // --- 4 kolom, rata kiri-kanan, fit PDF A4 landscape/portrait ---
-  const total = tests.BIGFIVE.questions.length;
-  // X: margin kiri 20, margin kanan 18, seimbang, tiap kolom 48px
-  const col_x = [20, 68, 116, 164];
-  const rowsPerCol = Math.ceil(total / 4);
-  let row = 0, col = 0, maxRow = 0;
+ const total = tests.BIGFIVE.questions.length;
+const col_x = [18, 63, 108, 153];
+const rowsPerCol = Math.ceil(total / 4);
 
-  for (let i = 0; i < total; i++) {
-    if (row >= rowsPerCol) { row = 0; col++; }
-    if (col > 3) { // 4 kolom per halaman
-      doc.addPage(); ySection = 20; col = 0; row = 0;
-    }
-    const ans = appState.answers.BIGFIVE[i];
-    let jawaban = "Tidak dijawab";
-    if (typeof ans === 'number' && ans > 0) {
-      if (ans === 1) jawaban = "1 (Sangat Tidak Sesuai)";
-      else if (ans === 2) jawaban = "2 (Tidak Sesuai)";
-      else if (ans === 3) jawaban = "3 (Netral)";
-      else if (ans === 4) jawaban = "4 (Sesuai)";
-      else if (ans === 5) jawaban = "5 (Sangat Sesuai)";
-      else jawaban = ans.toString();
-    }
-    doc.text(
-      `${(i + 1).toString().padStart(3, '0')}. ${jawaban}`,
-      col_x[col], ySection + row * 3
-    );
-    row++;
-    maxRow = Math.max(maxRow, row);
+let row = 0, col = 0, maxRow = 0;
+
+for (let i = 0; i < total; i++) {
+  // --- CEK: jika sudah mentok halaman, ganti halaman baru ---
+  if ((ySection + row * 3) > 275) { // 275 px batas aman
+    doc.addPage();
+    ySection = 22; // atau sesuai margin atas halaman baru
+    row = 0;
+    col++; // lanjut ke kolom kanan, BUKAN RESET KE 0
+    if (col > 3) { col = 0; } // kalau sudah 4 kolom, reset ke 0 (aman)
   }
-  ySection += maxRow * 3 + 3;
-
+  if (row >= rowsPerCol) { row = 0; col++; }
+  if (col > 3) { doc.addPage(); ySection = 22; col = 0; row = 0; }
+  const ans = appState.answers.BIGFIVE[i];
+  let jawaban = "Tidak dijawab";
+  if (typeof ans === 'number' && ans > 0) {
+    if (ans === 1) jawaban = "1 (Sangat Tidak Sesuai)";
+    else if (ans === 2) jawaban = "2 (Tidak Sesuai)";
+    else if (ans === 3) jawaban = "3 (Netral)";
+    else if (ans === 4) jawaban = "4 (Sesuai)";
+    else if (ans === 5) jawaban = "5 (Sangat Sesuai)";
+    else jawaban = ans.toString();
+  }
+  doc.text(
+    `${(i + 1).toString().padStart(3, '0')}. ${jawaban}`,
+    col_x[col], ySection + row * 3
+  );
+  row++;
+  maxRow = Math.max(maxRow, row);
+}
+ySection += maxRow * 3 + 3;
   // ===== Ringkasan OCEAN =====
   if (appState.hasilOCEAN) {
     if (ySection > 255) { doc.addPage(); ySection = 20; }
