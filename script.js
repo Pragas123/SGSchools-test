@@ -7297,12 +7297,13 @@ const adminExcelQuestions = [
 // Render tes Excel:
 
 function renderAdminExcelSheet() {
-  let timeLeft = 40 * 60; // 40 menit
+  let timeLeft = 40 * 60; // 11 menit, tinggal ubah angka ini saja kalau perlu durasi lain!
   let timerInterval;
   let sudahStart = false;
   let ttsPlayed10M = false;
   let ttsPlayed30Dtk = false;
 
+  // Generate waktu awal "MM:00" sesuai timeLeft
   const timerStr = Math.floor(timeLeft / 60).toString().padStart(2, '0') + ':00';
 
   document.getElementById('app').innerHTML = `
@@ -7311,7 +7312,6 @@ function renderAdminExcelSheet() {
       <div style="margin-bottom:16px;">
         <b>Instruksi:</b>
         <ul style="margin:10px 28px 16px 28px;padding-left:16px;line-height:1.7;">
-          <li><span style="color:#d32f2f;font-weight:600;">Waktu ujian otomatis berjalan setelah Anda klik tombol di bawah!</span></li>
           <li>Klik tombol di bawah untuk mendapatkan Google Sheet soal ujian Anda (<b>salin ke Google Drive Anda</b>).</li>
           <li>Kerjakan langsung di Google Sheet tersebut.</li>
           <li><b>PENTING!</b> Setelah selesai, <b>bagikan link Sheet Anda</b> ke panitia dengan akses 
@@ -7335,10 +7335,14 @@ function renderAdminExcelSheet() {
           <b>Catatan:</b> Pastikan akses “Siapa saja yang memiliki link” & Editor sudah aktif sebelum mengumpulkan link!
         </div>
       </div>
+      <div style="text-align:center; margin:26px 0 12px 0;">
+        <a href="https://docs.google.com/spreadsheets/d/1RKykKAHOn-kXfOFrDLD2UkOQ6YlpoFAgv06ETvnRU_g/copy" target="_blank" rel="noopener" id="startSheetBtn">
+          <button class="btn btn-success" style="font-size:1.13em;padding:12px 28px 12px 28px;">
+            📋 Dapatkan Google Sheet Ujian Anda
+          </button>
+        </a>
+      </div>
       <div style="max-width:500px;margin:0 auto 0 auto;">
-        <div style="margin-bottom:10px;padding:9px 14px 8px 14px;border-radius:7px;background:#fff8e1;color:#e65100;font-weight:600;border:1px solid #ffe0b2;">
-          Setelah mengirimkan link, <span style="color:#d32f2f;">dilarang mengedit jawaban lagi</span> karena akan <b>diskualifikasi</b> (perubahan terekam sistem).
-        </div>
         <div style="margin-bottom:8px;"><b>Kumpulkan Link Google Sheet Anda:</b></div>
         <input type="url" id="sheetLinkInput" placeholder="Tempelkan link Google Sheet Anda di sini" style="width:100%;padding:10px;font-size:1.1em;border-radius:8px;border:1.3px solid #b5d6f9;" autocomplete="off"/>
         <div id="sheetLinkMsg" style="margin:10px 0 0 0;color:#197278;font-size:1em;"></div>
@@ -7388,7 +7392,7 @@ function renderAdminExcelSheet() {
     // Tambahkan suara peringatan jika ada, jika tidak bisa kosongkan saja
   }
 
-  // Timer start saat klik tombol
+  // Mulai timer saat klik sheet
   document.getElementById('startSheetBtn').addEventListener('click', function () {
     if (!sudahStart) {
       sudahStart = true;
@@ -7402,6 +7406,7 @@ function renderAdminExcelSheet() {
     }
   });
 
+  // Simpan link jawaban
   document.getElementById('sheetLinkInput').addEventListener('input', function (e) {
     const link = e.target.value.trim();
     if (link.startsWith("https://docs.google.com/spreadsheets/")) {
@@ -7414,12 +7419,14 @@ function renderAdminExcelSheet() {
     }
   });
 
+  // Tombol selesai & kembali
   document.getElementById('btnExcelDone').onclick = function () {
     clearInterval(timerInterval);
     appState.completed.EXCEL = true;
     renderHome();
   };
 }
+
 
 // ==================== TES KETIK ====================
 
