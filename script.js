@@ -7065,44 +7065,47 @@ function renderGrafisUpload() {
 
   // ========== SLIDE 0: PERSIAPAN 3 KERTAS & PENSIL ==========
   function renderPersiapanSlide() {
-    if (timer) clearInterval(timer);
-    document.getElementById('app').innerHTML = `
-      <div class="card">
-        <div class="header"><h2>Persiapan Tes Gambar</h2></div>
-        <div style="margin:0 auto 12px auto; max-width:430px;">
-          <div style="background:#fffbe8;border-radius:10px;padding:17px 21px 13px 21px;margin-bottom:16px;">
-            <b>Pastikan Anda menyiapkan:</b>
-            <ul style="margin-left:17px;margin-bottom:8px;">
-              <li><b>3 lembar kertas A4 polos</b> (tidak bergaris/bergambar)</li>
-              <li><b>Pensil HB/2B</b> (direkomendasikan untuk tes grafis psikologi)</li>
-              <li><b>HP untuk foto</b> hasil gambar</li>
-            </ul>
-            <div style="margin:8px 0 6px 0;padding:8px 12px 7px 12px;border-radius:8px;background:#e3f3fa;">
-              <b>Cara upload gambar yang mudah:</b><br>
-              <span style="font-size:0.98em;">
-                <ol style="margin-left:16px;margin-bottom:0;padding-left:16px;">
-                  <li>Ambil foto hasil gambar dengan HP Anda.</li>
-                  <li>Buka WhatsApp, kirim gambar tersebut ke <b>nomor WA sendiri</b> (chat ke diri sendiri).</li>
-                  <li>Buka <b>web.whatsapp.com</b> atau aplikasi WhatsApp Desktop di komputer/laptop Anda.</li>
-                  <li>Drag gambar dari WhatsApp ke komputer, lalu upload di halaman ini (atau drag ke kotak upload nanti).</li>
-                </ol>
-                <span style="color:#158600;">Tips:</span> Gambar lebih mudah diakses dan di-upload melalui WA Web/WA Desktop.
-              </span>
-            </div>
-            <div style="margin:10px 0 5px 0;color:#b74a00;">
-              <b>Perhatian!</b> Ikuti waktu pada setiap tes, jika terlambat halaman upload otomatis tertutup dan Anda tidak dapat mengumpulkan file.
-            </div>
+  if (timer) clearInterval(timer);
+  document.getElementById('app').innerHTML = `
+    <div class="card">
+      <div class="header"><h2>Persiapan Tes Gambar</h2></div>
+      <div style="margin:0 auto 12px auto; max-width:430px;">
+        <div style="background:#fffbe8;border-radius:10px;padding:17px 21px 13px 21px;margin-bottom:16px;">
+          <b>Pastikan Anda menyiapkan:</b>
+          <ul style="margin-left:17px;margin-bottom:8px;">
+            <li><b>3 lembar kertas A4 polos</b> (tidak bergaris/bergambar)</li>
+            <li><b>Pensil HB/2B</b></li>
+            <li><b>HP untuk foto</b> hasil gambar</li>
+          </ul>
+          <div style="margin:8px 0 6px 0;padding:8px 12px 7px 12px;border-radius:8px;background:#e3f3fa;">
+            <b>Cara upload gambar yang mudah:</b><br>
+            <span style="font-size:0.98em;">
+              <ol style="margin-left:16px;margin-bottom:0;padding-left:16px;">
+                <li>Ambil foto hasil gambar dengan HP Anda.</li>
+                <li>Buka WhatsApp, kirim gambar tersebut ke <b>nomor WA sendiri</b> (chat ke diri sendiri).</li>
+                <li>
+                  Buka <a href="https://web.whatsapp.com" target="_blank" style="color:#006e99;text-decoration:underline;font-weight:bold;">web.whatsapp.com</a> 
+                  atau aplikasi WhatsApp Desktop di komputer/laptop Anda.
+                </li>
+                <li>Drag gambar dari WhatsApp ke komputer, lalu upload di halaman ini (atau drag ke kotak upload nanti).</li>
+              </ol>
+              <span style="color:#158600;">Tips:</span> Gambar lebih mudah diakses dan di-upload melalui WA Web/WA Desktop.
+            </span>
           </div>
-          <div style="text-align:center;margin-top:18px;">
-            <button class="btn" id="btnSiapSemua" style="padding:11px 35px;font-size:1.13em;">Saya sudah siap</button>
+          <div style="margin:10px 0 5px 0;color:#b74a00;">
+            <b>Perhatian!</b> Ikuti waktu pada setiap tes, jika terlambat halaman upload otomatis tertutup dan Anda tidak dapat mengumpulkan file.
           </div>
         </div>
+        <div style="text-align:center;margin-top:18px;">
+          <button class="btn" id="btnSiapSemua" style="padding:11px 35px;font-size:1.13em;">Saya sudah siap</button>
+        </div>
       </div>
-    `;
-    document.getElementById('btnSiapSemua').onclick = () => {
-      renderGrafisSlide(0, "persiapan");
-    };
-  }
+    </div>
+  `;
+  document.getElementById('btnSiapSemua').onclick = () => {
+    renderGrafisSlide(0, "persiapan");
+  };
+}
 
   // ========== SLIDE GRAFIS (DAP/HTP/BAUM) ==========
   function renderGrafisSlide(idx, step = "persiapan") {
