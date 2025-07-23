@@ -2102,10 +2102,739 @@ BIGFIVE: {
     { id:119, text: "Saya merasa kewalahan dengan mudah.", options: ["1","2","3","4","5"], dimension: "N", reverse: false },
     { id:120, text: "Saya menikmati sebagian besar aspek hidup saya.", options: ["1","2","3","4","5"], dimension: "N", reverse: true }
   ]
+},
+SUBJECT: {
+    name: "Tes Subjek",
+    description: "Tes kemampuan akademik sesuai mata pelajaran pilihan Anda.",
+    instruction: "Pilih salah satu subjek di bawah, lalu kerjakan soal yang muncul.",
+    subjects: [
+      {
+  id: "LAMPUNG",
+  name: "Bahasa Lampung",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL REKRUTMEN GURU BAHASA LAMPUNG
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+   questions: [
+        { type: "essay", question: "Lampung memiliki berbagai macam upacara adat. Jelaskan salah satu upacara adat yang kamu ketahui, mulai dari prosesi, makna, hingga nilai-nilai yang terkandung di dalamnya!" },
+        { type: "essay", question: "Bagaimana pengaruh budaya luar terhadap kebudayaan Lampung saat ini? Berikan contohnya!" },
+        { type: "essay", question: "Sebuah sanggar tari di Lampung ingin mementaskan tari Sembah. Apa saja persiapan yang perlu dilakukan dan bagaimana cara mereka melestarikan tarian tersebut agar tetap dikenal oleh generasi muda?" },
+        { type: "essay", question: "Jelaskan ciri-ciri bahasa Lampung dialek Abung dan dialek Pesisir!" },
+        { type: "essay", question: "Salah satu tantangan dalam mengajar Bahasa dan Budaya Lampung adalah menarik minat siswa terhadap hal yang dianggap sulit. Berikan contoh metode pembelajaran kreatif yang dapat meningkatkan motivasi belajar siswa! Tentukan salah satu topik yang akan dibahas." },
+        { type: "essay", question: "Pada saat belajar budaya Lampung, ada beberapa siswa yang cenderung menggangu temannya sehingga pembelajaran tidak kondusif. Bagaimanakan Anda menerapkan disiplin kelas dalam menangani situasi ini, dengan melihat gaya belajar siswa yang beragam, bagaimanakah membuat proses pembelajaran yang berdeferensiasi untuk mengakomodasi kebutuhan siswa." },
+        { type: "essay", question: "Jelaskan prinsip-prinsip utama dalam manajemen kelas yang efektif dan bagaimana Anda akan menerapkannya dalam mengajar Bahasa/Budaya Lampung?" },
+        { type: "essay", question: "Dalam kelas Anda terdapat siswa dari berbagai latar belakang budaya dan ekonomi yang berbeda. Bagaimana Anda menciptakan lingkungan belajar yang inklusif dan mendukung keberagaman?" },
+        { type: "essay", question: "Selain mengajarkan mata pelajaran Budaya Lampung, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" },
+        { type: "essay", question: "Dewasa ini, teknologi semakin terintegrasi dalam pendidikan. Bagaimana Anda akan memanfaatkan teknologi untuk meningkatkan efektivitas pembelajaran Budaya Lampung di kelas Anda? Berikan contoh aplikasi atau platform yang akan Anda gunakan dan bagaimana Anda akan mengintegrasikannya dalam rencana pembelajaran Anda." }
+      ]
+    },
+      {
+      id: "BIOLOGI",
+      name: "Biologi",
+      time: 2700, // 45 menit
+      instruction: `
+        <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+          SOAL REKRUTMEN GURU BIOLOGI
+        </div>
+        <ul style="text-align:left;margin-left:18px;">
+          <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+          <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+          <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+        </ul>
+        <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+      `,
+      questions: [
+        { type: "essay", question: "Jelaskan secara rinci proses fotosintesis, mulai dari tahap penyerapan cahaya hingga pembentukan glukosa. Sebutkan faktor-faktor yang mempengaruhi fotosintesis dan bagaimana masing-masing faktor tersebut dapat mempengaruhi laju fotosintesis." },
+        { type: "essay", question: "Sistem kekebalan tubuh memiliki peran penting dalam melindungi tubuh dari infeksi. Analisis bagaimana sistem kekebalan tubuh mengenali dan merespons antigen, serta bagaimana mekanisme kekebalan humoral dan kekebalan seluler bekerja sama untuk melawan infeksi." },
+        { type: "essay", question: "Suatu populasi hewan mengalami isolasi geografis dari populasi aslinya. Setelah beberapa generasi, populasi yang terisolasi tersebut menunjukkan perbedaan morfologi dan perilaku yang signifikan dibandingkan dengan populasi aslinya. Analisis bagaimana isolasi geografis dapat menyebabkan spesiasi, dan faktor-faktor apa saja yang dapat mempengaruhi proses spesiasi tersebut." },
+        { type: "essay", question: "Seorang siswa mengalami kesulitan dalam memahami konsep metabolisme karbohidrat. Bagaimana strategi pembelajaran yang akan Anda gunakan untuk membantunya memahami konsep tersebut?" },
+        { type: "essay", question: "Pada saat anda mengajar materi pewarisan sifat, ada siswa yang sangat aktif sehingga menggu pembelajaran. Dalam situasi tersebut, bagaimana Anda akan menyesuaikan pembelajaran agar lebih inklusif dan mendukung keberagaman gaya belajar siswa?" },
+        { type: "essay", question: "Jelaskan bagaimana Anda menerapkan pendekatan diferensiasi dalam pembelajaran biologi untuk memastikan bahwa setiap siswa dapat mencapai kompetensi yang diharapkan!" },
+        { type: "essay", question: "Dalam suatu praktikum biologi, ada beberapa siswa yang tidak mengikuti prosedur keamanan dengan benar meskipun sudah diberikan instruksi sebelumnya. Bagaimana Anda menangani situasi ini agar tetap mendidik namun tetap menjaga disiplin di kelas?" },
+        { type: "essay", question: "Dewasa ini, teknologi semakin terintegrasi dalam pendidikan. Bagaimana Anda akan memanfaatkan teknologi untuk meningkatkan efektivitas pembelajaran Biologi di kelas Anda? Berikan contoh aplikasi atau platform yang akan Anda gunakan dan bagaimana Anda akan mengintegrasikannya dalam rencana pembelajaran Anda." },
+        { type: "essay", question: "Selain mengajarkan mata pelajaran biologi, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" }
+      ]
+    },
+    {
+  id: "KIMIA",
+  name: "Kimia",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL REKRUTMEN GURU KIMIA SMA
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    { type: "essay", question: "Jelaskan bagaimana konsep kesetimbangan kimia dapat diaplikasikan dalam industri! Berikan contoh nyata dan analisis dampaknya terhadap lingkungan." },
+    { type: "essay", question: "Sebuah reaksi kimia berlangsung dengan kecepatan yang sangat lambat pada suhu ruang. Sebutkan dan jelaskan tiga cara yang dapat dilakukan untuk meningkatkan laju reaksi tersebut dengan tetap memperhatikan faktor keselamatan laboratorium." },
+    { type: "essay", question: "Seorang siswa mengalami kesulitan memahami konsep stoikiometri dalam reaksi pembakaran hidrokarbon. Bagaimana strategi pembelajaran yang akan Anda gunakan untuk membantunya memahami konsep tersebut?" },
+    { type: "essay", question: "Dalam kelas Anda terdapat seorang siswa dengan gaya belajar kinestetik yang sulit memahami materi larutan asam dan basa. Bagaimana Anda akan menyesuaikan pembelajaran agar lebih inklusif dan mendukung keberagaman gaya belajar siswa?" },
+    { type: "essay", question: "Jelaskan bagaimana Anda menerapkan pendekatan diferensiasi dalam pembelajaran kimia untuk memastikan bahwa setiap siswa dapat mencapai kompetensi yang diharapkan!" },
+    { type: "essay", question: "Salah satu tantangan dalam mengajar kimia adalah menarik minat siswa terhadap materi yang dianggap sulit. Berikan contoh metode pembelajaran kreatif berbasis teknologi atau eksperimen sederhana yang dapat meningkatkan motivasi belajar siswa!" },
+    { type: "essay", question: "Anda mengajar kelas XII dan hendak mengajarkan materi elektrokimia. Bagaimana Anda mendesain pembelajaran yang interaktif dan membuat siswa lebih tertarik dengan materi tersebut?" },
+    { type: "essay", question: "Dalam suatu praktikum kimia, ada beberapa siswa yang tidak mengikuti prosedur keamanan dengan benar meskipun sudah diberikan instruksi sebelumnya. Bagaimana Anda menangani situasi ini agar tetap mendidik namun tetap menjaga disiplin di kelas?" },
+    { type: "essay", question: "Jelaskan prinsip-prinsip utama dalam manajemen kelas yang efektif dan bagaimana Anda akan menerapkannya dalam mengajar kimia?" },
+    { type: "essay", question: "Dalam kelas Anda terdapat siswa dari berbagai latar belakang budaya dan ekonomi yang berbeda. Bagaimana Anda menciptakan lingkungan belajar yang inklusif dan mendukung keberagaman?" },
+    { type: "essay", question: "Sekolah Anda ingin meningkatkan partisipasi siswa dalam kompetisi sains seperti OSN Kimia. Sebagai guru, bagaimana strategi Anda dalam mengidentifikasi, membimbing, dan mengembangkan potensi siswa untuk berprestasi dalam kompetisi tersebut?" },
+    { type: "essay", question: "Selain mengajarkan mata pelajaran kimia, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" }
+  ]
+},
+    {
+  id: "MATH",
+  name: "Matematika",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL REKRUTMEN GURU MATEMATIKA
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    { type: "essay", question: "Tentukan angka satuan pada bilangan 2^999!" },
+    { type: "essay", question: "Nilai dari √(6150^2-6050^2 )= ?" },
+    { type: "essay", question: "Kedua akar persamaan kuadrat x^2-111x+k = 0 adalah bilangan prima. Nilai k adalah ..." },
+    { type: "essay", question: "Sebuah kapal berlayar dari Pelabuhan A ke Pelabuhan B sejauh 60 mil dengan arah 040° dari A, kemudian berputar haluan dilanjutkan ke Pelabuhan C sejauh 90 mil, dengan arah 160° dari B. Berapa jarak terdekat Pelabuhan A ke Pelabuhan C?" },
+    { type: "essay", question: "Dalam sebuah kelas yang jumlah siswanya 40 orang, 22 orang mengikuti IMO, 17 orang mengikuti IBO, dan 20 orang mengikuti ICO. Ada juga yang mengikuti sekaligus dua kegiatan, yaitu 12 orang mengikuti IMO dan IBO, 9 orang mengikuti IMO dan ICO, 8 orang mengikuti IBO dan ICO, sedangkan 5 orang tercatat mengikuti IMO, IBO, dan ICO. Jika dipilih satu orang siswa dari kelas tersebut, maka peluang terpilihnya seorang siswa yang tidak mengikuti IMO, IBO, maupun ICO adalah… ?" },
+    { type: "essay", question: "Sebuah toko alat tulis memberi diskon sebesar 20% khusus untuk pelajar. Pada awal tahun ajaran baru, toko memberi diskon tambahan sebesar 10% dari harga yang sudah didiskon. Ahmad adalah seorang pelajar SMA, yang membeli buku dengan harga Rp57.600,00 pada awal tahun ajaran baru. Berapakah harga awal dari buku tersebut?" },
+    { type: "essay", question: "Suatu bak air mempunyai 1 keran pengisi bak yaitu x dan 1 keran pengosong yaitu y. Bila keran x dibuka dan keran y ditutup, bak tersebut akan penuh dalam 6 jam. Sedangkan bila y dibuka dan keran x ditutup, maka bak tersebut kosong dalam 8 jam. Berapa waktu yang diperlukan untuk mengisi penuh bak dari keadaan kosong jika kedua keran dibuka?" },
+    {
+      type: "essay",
+      question: `
+        Pada sebuah segi empat dibuat lingkaran seperti pada gambar berikut:<br>
+        <img src="https://files.catbox.moe/raxhqj.jpg" alt="Gambar soal matematika nomor 8" style="max-width:340px;margin:10px 0;border-radius:9px;box-shadow:0 2px 8px #ccc"><br>
+        Keliling daerah yang diarsir adalah 100 cm. Luas daerah yang diarsir akan maksimum untuk nilai p =… (dalam π).
+      `
+    },
+    { type: "essay", question: "Sebuah tangki berisi 50000 liter solar. Solar tersebut diisikan pada 5 drum berbentuk tabung dengan tinggi 100 cm dan jari-jari 70 cm. Berapa liter/jam debit solar jika waktu yang dihabiskan untuk mengisi ke-5 drum adalah 1 jam 17 menit? (asumsi tidak ada jeda pengisian)" },
+    { type: "essay", question: "Di dalam kelas terdapat berbagai siswa dengan kemampuan yang berbeda, output yang dihasilkan biasanya tidak sesuai yang diharapkan. Perbedaan yang ada akan membuat jarak siswa pintar dan lemah semakin nampak. Desainlah sebuah program pembelajaran dengan topik persamaan trigonometri yang dapat diberikan di kelas dengan berbagai model yang dapat dipahami oleh semua siswa baik siswa yang pintar ataupun yang lemah sehingga tujuan pembelajaran dapat tercapai." }
+  ]
+}
+,
+    {
+  id: "TIK",
+  name: "TIK",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL REKRUTMEN GURU TIK / KOMPUTER
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    { type: "essay", question: "Sebagai guru komputer, deskripsikan master plan pelajaran komputer dari tingkat dasar kelas 4 SD hingga tingkat atas 12 SMA/SMK ?" },
+    { type: "essay", question: "Ketika ada 3 kelas yang akan mengikuti pelajaran komputer dalam 1 hari, kelas A jam 07.30-09.00, kelas B jam 09.00-10.30, kelas C jam 13.15-14.45. Jumlah siswa di setiap kelas 25 orang, jumlah komputer yang tersedia di lab. Komputer 30 unit. Tindakan apa saja yang dilakukan guru ketika terjadi kerusakan sebuah unit komputer di kelas B ?" },
+    {
+      type: "essay",
+      question: `
+        Ketika ada 3 kelas yang akan mengikuti pelajaran komputer dalam 1 hari, kelas A jam 07.30-09.00, kelas B jam 09.00-10.30, kelas C jam 13.15-14.45. Jumlah siswa di setiap kelas 30 orang, jumlah komputer yang tersedia di lab. Komputer 20 unit.<br>
+        a. Bagaimana rencana pembelajaran teori hari tersebut?<br>
+        b. Bagaimana rencana pembelajaran praktik hari tersebut?<br>
+        c. Apa tindakan yang dilakukan jika terjadi kerusakan sebuah unit komputer di kelas B?
+      `
+    },
+    { type: "essay", question: "Ketika proses belajar di lab computer sedang berlangsung, seorang siswa yang sangat aktif menggangu proses belajar sehingga menimbulkan sedikit keributan. Apa tindakan yang sebaiknya dilakukan oleh seorang guru ?" },
+    {
+      type: "essay",
+      question: `
+        Salah satu materi pelajaran TIK/ komputer adalah Pengenalan Hardware & Software (Jumlah pertemuan disesuaikan dengan fasilitas, intake siswa & kemampuan gurunya):<br>
+        a. Bagaimana rancangan pembelajaran untuk tingkat SD (kelas 4/ 5/ 6)?<br>
+        b. Bagaimana rancangan pembelajaran untuk tingkat SMP (kelas 7/ 8/ 9)?<br>
+        c. Bagaimana rancangan pembelajaran untuk tingkat SMA (kelas 10/ 11/ 12)?<br>
+        d. Bagaimana rancangan pembelajaran untuk tingkat SMK (kelas 10/ 11/ 12)?
+      `
+    },
+    {
+      type: "essay",
+      question: `
+        Salah satu materi pelajaran TIK/ komputer adalah Jaringan Komputer & Internet (Jumlah pertemuan disesuaikan dengan fasilitas, intake siswa & kemampuan gurunya):<br>
+        a. Bagaimana rancangan pembelajaran untuk tingkat SD (kelas 4/ 5/ 6)?<br>
+        b. Bagaimana rancangan pembelajaran untuk tingkat SMP (kelas 7/ 8/ 9)?<br>
+        c. Bagaimana rancangan pembelajaran untuk tingkat SMA (kelas 10/ 11/ 12)?<br>
+        d. Bagaimana rancangan pembelajaran untuk tingkat SMK (kelas 10/ 11/ 12)?
+      `
+    },
+    { type: "essay", question: "Jelaskan apakah seorang guru komputer juga harus memiliki kemampuan teknis untuk memperbaiki kerusakan perangkat keras/ perangkat lunak komputer ?" }
+  ]
+}
+,
+    {
+  id: "OLAHRAGA",
+  name: "Olahraga",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      TES TERTULIS SELEKSI GURU OLAHRAGA SEKOLAH SUGAR GROUP
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Waktu Pengerjaan: 45 menit</li>
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    // Bagian 1: Kompetensi Profesional
+    { type: "essay", question: "Jelaskan konsep dasar latihan fisik yang sesuai dengan tingkat perkembangan siswa SD/SMP/SMA!" },
+    { type: "essay", question: "Seorang siswa mengalami cedera ringan saat mengikuti pelajaran olahraga. Bagaimana langkah-langkah yang harus Anda lakukan sebagai guru olahraga dalam menangani cedera tersebut?" },
+    { type: "essay", question: "Dalam suatu pembelajaran olahraga, bagaimana cara Anda mengidentifikasi dan mengembangkan bakat siswa dalam bidang olahraga tertentu?" },
+    // Bagian 2: Keberpihakan pada Murid dalam Proses Pembelajaran
+    { type: "essay", question: "Bagaimana cara Anda memastikan bahwa semua siswa, termasuk mereka yang memiliki keterbatasan fisik, dapat berpartisipasi dalam pembelajaran olahraga secara optimal?" },
+    { type: "essay", question: "Dalam satu kelas, terdapat siswa dengan tingkat kemampuan fisik yang sangat beragam. Bagaimana strategi Anda agar setiap siswa tetap termotivasi dan merasa dihargai dalam proses pembelajaran?" },
+    // Bagian 3: Kreativitas dalam Pembelajaran
+    { type: "essay", question: "Sebutkan dan jelaskan tiga metode kreatif yang dapat digunakan dalam pembelajaran olahraga agar siswa lebih termotivasi dan aktif berpartisipasi!" },
+    { type: "essay", question: "Buatlah rancangan singkat sebuah permainan olahraga yang menggabungkan unsur edukatif dan kompetitif sehingga menarik bagi siswa!" },
+    // Bagian 4: Manajemen Perilaku dalam Pembelajaran
+    { type: "essay", question: "Dalam sesi pembelajaran olahraga, bagaimana Anda menangani siswa yang tidak disiplin dan mengganggu jalannya kegiatan?" },
+    { type: "essay", question: "Bagaimana cara Anda membangun lingkungan belajar yang positif dan mendukung nilai sportivitas di dalam kelas?" },
+    // Bagian 5: Pemahaman Perbedaan Kultur dan Budaya
+    { type: "essay", question: "Olahraga sering kali menjadi alat pemersatu dalam masyarakat yang memiliki perbedaan budaya. Bagaimana Anda mengakomodasi keberagaman budaya siswa dalam pembelajaran olahraga di sekolah?" },
+    // Bagian 6: Kompetensi Tambahan dan Pengembangan Siswa
+    { type: "essay", question: "Bagaimana cara Anda mengidentifikasi dan membimbing siswa berbakat dalam bidang olahraga agar bisa berprestasi di ajang kompetisi seperti O2SN?" },
+    { type: "essay", question: "Bagaimana Anda mengintegrasikan aspek kebugaran jasmani ke dalam kegiatan ekstrakurikuler agar tidak hanya berfokus pada kompetisi tetapi juga pada peningkatan kualitas hidup siswa?" }
+  ]
+}
+,
+    {
+  id: "VISUALART",
+  name: "Visual Art",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL SELEKSI GURU VISUAL ART
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    // DASAR
+    { type: "essay", question: "Apa saja unsur-unsur seni rupa? Jelaskan masing-masing secara singkat saja!" },
+    { type: "essay", question: "Apa yang dimaksud dengan garis semu dan bagaimana terjadinya?" },
+    { type: "essay", question: "Jelaskan hal apa saja yang Anda ketahui tentang warna!" },
+    // KETERAMPILAN MENGAJAR
+    { type: "essay", question: "Uraikan bagaimana Anda mengajarkan konsep 'warna' kepada siswa kelas 10 SMA kaitannya dengan STEAM (Sains-Teknologi-Engineering-Art-Math)." },
+    { type: "essay", question: "Bagaimana Anda mengelola penilaian atas kinerja siswa dalam pembelajar seni rupa?" },
+    { type: "essay", question: "Apa yang Anda lakukan atas fakta bahwa tidak semua siswa punya ketertarikan dan keterampilan atas seni rupa? Hal apa pula yang Anda lakukan terhadap siswa yang mempunyai bakat dan ketertarikan yang tinggi atas seni rupa?" },
+    { type: "essay", question: "Terkait dengan perkembangan teknologi, software atau aplikasi apa saja yang Anda kuasai dan yang akan Anda terap/ajarkan pada beberapa bagian pembelajaran seni rupa?" },
+    // PENGETAHUAN UMUM
+    { type: "essay", question: "Apa yang dimaksud dengan kurikulum? Kurikulum apa saja yg Anda ketahui dan pernah diterapkan di Indonesia?" },
+    { type: "essay", question: "Bagaimana Anda akan mengintegrasikan penekanan atas pentingnya pembentukan nilai-nilai dan karakter yang baik dalam pembelajaran seni rupa?" },
+    // PRAKTIK
+    { type: "essay", question: "Pada selembar kertas, buatlah gambar rumah sederhana dengan menerapkan prinsip ‘2 titik hilang’." }
+  ]
+}
+,
+   {
+  id: "PRIMARY",
+  name: "Primary",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      TES TERTULIS SELEKSI GURU SD (GURU KELAS)
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    // 1. Pertanyaan Konseptual
+    { type: "essay", question: `Jelaskan apa yang dimaksud dengan "pembelajaran yang memerdekakan" dalam konteks Kurikulum Merdeka dan bagaimana peran guru dalam pembelajaran yang memerdekakan?` },
+    // 2. Studi Kasus: Keragaman Budaya Indonesia
+    { type: "essay", question: `Anda adalah seorang guru kelas 3 SD. Tema yang akan Anda ajarkan adalah "Keragaman Budaya Indonesia".<br>
+      <b>Tujuan pembelajaran:</b><br>
+      • Siswa dapat mengidentifikasi berbagai macam budaya yang ada di Indonesia (misalnya, pakaian adat, tarian, lagu daerah, makanan khas).<br>
+      • Siswa dapat menjelaskan pentingnya melestarikan keragaman budaya Indonesia.<br>
+      • Siswa termotivasi untuk mempelajari lebih lanjut tentang budaya Indonesia.<br>
+      <br>
+      <b>Pertanyaan:</b><br>
+      Bagaimana anda mendesain kegiatan pembelajaran yang kreatif dan inovatif untuk mencapai tujuan pembelajaran di atas? Kegiatan tersebut harus berpusat pada siswa (student-centered), melibatkan siswa secara aktif, menggunakan berbagai media dan sumber belajar, menyenangkan dan memotivasi siswa, serta mengembangkan kompetensi siswa (pengetahuan, keterampilan, sikap).`
+    },
+    // 3. Studi Kasus: Andi, Siswa dengan Disleksia
+    { type: "essay", question: `Andi adalah siswa kelas 3 SD yang sangat antusias dan aktif di kelas. Dia memiliki banyak teman dan suka berpartisipasi dalam kegiatan kelompok. Namun, Andi mengalami kesulitan dalam membaca dan menulis. Dia seringkali tertukar huruf, sulit mengeja kata-kata sederhana, dan membutuhkan waktu lebih lama untuk menyelesaikan tugas-tugas yang melibatkan membaca dan menulis. Berdasarkan observasi dan asesmen yang dilakukan guru, Andi diduga mengalami disleksia.<br>
+      <br>
+      <b>Pertanyaan:</b> Akomodasi dan modifikasi apa yang akan Anda berikan kepada Andi dalam kegiatan pembelajaran di kelas?`
+    },
+    // 4. Studi Kasus: Rina, Siswa yang Sering Mengganggu Teman
+    { type: "essay", question: `Rina adalah siswa kelas 4 SD yang pintar dan kreatif. Namun, dia seringkali melakukan perundungan dengan mencubit, mendorong, atau mengejek teman-temannya, sehingga membuat mereka merasa tidak nyaman dan terganggu. Perilaku Rina ini sudah berlangsung cukup lama dan tampaknya semakin sering terjadi.<br>
+      <br>
+      <b>Pertanyaan:</b> Bagaimana Anda akan mengidentifikasi dan memahami akar penyebab perilaku Rina yang suka melakukan perundungan teman-temannya dan strategi apa yang akan Anda gunakan untuk mengatasi perilaku Rina yang mengganggu teman-temannya?`
+    },
+    // 5. Pertanyaan Konseptual: Asesmen
+    { type: "essay", question: `Jelaskan apa yang dimaksud dengan asesmen formatif dan sumatif, serta berikan contohnya dalam konteks pembelajaran di kelas SD.` },
+    // 6. Pertanyaan Reflektif: Peran Guru
+    { type: "essay", question: `Bagaimana Anda memahami peran guru dalam konteks pendidikan abad ke-21?` }
+  ]
+}
+,
+    {
+  id: "KINDERGARTEN",
+  name: "Kindergarten",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      TES TERTULIS SELEKSI GURU TAMAN KANAK-KANAK (TK)
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    { type: "essay", question: `Siswa/i Taman Kanak-kanak dapat melakukan kegiatan pembelajaran yang menekankan pada pembelajaran yang kontekstual, berbasis kompetensi dan berfokus pada pengembangan pribadi dan sosial mereka.<br>
+      Jelaskan integrasi antara kurikulum merdeka dengan pembelajaran di Taman Kanak-kanak yang dapat diaplikasikan anda dengan keunikan karakteristik dari siswa/i yang orang tua mereka memiliki tingkat Pendidikan beragam!` },
+    { type: "essay", question: `Banyak teori tentang metode pembelajaran yang dapat meningkatkan kreatifitas siswa.<br>
+      Jabarkan pendapat anda mengenai metode pembelajaran yang tepat untuk diterapkan sehingga mampu meningkatkan kreatifitas siswa/i Taman Kanak-kanak yang dapat memacu motivasi dan kompetensi siswa!` },
+    { type: "essay", question: `Setiap anak memiliki kebutuhan uniknya sendiri.<br>
+      Bagaimana cara anda untuk menangani anak berkebutuhan khusus yang berkisar dari gangguan perkembangan seperti autism, ADHD, hingga kesulitan belajar untuk siswa/i Taman Kanak-kanak?` },
+    { type: "essay", question: `Perilaku siswa/i Taman Kanak-kanak dapat diobservasi, diukur dan dipelajari melalui interaksi dengan lingkungan sekitarnya.<br>
+      Bagaimana manajemen perilaku siswa yang dapat anda kelola sehingga siswa/i Taman Kanak-kanak dapat meningkatkan disiplin, respon dan ketaatan atau perilaku baik lainnya?` },
+    { type: "essay", question: `Apa kompetensi yang dapat anda berikan untuk mengembangkan sekolah terkhusus Taman Kanak-kanak!` },
+    { type: "essay", question: `Apa yang kamu anggap sebagai keberhasilan terbesarmu sebagai seorang guru?` }
+  ]
+}
+,
+   {
+  id: "INDO",
+  name: "Bahasa Indonesia",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      TES TERTULIS SELEKSI GURU BAHASA INDONESIA
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Bacalah kasus yang disajikan dan jawablah dengan jelas!</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    // I. Kasus Kelas VIII C
+    { type: "essay", question: `Bapak Doni adalah wali kelas VIII C yang berjumlah 24 orang dengan kemampuan belajar yang beragam. Beberapa diantara mereka adalah siswa yang pintar, aktif, antusias dan cekatan. Sehingga tugas yang diberikan selalu dikumpulkan lebih cepat dari waktu yang diberikan. Dan kemudian kelas menjadi ramai. Sementara beberapa murid masih belum selesai mengerjakan dan terganggu akan kondisi kelas yang ramai.<br>
+    <br>
+    Melihat situasi tersebut, bagaimana tindakan Bapak Doni?` },
+    // II. Pembelajaran Diferensiasi
+    { type: "essay", question: `Anda adalah seorang guru mata pelajaran Bahasa Indonesia yang mengajar di kelas VI dengan jumlah peserta didik sebanyak 30 orang. Setelah melakukan observasi awal dan beberapa penilaian formatif, Anda menyadari bahwa kemampuan peserta didik sangat beragam. Di kelas tersebut, terdapat beberapa peserta didik yang masih kesulitan memahami teks sederhana, beberapa lainnya mampu membaca dan memahami teks dengan baik, sementara ada juga yang sudah sangat mahir, bahkan menunjukkan kemampuan untuk menganalisis teks yang lebih kompleks dan melakukan penelitian mandiri.<br>
+    Selama pelajaran sebelumnya, Anda menggunakan metode pengajaran yang sama untuk seluruh kelas. Namun, Anda melihat bahwa beberapa peserta didik merasa bosan karena tugas terlalu mudah, sementara beberapa lainnya merasa kewalahan dan kesulitan mengikuti pelajaran.<br>
+    <br>
+    Karena itulah, Anda memutuskan untuk menerapkan pembelajaran diferensiasi. Tujuannya adalah agar setiap peserta didik mendapatkan tantangan yang sesuai dengan kemampuan mereka, dan semua peserta didik dapat berkembang optimal.<br>
+    <ol style="margin-left:20px;">
+      <li>Bagaimana Anda mengidentifikasi kemampuan awal peserta didik untuk menentukan kelompok diferensiasi yang sesuai?</li>
+      <li>Bagaimana Anda memastikan setiap peserta didik mendapatkan tantangan yang sesuai dengan kemampuannya?</li>
+      <li>Bagaimana Anda menilai keberhasilan pembelajaran diferensiasi yang Anda terapkan?</li>
+    </ol>
+    `},
+    // III. Kasus Ibu Retno
+    { type: "essay", question: `Ibu Retno adalah guru mata pelajaran matematika kelas XB. Ibu Retno baru saja masuk setelah cuti melahirkan. Ibu Retno beberapa kali dalam 1 minggu terlambat datang ke sekolah. Di dalam kelas ia sering memarahi murid tanpa alasan yang jelas. Saat wakil kepala sekolah menegur, ia terlihat sedih dan menangis.<br>
+    <ol style="margin-left:20px;">
+      <li>Bagaimana pendapat Anda atas sikap dan perilaku Ibu Retno?</li>
+      <li>Jika Anda pada posisi Ibu Retno, bagaimana sikap dan solusi yang harus Anda lakukan?</li>
+    </ol>
+    `},
+    // IV. Kelebihan
+    { type: "essay", question: `Apakah kelebihan lain yang Anda miliki? Bagaimana cara Anda membagikan kelebihan Anda pada murid?` },
+    // V. Pengalaman Mengajar
+    { type: "essay", question: `Tuliskan pengalaman Anda selama mengajar. Apakah pengalaman yang paling mengesankan? Pernahkah Anda menghadapi masalah dan bagaimana mengatasinya?` }
+  ]
+}
+,
+    {
+  id: "FISIKA",
+  name: "Fisika",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      TERUNTUK GURU FISIKA YANG biasanya LUCU DAN DIRINDUKAN SISWA
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Bagaimana kabar anda pak guru / bu guru? Semoga sebahagia kami yang membagikan lembar kertas ini.</li>
+      <li>Oiya, nanti anda akan bertemu pertanyaan-pertanyaan, nah… anda tidak perlu menulis ulang pertanyaannya, maka sebaiknya anda jawab semua, yaa 😊</li>
+      <li>Supaya potensi anda muncul maksimal, anda tidak perlu menggunakan HP untuk menjawab pertanyaan ini, yang pasti gunakan tangan dan pena/pulpen/pensil…😁 (eits…. Gabawa? Waduuh)</li>
+      <li>Supaya mas dan mbak penilai bisa yakin, dan akhirnya memilih anda untuk diterima, tambahkan berbagai pengalaman yang pernah anda lakukan sesuai pertanyaan yang ada….</li>
+      <li>Nah, sampai disini ada pertanyaan? ………….JANGAN! ……kami yang Tanya… kan ini ..tes.. 😊</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:10px;font-size:0.97em;color:#888;font-style:italic;">
+      “Cahaya tetap berdifraksi dan berinterferensi, walau Snellius dan Huygens tidak menceritakan Alhazen” ~ Nur
+    </div>
+  `,
+  questions: [
+    { type: "essay", question: "Mas, mbak, teh, aa’, bang, non, …. FISIKA itu belajar apa yak? Trus, buat apa kita belajar fisika inii?" },
+    { type: "essay", question: "Mas, mbak, katanya fisika tu ada yang modern, ada juga fisika klasik. Jelasin se-clear-clear nya" },
+    { type: "essay", question: `Lagi nih, waktu itu, ada yang namanya Isaac Newton, yang lagi di bawah pohon apel, kalo ga salah. Trus beliau merumuskan hukum Fisika. Ada 3 ya? Bagaimana cerita ini?<br>
+      Lalu rangkailah sebuah soal beserta kemungkinan jawabannya yang menggunakan 3 hukum Newton` },
+    { type: "essay", question: "Selanjutnya, Fisika sangat erat kaitannya dengan matematika. Konsep-konsep matematika apa saja yang diperlukan dalam fisika serta topik fisika yang mana yang menerapkan konsep matematika itu?" },
+    { type: "essay", question: "Alat ukur dalam Fisika sangat penting. Alat ukur apa saja yang digunakan dalam fisika, untuk mengukur apa dengan satuan apa saja, dan bagaimana cara menggunakannya? Urutkan jawaban anda dari yang paling jarang digunakan hingga yang paling sering digunakan." },
+    { type: "essay", question: "Pada fisika tentang kinematika gerak, variabel utama apa yang perlu dijelaskan kepada siswa? Bagaimana anda menjelaskan materi ini secara lengkap dan menyeluruh agar siswa memahami dengan tuntas" },
+    { type: "essay", question: "Berikutnya, tentang energi. Energi ini tidak terlihat, tetapi merupakan salah satu materi inti dalam fisika. Bagaimana anda mengadakan pembelajan ini agar menjadi unik dan menarik" },
+    { type: "essay", question: "Nah, beberapa materi Fisika sangat berkaitan dengan mata pelajaran lain, seperti teori kinetik gas, listrik dinamis, mekanika fluida, fisika inti, gelombang dan banyak materi lain. Ceritakan bagaimana suatu skenario pembelajaran yang mengolaborasikan fisika pada satu materi tertentu dengan mata pelajaran lain sehingga tampak kerjasama anda dengan mata pelajaran lain tersebut" },
+    { type: "essay", question: "Mas, mbak, saat belajar fisika, terkadang ada siswa yang sangat antusias, sering memberi peran dalam kelas, ada yang mengabaikan, ada yang hanya diam, ada yang merespon dengan destruktif, ada juga yang berperilaku lain. Nah, ceritakan pengalaman anda mengatasi hal ini." },
+    { type: "essay", question: "Bagian penting lainnya, gimana caranya bikin kelas anda menjadi kelas yang semua siswanya dan semua warga sekolah memiliki penghargaan yang tinggi terhadap perbedaan dalam segala hal." },
+    { type: "essay", question: "Bagian yang menantang nih. Dua bulan lagi anda akan membawa beberapa siswa ke olimpiade fisika. Bagaimana cara anda?" },
+    { type: "essay", question: "Terakhir, nih… beberapa tahun ke depan siswa akan menghadapi tantangan sesuai era mereka. Nah, jelaskan bagaimana anda memberikan bekal keterampilan yang membuat siswa siap menghadapi tantangan masa depan." }
+  ]
+}
+,
+    {
+  id: "ISLAM",
+  name: "Agama Islam",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL REKRUTMEN GURU AGAMA ISLAM
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
+    { type: "essay", question: "Tuliskanlah bacaan takhiat awal dalam sholat menggunakan tulisan arab." },
+    { type: "essay", question: "Jelaskan secara sistematis urutan sholat jenasah berikut laval/bacaan yang harus diucapkan." },
+    { type: "essay", question: "Analisislah kompetensi dasar pada kurikulum PAI tingkat SMP kelas VIII tentang materi 'Menghindari Perilaku Tercela'. Bagaimana Anda akan mengembangkan indikator pencapaian kompetensi dan materi pembelajaran yang relevan dengan konteks kehidupan siswa saat ini?!" },
+    { type: "essay", question: "Analisislah makna dan pesan yang terkandung dalam Q.S. Al-Hujurat ayat 13 tentang keragaman umat manusia. Bagaimana Anda akan menjelaskan ayat ini kepada siswa dengan latar belakang budaya yang beragam?" },
+    { type: "essay", question: "Bagaimana cara anda menganalisa tentang isu-isu yang sedang marak di kalangan siswa, seperti perundungan, penyalahgunaan media sosial, dan radikalisme dalam perspektif ajaran Islam?" },
+    { type: "essay", question: "Seorang siswa Anda seringkali terlambat datang ke sekolah dan menunjukkan sikap kurang hormat selama pelajaran. Setelah Anda telusuri, ternyata siswa tersebut mengalami masalah keluarga. Bagaimana Anda akan menangani situasi ini dengan pendekatan yang empatik dan sesuai dengan prinsip-prinsip pendidikan Islam?" },
+    { type: "essay", question: "Di sekolah Anda, terdapat perbedaan pendapat antara guru-guru PAI mengenai pelaksanaan suatu praktik ibadah. Bagaimana Anda akan memfasilitasi dialog yang konstruktif untuk mencapai kesepahaman bersama?" },
+    { type: "essay", question: "Dalam era digital, penggunaan teknologi dalam pembelajaran PAI menjadi suatu keniscayaan. Namun, ada kekhawatiran tentang dampak negatif penggunaan gawai terhadap akhlak siswa. Bagaimana Anda akan mengintegrasikan teknologi dalam pembelajaran PAI secara bijak dan bertanggung jawab?" },
+    { type: "essay", question: "Di kelas Anda terdapat siswa dengan beragam latar belakang agama dan budaya. Bagaimana anda akan menciptakan suasana pembelajaran yang inklusif dan menghargai perbedaan, serta menanamkan nilai-nilai toleransi dalam diri siswa?" }
+  ]
+}
+,
+    { id: "KRISTEN",      name: "Agama Kristen",       time: 900, questions: [] },
+    { id: "KATHOLIK",     name: "Agama Katholik",      time: 900, questions: [] },
+    { id: "HINDU",        name: "Agama Hindu",         time: 900, questions: [] },
+    { id: "SOSIAL",       name: "Sosial",              time: 900, questions: [] },
+    { id: "SEJARAH",      name: "Sejarah",             time: 900, questions: [] },
+    { id: "IPA",          name: "IPA",                 time: 900, questions: [] },
+    { id: "INGGRIS",      name: "Bahasa Inggris",      time: 900, questions: [] }
+  ]
+}
+};
+// ============ DISKUALIFIKASI TAB TES SUBJEK ============
+let subjectCheatFlag = false;
+let allowTabOutSubject = false;
+
+function onSubjectBlur() {
+  if (appState.subjectSelected && !allowTabOutSubject) {
+    subjectCheatFlag = true;
+    clearInterval(window.subjectTimerInterval); // stop timer
+    appState.subjectSelected = null;
+    appState.subjectDisqualified = true;
+    document.getElementById('app').innerHTML = `
+      <div class="card" style="max-width:480px;margin:80px auto;padding:32px 25px 35px 25px;border-radius:17px;text-align:center;">
+        <div style="font-size:2.3em;margin-bottom:13px;">❌</div>
+        <h2 style="color:#c91b1b;margin-bottom:13px;">Diskualifikasi!</h2>
+        <div style="font-size:1.09em;margin-bottom:24px;">
+          Anda terdeteksi membuka tab/jendela lain saat mengerjakan tes subjek.<br>
+          Mohon hubungi panitia jika ada kendala.
+        </div>
+        <button class="btn btn-danger" style="padding:12px 46px;font-size:1.15em;" onclick="logoutDiskualifikasi()">🔒 Logout</button>
+      </div>
+    `;
+  }
+}
+
+// Fungsi logout khusus diskualifikasi
+function logoutDiskualifikasi() {
+  localStorage.setItem('usedPragas', '1'); // Password jadi "pragass"
+  localStorage.removeItem('identity');     // Hapus data user
+  setTimeout(() => {
+    location.reload();
+  }, 250);
 }
 
 
-};
+window.addEventListener('blur', onSubjectBlur);
+function renderSubjectTestHome() {
+  const subs = tests.SUBJECT.subjects;
+  document.getElementById('app').innerHTML = `
+    <div class="card" style="
+      max-width:750px;
+      margin:60px auto 0 auto;
+      padding:42px 30px 48px 30px;
+      border-radius:30px;
+      background:#fff;
+      box-shadow:0 8px 48px #d2e6e870, 0 2px 14px #f0f5f540;
+      ">
+      <div style="text-align:center;">
+        <h2 style="
+          font-family:'Playfair Display',serif;
+          font-size:2.5em;
+          font-weight:900;
+          color:#244056;
+          margin-bottom:5px;
+          letter-spacing:0.5px;
+        ">${tests.SUBJECT.name}</h2>
+        <div style="color:#277849;font-size:1.16em;font-weight:600;margin-bottom:5px;">
+          ${tests.SUBJECT.description}
+        </div>
+        <div style="
+          display:inline-block;
+          margin:12px auto 26px auto;
+          padding:11px 23px;
+          background:linear-gradient(90deg,#e4f7ef 80%,#e6f2fb 100%);
+          border-radius:12px;
+          font-size:1.08em;
+          color:#155773;
+          box-shadow:0 1px 8px #e0efe9b8;
+        ">
+          ${tests.SUBJECT.instruction}
+        </div>
+      </div>
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+        gap:20px 28px;
+        margin-top:12px;
+        padding:6px 0 2px 0;
+      ">
+        ${subs.map(subj => `
+          <button class="btn" style="
+            width:100%;
+            min-width:0;
+            padding:18px 0 13px 0;
+            font-size:1.18em;
+            font-weight:700;
+            color:#195746;
+            background:linear-gradient(98deg,#f7fbf9 0%,#d6f8ef 100%);
+            border-radius:15px;
+            border:none;
+            outline:none;
+            box-shadow:0 2px 14px #e7f3e880;
+            transition:box-shadow 0.18s,background 0.18s;
+            cursor:pointer;
+          " onmouseover="this.style.background='#e5f5ed'" onmouseout="this.style.background='linear-gradient(98deg,#f7fbf9 0%,#d6f8ef 100%)'"
+          onclick="startSubjectTest('${subj.id}')">
+            ${subj.name}
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+
+// Render instruksi awal
+function startSubjectTest(subjId) {
+  const subj = tests.SUBJECT.subjects.find(s => s.id === subjId);
+  if (!subj) return alert("Subjek tidak ditemukan!");
+  appState.subjectSelected = subjId;
+  appState.subjectStartTime = Date.now();
+  appState.timeLeft = subj.time || 2700; // 45 menit
+
+  // Tampilkan instruksi dulu
+  if (subj.instruction) {
+    document.getElementById('app').innerHTML = `
+      <div class="card" style="max-width:600px;margin:40px auto 0;padding:28px 20px;border-radius:20px;text-align:left;">
+        <div>${subj.instruction}</div>
+        <div style="text-align:center;margin-top:26px;">
+          <button class="btn" onclick="renderSubjectQuestionSlide(0)">Mulai</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  renderSubjectQuestionSlide(0);
+}
+
+// Render soal per slide
+function renderSubjectQuestionSlide(qIdx) {
+  allowTabOutSubject = false; // Diskualifikasi aktif!
+  const subj = tests.SUBJECT.subjects.find(s => s.id === appState.subjectSelected);
+  if (!subj) return;
+
+  // Timer di atas
+  let m = Math.floor(appState.timeLeft / 60), s = appState.timeLeft % 60;
+  let timerHTML = `<span id="subject-timer">${(m<10?"0":"")+m}:${(s<10?"0":"")+s}</span>`;
+
+  // Nomor & soal
+  const q = subj.questions[qIdx];
+  document.getElementById('app').innerHTML = `
+    <div class="card" style="max-width:650px;margin:40px auto 0;padding:32px 18px 30px 18px;border-radius:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 style="margin-bottom:0;">${subj.name}</h2>
+        <div style="font-size:1.05em;background:#f2fbe5;padding:7px 16px;border-radius:9px;">${timerHTML}</div>
+      </div>
+      <div style="margin:14px 0 17px 0;font-weight:500;font-size:1.05em;">
+        Kerjakan soal berikut di kertas Anda lalu klik <b>Lanjut</b>!
+      </div>
+      <div style="font-size:1.3em;font-weight:700;color:#3d4f7c;margin-bottom:12px;">
+        Soal ${qIdx + 1}
+      </div>
+      <div style="font-size:1.14em;margin-bottom:34px;min-height:100px;">
+        ${q.question}
+        ${q.type === "multiple-choice"
+          ? `<div style="margin-top:16px;font-size:1em;">${q.options.map(opt => `<div style="margin:2px 0 2px 18px;">${opt}</div>`).join("")}</div>`
+          : ""}
+      </div>
+      <div style="display:flex;justify-content:${qIdx===0?'flex-end':'space-between'}">
+        ${qIdx > 0 ? `<button class="btn btn-outline" onclick="renderSubjectQuestionSlide(${qIdx-1})">Sebelumnya</button>` : ""}
+        <button class="btn" onclick="nextSubjectQuestionSlide(${qIdx})">${qIdx === subj.questions.length-1 ? 'Selesai & Upload' : 'Lanjut'}</button>
+      </div>
+    </div>
+  `;
+  startSubjectCountdown();
+}
+
+function nextSubjectQuestionSlide(qIdx) {
+  const subj = tests.SUBJECT.subjects.find(s => s.id === appState.subjectSelected);
+  if (!subj) return;
+  if (qIdx < subj.questions.length-1) {
+    renderSubjectQuestionSlide(qIdx+1);
+  } else {
+    renderSubjectUpload();
+  }
+}
+
+// TIMER
+function startSubjectCountdown() {
+  if (window.subjectTimerInterval) clearInterval(window.subjectTimerInterval);
+  window.subjectTimerInterval = setInterval(function() {
+    appState.timeLeft--;
+    let m = Math.floor(appState.timeLeft / 60), s = appState.timeLeft % 60;
+    const timer = document.getElementById('subject-timer');
+    if (timer) timer.textContent = (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+    if (appState.timeLeft <= 0) {
+      clearInterval(window.subjectTimerInterval);
+      renderSubjectUpload();
+    }
+  }, 1000);
+}
+
+// ==== UPLOAD JAWABAN TES SUBJEK (Drag & Drop/Click + Preview Multi Gambar) ====
+function renderSubjectUpload() {
+  allowTabOutSubject = true; // Upload: Boleh buka tab!
+  if (window.subjectTimerInterval) clearInterval(window.subjectTimerInterval);
+  document.getElementById('app').innerHTML = `
+    <div class="card" style="max-width:540px;margin:44px auto;padding:32px 19px 34px 19px;border-radius:17px;text-align:center;">
+      <h2>Upload Foto Jawaban</h2>
+      <div style="margin:14px 0 24px 0;">Upload foto lembar jawaban kertas Anda di sini.<br>
+        Bisa lebih dari 3 gambar (<b>klik</b> atau <b>drag dari WA</b> ke area bawah).</div>
+      <div id="drop-area" style="border:2px dashed #83c980;border-radius:12px;padding:28px 12px;cursor:pointer;background:#f6fff3;">
+        <input type="file" id="subject-upload-multi" accept="image/*" multiple style="display:none;">
+        <div style="color:#789;font-size:1.08em;">Klik di sini atau drag gambar ke area ini</div>
+        <div id="subject-upload-preview" style="margin-top:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:11px;"></div>
+      </div>
+      <button class="btn" style="margin-top:28px;padding:12px 38px;" onclick="selesaiSubjectUpload()">Selesai</button>
+    </div>
+  `;
+
+  // Variabel untuk simpan file dan base64 preview
+  let gambarList = [];
+  let base64List = [];
+
+  // DOM element
+  const dropArea = document.getElementById('drop-area');
+  const fileInput = document.getElementById('subject-upload-multi');
+  const previewDiv = document.getElementById('subject-upload-preview');
+
+  dropArea.addEventListener('click', () => fileInput.click());
+  dropArea.addEventListener('dragover', e => {
+    e.preventDefault(); dropArea.style.background = "#eaffd5";
+  });
+  dropArea.addEventListener('dragleave', e => {
+    e.preventDefault(); dropArea.style.background = "#f6fff3";
+  });
+  dropArea.addEventListener('drop', e => {
+    e.preventDefault(); dropArea.style.background = "#f6fff3";
+    let files = [];
+    if (e.dataTransfer.items) {
+      for (let item of e.dataTransfer.items) {
+        if (item.kind === "file") files.push(item.getAsFile());
+      }
+    } else {
+      files = Array.from(e.dataTransfer.files);
+    }
+    handleFiles(files);
+  });
+  fileInput.addEventListener('change', e => {
+    handleFiles(e.target.files);
+  });
+
+ function handleFiles(files) {
+  Array.from(files)
+    .filter(f => f.type.startsWith("image/"))
+    .forEach(file => {
+      const reader = new FileReader();
+      reader.onload = evt => {
+        gambarList.push(file);
+        base64List.push(evt.target.result);
+        showPreview();
+        // === SIMPAN KE appState ===
+        if (!appState.completed) appState.completed = {};
+        appState.completed.SUBJECT = true; // Ini penting biar dianggap selesai!
+        appState.subjectUpload = base64List.slice(); // Simpan base64 untuk PDF
+      };
+      reader.readAsDataURL(file);
+    });
+}
+
+
+  function showPreview() {
+    previewDiv.innerHTML = "";
+    base64List.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.style = "max-width:130px;max-height:95px;border-radius:10px;box-shadow:0 3px 15px #c5e5b990;margin:2px;";
+      previewDiv.appendChild(img);
+    });
+  }
+}
+
+// ======= Fungsi setelah upload (Wajib Ditaruh di Bawah) =======
+function selesaiSubjectUpload() {
+  document.getElementById('app').innerHTML = `
+    <div class="card" style="max-width:420px;margin:60px auto;padding:36px 23px 40px 23px;border-radius:18px;text-align:center;">
+      <div style="font-size:2.3em;margin-bottom:13px;">🎉</div>
+      <h2>Terima kasih telah mengerjakan Tes Subjek!</h2>
+      <div style="font-size:1.11em;margin:19px 0 32px 0;">
+        Jawaban Anda berhasil diupload.<br>
+        Silakan lanjut ke tes berikutnya.
+      </div>
+      <button class="btn" style="padding:10px 35px;" onclick="renderHome()">Kembali ke Beranda</button>
+    </div>
+  `;
+}
+
+
+
+
 // Membuat kolom Kraeplin random (helper nomor 2)
 // Membuat kolom Kraeplin random (helper)
 function generateKraeplinColumns(jumlahKolom, jumlahBaris) {
@@ -2779,99 +3508,7 @@ let PASSWORD = localStorage.getItem('usedPragas') === '1' ? "pragass" : "pragas"
 
 
 // --- Efek suara welcome (futuristik) ---
-function playFuturisticSound() {
-    const audioWelcome = new Audio('https://files.catbox.moe/gtrbgh.mp3');
-    audioWelcome.volume = 0.80;
-    audioWelcome.play();
-}
 
-// --- Overlay instruksi audio dan subtitle berjalan ---
-function showInstruksiOverlay() {
-    // Blur home
-    document.querySelector('.card').classList.add('blur-main');
-
-    // Cek/insert overlay
-    let overlay = document.getElementById('overlayInstruksi');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'overlayInstruksi';
-        overlay.className = 'instruksi-overlay-box';
-        document.body.appendChild(overlay);
-    }
-    overlay.style.display = 'flex';
-    overlay.innerHTML = `
-        <div class="instruksi-isi" id="isiInstruksi">
-            <div id="instruksiText" style="min-height:60px;"></div>
-        </div>
-    `;
-
-    // Isi subtitle berjalan
-    const teksInstruksi = [
-        "Selamat datang di platform tes psikologi Sugar Group Schools.",
-        "Sebelum mengerjakan tes, pastikan Anda mendengarkan instruksi ini dengan seksama.",
-        "Anda akan dihadapkan pada beberapa jenis tes.",
-        "Setiap tes memiliki instruksi khusus yang berbeda.",
-        "Pastikan Anda memahami instruksi setiap tes sebelum memulai.",
-        "Setelah menyelesaikan semua tes, Anda dapat mengunduh hasil melalui tombol 'Download Hasil Tes'.",
-        "Hindari mengunduh hasil tes satu per satu.",
-        "Pastikan untuk mengunduh PDF setelah semua tes selesai dikerjakan.",
-        "Fitur ini akan mengunduh semua hasil tes sekaligus dalam satu file.",
-        "Sebelum memulai, lakan verifikasi fungsi tombol download.",
-        "Jika tombol berfungsi dengan baik, lanjutkan dengan mengerjakan tes-tes yang tersedia.",
-        "Jika mengalami masalah, hubungi tim rekrutmen untuk bantuan. Selamat mengerjakan. Semoga sukses"
-    ];
-    let idx = 0;
-    function nextSubtitle() {
-        if (idx < teksInstruksi.length) {
-            document.getElementById('instruksiText').innerHTML = teksInstruksi[idx];
-            idx++;
-            setTimeout(nextSubtitle, idx === 1 ? 1800 : 3300);
-        } else {
-            showBtnSelesai();
-        }
-    }
-
-    // Play audio instruksi
-    const audioTTS = new Audio('https://files.catbox.moe/59rm2w.mp3');
-    audioTTS.volume = 0.94;
-    audioTTS.play();
-    nextSubtitle();
-
-    audioTTS.onended = showBtnSelesai;
-
-    function showBtnSelesai() {
-        if (document.getElementById('btnSelesaiInstruksi')) return;
-        const btn = document.createElement('button');
-        btn.textContent = "✔️ Selesai";
-        btn.className = "instruksi-btn-finish";
-        btn.id = "btnSelesaiInstruksi";
-        btn.onclick = finishInstruksiOverlay;
-        document.querySelector('.instruksi-isi').appendChild(btn);
-    }
-}
-
-function finishInstruksiOverlay() {
-    document.getElementById('overlayInstruksi').style.display = "none";
-    document.querySelector('.card').classList.remove('blur-main');
-    // Nyalakan efek tombol download
-    const downloadBtn = document.querySelector('.btn-warning');
-    if (downloadBtn) {
-        downloadBtn.style.animation = "glowbtn 1.2s infinite alternate";
-        if(!document.getElementById('cekDownloadMsg')) {
-            const msg = document.createElement('div');
-            msg.id = "cekDownloadMsg";
-            msg.style.cssText = "margin-top:12px;font-size:1.07rem;color:#db7700;font-weight:600;";
-            msg.innerHTML = "🔔 Cek tombol ini. Jika tidak muncul hasil download, hubungi tim rekrutmen.";
-            downloadBtn.parentElement.appendChild(msg);
-        }
-    }
-}
-
-// --- Play instruksi audio mp3 (old button, now replaced by overlay) ---
-function playInstruksiTTS() {
-    // Just fallback, you can ignore this
-    showInstruksiOverlay();
-}
 function playFuturisticSound() {
     // MP3 Welcome
     const audioWelcome = new Audio('https://files.catbox.moe/gtrbgh.mp3');
@@ -3341,7 +3978,7 @@ function renderTestSelection() {
     <div class="section-title">📥 Pengunduhan Hasil</div>
     <div class="section-content">
         • Unduh hasil hanya setelah <b>SEMUA TES SELESAI</b><br>
-        • Hindari mengunduh hasil satu per satu<br>
+        • Hindari mengunduh lebih dari 2 kali<br>
         • Hasil akhir akan terkumpul dalam satu file PDF
     </div>
 </div>
@@ -3349,8 +3986,8 @@ function renderTestSelection() {
 <div class="instruksi-section">
     <div class="section-title">🔧 Verifikasi Sistem & Urutan Langkah</div>
     <div class="section-content">
-        • Setelah Anda selesai mendengarkan instruksi ini dan klik <b>Selesai</b>, layar akan otomatis scroll menuju tombol <b>Download</b>.<br>
-        • Silakan klik tombol <b>Download</b> sekali untuk memastikan file PDF bisa terunduh.<br>
+        • Setelah Anda selesai membaca instruksi ini dan klik <b>Selesai</b>, layar akan otomatis scroll menuju tombol <b>Download</b>.<br>
+        • Silakan klik tombol <b>Download</b> untuk memastikan file PDF bisa terunduh.<br>
         • <b>Jangan klik tombol Download lagi</b> sebelum Anda menyelesaikan seluruh tes yang diminta.<br>
         • Jika tombol Download diklik dua kali, maka fungsinya akan berubah menjadi <b>Logout</b>.<br>
         • Klik tombol Download lagi hanya setelah semua tes yang diwajibkan telah dikerjakan.<br>
@@ -3681,87 +4318,82 @@ function showInstruksiOverlay(nickname, instruksiList) {
     </div>
   `;
     // Mesin ketik overlay
-  const teks = instruksiList[0];
-    const el = document.getElementById('subtitleInstruksiTyping');
-    el.textContent = '';
-    let i = 0;
-    function typeLoop() {
-        let rawText = teks.substring(0, i);
-        let typed = rawText
-            .replace(/<WELCOME>(.*?)<\/WELCOME>/s, 
-                '<div style="font-size:1.6rem;font-weight:700;color:#2c7be5;text-align:center;margin:0 0 15px 0;line-height:1.4;">$1</div>')
-            .replace(/<HEADNOTE>(.*?)<\/HEADNOTE>/s, 
-                '<div style="font-size:1.25rem;font-weight:600;color:#3a506b;margin:0 0 15px 0;text-align:center;">$1</div>')
-            .replace(/<div class="instruksi-section">/g, 
-                '<div style="margin-bottom:18px;padding:15px;background:#f8fbff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.05);">')
-            .replace(/<div class="section-title">/g, 
-                '<div style="font-size:1.18rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;display:flex;align-items:center;gap:8px;">')
-            .replace(/<div class="section-content">/g, 
-                '<div style="padding-left:20px;font-size:1.08rem;line-height:1.6;color:#334e68;">')
-            .replace(/<PENTING>(.*?)<\/PENTING>/gs, 
-                '<div style="margin:22px 0;padding:18px;background:#fff8f0;border:2px solid #ff6b6b;border-radius:12px;box-shadow:0 4px 15px rgba(255,107,107,0.1);">$1</div>')
-            .replace(/<div class="warning-header">/g, 
-                '<div style="font-size:1.25rem;font-weight:800;color:#d32f2f;text-align:center;margin-bottom:15px;">')
-            .replace(/<div class="warning-content">/g, 
-                '<div style="font-size:1.1rem;line-height:1.6;color:#5a3e3e;padding:0 10px;">')
-            .replace(/<div class="warning-alert">/g, 
-                '<div style="margin-top:15px;padding:12px;background:#ffebee;border-radius:8px;font-weight:700;color:#b71c1c;text-align:center;border:1px dashed #f44336;">');
+ const teks = instruksiList[0];
+const el = document.getElementById('subtitleInstruksiTyping');
+el.textContent = '';
+let i = 0;
+function typeLoop() {
+    let rawText = teks.substring(0, i);
+    let typed = rawText
+        .replace(/<WELCOME>(.*?)<\/WELCOME>/s, 
+            '<div style="font-size:1.6rem;font-weight:700;color:#2c7be5;text-align:center;margin:0 0 15px 0;line-height:1.4;">$1</div>')
+        .replace(/<HEADNOTE>(.*?)<\/HEADNOTE>/s, 
+            '<div style="font-size:1.25rem;font-weight:600;color:#3a506b;margin:0 0 15px 0;text-align:center;">$1</div>')
+        .replace(/<div class="instruksi-section">/g, 
+            '<div style="margin-bottom:18px;padding:15px;background:#f8fbff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.05);">')
+        .replace(/<div class="section-title">/g, 
+            '<div style="font-size:1.18rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;display:flex;align-items:center;gap:8px;">')
+        .replace(/<div class="section-content">/g, 
+            '<div style="padding-left:20px;font-size:1.08rem;line-height:1.6;color:#334e68;">')
+        .replace(/<PENTING>(.*?)<\/PENTING>/gs, 
+            '<div style="margin:22px 0;padding:18px;background:#fff8f0;border:2px solid #ff6b6b;border-radius:12px;box-shadow:0 4px 15px rgba(255,107,107,0.1);">$1</div>')
+        .replace(/<div class="warning-header">/g, 
+            '<div style="font-size:1.25rem;font-weight:800;color:#d32f2f;text-align:center;margin-bottom:15px;">')
+        .replace(/<div class="warning-content">/g, 
+            '<div style="font-size:1.1rem;line-height:1.6;color:#5a3e3e;padding:0 10px;">')
+        .replace(/<div class="warning-alert">/g, 
+            '<div style="margin-top:15px;padding:12px;background:#ffebee;border-radius:8px;font-weight:700;color:#b71c1c;text-align:center;border:1px dashed #f44336;">');
 
-        el.innerHTML = typed + `<span class="blink-cursor">|</span>`;
-        if (i < teks.length) {
-            i++;
-            setTimeout(typeLoop, 12);
-        } else {
-            el.innerHTML = typed;
-            // Tambahkan animasi CSS untuk peringatan
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes pulse {
-                    0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-                    70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
-                    100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-                }
-                .blink-cursor {
-                    animation: blink 1s infinite;
-                }
-                @keyframes blink {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0; }
-                }
-                #subtitleInstruksiTyping > div > div[style*="background:#ffebee"] {
-                    animation: pulse 1.5s infinite;
-                }
-    `;
-    document.head.appendChild(style);
+    el.innerHTML = typed + `<span class="blink-cursor">|</span>`;
+    if (i < teks.length) {
+        i++;
+        setTimeout(typeLoop, 12);
+    } else {
+        el.innerHTML = typed;
+        // Tambahkan animasi CSS untuk peringatan
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+                70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+            }
+            .blink-cursor {
+                animation: blink 1s infinite;
+            }
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0; }
+            }
+            #subtitleInstruksiTyping > div > div[style*="background:#ffebee"] {
+                animation: pulse 1.5s infinite;
+            }
+        `;
+        document.head.appendChild(style);
 
-    // Tampilkan tombol selesai
-    const btn = document.getElementById('btnSelesaiInstruksi');
-    btn.style.display = "inline-block";
+        // Tampilkan tombol selesai
+        const btn = document.getElementById('btnSelesaiInstruksi');
+        btn.style.display = "inline-block";
 
-    // --- Cek & hapus pesan lama jika ada ---
-    const pesanLama = document.getElementById('pesanSelesaiInstruksi');
-    if (pesanLama) pesanLama.remove();
+        // --- Cek & hapus pesan lama jika ada ---
+        const pesanLama = document.getElementById('pesanSelesaiInstruksi');
+        if (pesanLama) pesanLama.remove();
 
-    // Tambahkan pesan sebelum tombol selesai
-    let pesan = document.createElement('div');
-    pesan.id = "pesanSelesaiInstruksi";
-    pesan.style.marginTop = "30px";
-    pesan.style.marginBottom = "18px";
-    pesan.style.textAlign = "center";
-    pesan.style.color = "#1668a9";
-    pesan.style.fontSize = "1.11em";
-    pesan.style.fontWeight = "500";
-    pesan.innerHTML = `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
+        // Tambahkan pesan sebelum tombol selesai
+        let pesan = document.createElement('div');
+        pesan.id = "pesanSelesaiInstruksi";
+        pesan.style.marginTop = "30px";
+        pesan.style.marginBottom = "18px";
+        pesan.style.textAlign = "center";
+        pesan.style.color = "#1668a9";
+        pesan.style.fontSize = "1.11em";
+        pesan.style.fontWeight = "500";
+        pesan.innerHTML = `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
 
-    btn.parentNode.parentNode.insertBefore(pesan, btn.parentNode);
+        btn.parentNode.parentNode.insertBefore(pesan, btn.parentNode);
+    }
 }
-}
-   typeLoop();
-
-// Mainkan audio instruksi
-const audioTTS = new Audio('https://files.catbox.moe/4uj84n.mp3');
-audioTTS.volume = 0.92;
-setTimeout(() => audioTTS.play(), 350);
+typeLoop();
 
 document.getElementById('btnSelesaiInstruksi').onclick = () => {
     appState.showTestCards = true;  // <-- AKTIFKAN TEST CARD
@@ -3776,12 +4408,11 @@ document.getElementById('btnSelesaiInstruksi').onclick = () => {
         let downloadClickCount = 0;
 
         // Scroll ke elemen download box
-     if (box) {
-    // Scroll ke paling bawah agar tombol terlihat full
-    setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-    }, 300);
-}
+        if (box) {
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+            }, 300);
+        }
 
         enableDownloadButtonSetelahCek();
 
@@ -3799,14 +4430,13 @@ document.getElementById('btnSelesaiInstruksi').onclick = () => {
                     pdfBtn.style.pointerEvents = "none";
 
                     if (cekMsg) {
-                       cekMsg.innerHTML = `
+                        cekMsg.innerHTML = `
 <b>✅ Tombol sudah dicek.</b><br>
 Silakan periksa folder unduhan (Downloads) di browser Anda. File bernama <i>hasil-psikotes_[nama Anda].pdf</i> seharusnya telah terunduh.<br><br>
 Jika file tersebut tersedia, Anda dapat memulai dan mengerjakan seluruh tes yang diminta.<br><br>
 <b>Jangan klik tombol ini lagi sebelum semua tes selesai dikerjakan</b>, karena tombol akan beralih fungsi menjadi logout.<br><br>
 Jika Anda telah menyelesaikan seluruh tes, Anda boleh mengklik tombol ini kembali untuk keluar dari sistem.
 `;
-
 
                         cekMsg.style.display = "block";
                     }
@@ -3816,7 +4446,6 @@ Jika Anda telah menyelesaikan seluruh tes, Anda boleh mengklik tombol ini kembal
                         pdfBtn.style.opacity = "1";
                         pdfBtn.style.pointerEvents = "auto";
                         pdfBtn.classList.add('blink');
-                        // Tidak menyembunyikan cekMsg di sini
                     }, 1100);
                 }
 
@@ -3825,7 +4454,11 @@ Jika Anda telah menyelesaikan seluruh tes, Anda boleh mengklik tombol ini kembal
                         box.innerHTML = `
                             <div style="text-align:center;margin-top:24px;">
                                 <div style="color:#c00;font-weight:600;margin-bottom:14px;">
-                                    ⚠️ Tombol sudah diklik 2 kali.<br>Silakan logout untuk menyelesaikan sesi.
+                                   ⚠️ Tombol sudah diklik 2 kali.<br>
+<b>Sebelum logout, pastikan Anda sudah mengumpulkan PDF hasil tes ke link berikut:</b><br>
+<a href="https://forms.gle/G69K56TRfxNnBXtr9" target="_blank" style="font-weight:bold;color:#1565c0;">https://forms.gle/G69K56TRfxNnBXtr9</a><br>
+Setelah mengumpulkan, silakan logout untuk menyelesaikan sesi.
+
                                 </div>
                                 <button class="btn btn-danger" id="btnLogoutPDF" style="padding:18px 40px;font-size:1.17rem;font-weight:700;">
                                     🔒 Logout
@@ -3839,13 +4472,11 @@ Jika Anda telah menyelesaikan seluruh tes, Anda boleh mengklik tombol ini kembal
                             setTimeout(() => location.reload(), 250);
                         };
 
-                        // Scroll ulang agar logout terlihat
                         setTimeout(() => {
                             window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
                         }, 300);
                     }
 
-                    // Sembunyikan pesan "tombol sudah dicek"
                     if (cekMsg) cekMsg.style.display = "none";
                 }
             };
@@ -6798,7 +7429,7 @@ function renderAdminExcelSheet() {
 
 function renderTypingTest() {
   // Soal pengetikan (bukan instruksi!)
-  const typingText = `Sugar Group Schools adalah sekolah yang berada di bawah perusahaan agribisnis terintegrasi, tersebar di tiga perusahaan gula besar di Indonesia. Sekolah ini mendukung proses pendidikan untuk anak karyawan serta masyarakat sekitar. Visi kami adalah menjadi pelopor utama dalam menghasilkan lulusan berkualitas tinggi dengan semangat profesionalisme dan teknologi modern.`;
+  const typingText = `Sugar Group Schools merupakan institusi pendidikan yang berada di bawah naungan perusahaan agribisnis terintegrasi, tersebar di tiga perusahaan gula terbesar di Indonesia. Sekolah ini didirikan untuk mendukung proses pendidikan bagi anak-anak karyawan serta masyarakat sekitar. Visi kami adalah menjadi pelopor utama dalam menghasilkan lulusan berkualitas tinggi yang berjiwa profesional dan menguasai teknologi modern.`;
 
   const waktuTyping = 120; // 2 menit
 
@@ -6960,6 +7591,9 @@ function endTypingTest(timeIsUp = false) {
     </div>
   `;
 }
+
+
+
 
 
 
@@ -8452,6 +9086,39 @@ if (appState.completed.TYPING && appState.answers.TYPING) {
   doc.setTextColor(44, 62, 80);
 }
 
+// ========== TES SUBJEK (UPLOAD JAWABAN) ==========
+// Taruh sebelum tanda tangan/footer, setelah tes lain!
+if (
+  appState.completed &&
+  appState.completed.SUBJECT &&
+  Array.isArray(appState.subjectUpload) &&
+  appState.subjectUpload.length > 0
+) {
+  for (let i = 0; i < appState.subjectUpload.length; i++) {
+    await new Promise(resolve => {
+      doc.addPage();
+      const img = new window.Image();
+      img.onload = function() {
+        const pxToMm = px => px * 0.264583;
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        let imgWmm = pxToMm(img.naturalWidth);
+        let imgHmm = pxToMm(img.naturalHeight);
+        const scale = Math.min(pageW / imgWmm, pageH / imgHmm, 1);
+        imgWmm *= scale;
+        imgHmm *= scale;
+        const x = (pageW - imgWmm) / 2;
+        const y = (pageH - imgHmm) / 2;
+        doc.addImage(appState.subjectUpload[i], 'JPEG', x, y, imgWmm, imgHmm);
+        resolve();
+      };
+      img.src = appState.subjectUpload[i];
+    });
+  }
+  doc.addPage();
+  ySection = 25;
+}
+
 // ========== FOOTER UNTUK TANDA TANGAN ==========
 let footerY = 285;
 if (ySection > 245) { doc.addPage(); footerY = 285; }
@@ -8461,13 +9128,11 @@ doc.setFontSize(10);
 doc.setFont(undefined, 'bold');
 doc.text('TESTER,', footerX, footerY - 36, { align: "right" });
 doc.setFont(undefined, 'normal');
-// Ruang tanda tangan manual (24mm kosong)
 doc.text('Deni Pragas Septian Pratama', footerX, footerY - 12, { align: "right" });
 doc.text('Human Capital Recruitment Staff', footerX, footerY - 6, { align: "right" });
 doc.text('Sugar Group Schools', footerX, footerY, { align: "right" });
 
 // Simpan file
-
 let namaFile = (id.name||"Peserta").replace(/[^a-zA-Z0-9]/g,'-') + "-Psikotes-SGSchools.pdf";
 doc.save(namaFile);
 
@@ -8490,5 +9155,4 @@ if (downloadClickCount === 2) {
     };
   }
 }
-
 }
