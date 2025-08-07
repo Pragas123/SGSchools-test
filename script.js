@@ -1786,40 +1786,40 @@ questions: [
     id: 18,
     text: "Pilih yang PALING (P) dan KURANG (K) menggambarkan diri Anda:",
     options: [
-      { text: "Tidak mudah dikalahkan",                   P: 'D', K: 'D' },
-      { text: "Kerjakan sesuai perintah, Ikut pimpinan",  P: '*', K: 'I' },
-      { text: "Mudah terangsang, Riang",                  P: '*', K: 'S' },
-      { text: "Ingin segalanya teratur, Rapi",            P: 'C', K: '*' }
+      { text: "Memimpin, pendekatan langsung",                   P: 'D', K: 'D' },
+      { text: "Suka bergaul, antusias",  P: '*', K: 'I' },
+      { text: "Dapat ditebak (konsisten)",                  P: '*', K: 'S' },
+      { text: "Waspada, hati-hati",            P: 'C', K: '*' }
     ]
   },
   {
     id: 19,
     text: "Pilih yang PALING (P) dan KURANG (K) menggambarkan diri Anda:",
     options: [
-      { text: "Saya akan pimpin mereka",                  P: 'D', K: 'D' },
-      { text: "Saya akan melaksanakan",                   P: 'S', K: '*' },
-      { text: "Saya akan meyakinkan mereka",              P: 'I', K: 'I' },
-      { text: "Saya dapatkan fakta",                      P: '*', K: 'C' }
+      { text: "Tak mudah dikalahkan",                     P: 'D', K: 'D' },
+      { text: "Kerjakan sesuai perintah, ikut pimpinan",  P: 'S', K: '*' },
+      { text: "Mudah terangsang, riang",                  P: 'I', K: 'I' },
+      { text: "Ingin segalanya teratur, rapi",            P: '*', K: 'C' }
     ]
   },
   {
     id: 20,
     text: "Pilih yang PALING (P) dan KURANG (K) menggambarkan diri Anda:",
     options: [
-      { text: "Memikirkan orang dahulu",                  P: 'D', K: '*' },
-      { text: "Kompetitif, Suka tantangan",               P: 'S', K: 'S' },
-      { text: "Optimis, Positif",                         P: 'I', K: 'I' },
-      { text: "Pemikir logis, Sistematik",                P: 'C', K: '*' }
+      { text: "Saya akan pimpin mereka",                  P: 'D', K: '*' },
+      { text: "Saya akan melaksanakan",                   P: 'S', K: 'S' },
+      { text: "Saya akan meyakinkan mereka",              P: 'I', K: 'I' },
+      { text: "Saya dapatkan fakta",                      P: 'C', K: '*' }
     ]
   },
   {
     id: 21,
     text: "Pilih yang PALING (P) dan KURANG (K) menggambarkan diri Anda:",
     options: [
-      { text: "Menyenangkan orang, Mudah setuju",         P: 'S', K: 'S' },
-      { text: "Tertawa lepas, Hidup",                     P: 'D', K: 'D' },
-      { text: "Berani, Tak gentar",                       P: 'I', K: 'I' },
-      { text: "Tenang, Pendiam",                          P: '*', K: 'C' }
+      { text:"Memikirkan orang dahulu",         P: 'S', K: 'S' },
+      { text: "Kompetitif, suka tantangan",                     P: 'D', K: 'D' },
+      { text: "Optimis, positif",                       P: 'I', K: 'I' },
+      { text: "Pemikir logis, sistematik",              P: '*', K: 'C' }
     ]
   },
   {
@@ -3657,158 +3657,415 @@ function calculateAge(dob) {
     return `${years} tahun ${months} bulan ${days} hari`;
 }
 
-// --- Render Identity Form ---
+// --- Render Identity Form Profesional ---
 function renderIdentityForm() {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('app').innerHTML = `
-    <div class="card">
-      <form id="identityForm" class="identity-form">
-        <div class="instruction-box">
-          <div class="header">
-            <img src="https://dl.imgdrop.io/file/aed8b140-8472-4813-922b-7ce35ef93c9e/2025/06/02/LOGO_SSG_A47004b0bb989ef087.md.png" alt="Logo Psikotes" />
-            <h1>Data Identitas</h1>
-            <p>Silakan isi data diri Anda dengan lengkap dan benar. Semua field dengan * wajib diisi.</p>
-          </div>
-          <div class="form-group">
-            <input type="text" id="name" value="${appState.identity?.name||''}" required autocomplete="off" placeholder="Nama Lengkap *" />
-          </div>
-          <div class="form-group">
-            <input type="text" id="nickname" value="${appState.identity?.nickname||''}" required autocomplete="off" placeholder="Nama Panggilan *" />
-          </div>
-          <div class="form-group">
-            <input type="email" id="email" value="${appState.identity?.email||''}" required autocomplete="off" placeholder="Email *" />
-          </div>
-          <div class="form-group">
-            <input type="tel" id="phone" value="${appState.identity?.phone||''}" required autocomplete="off" placeholder="Nomor HP *" />
-          </div>
-          <div class="form-group">
-            <input type="date" id="dob" max="${today}" value="${appState.identity?.dob||''}" required />
-          </div>
-          <div class="form-group full-span">
-            <input type="text" id="addressKTP" value="${appState.identity?.addressKTP||''}" required placeholder="Alamat KTP *" />
-          </div>
-          <div class="form-group full-span">
-            <input type="text" id="addressCurrent" value="${appState.identity?.addressCurrent||''}" ${appState.identity?.sameAddress?'disabled':''} placeholder="Alamat Saat Ini" />
-            <div class="form-checkbox-group">
-              <input type="checkbox" id="sameAddress" ${appState.identity?.sameAddress?'checked':''} />
-              <label for="sameAddress">Sama dengan Alamat KTP</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <select id="position" required>
-              <option value="" disabled ${!appState.identity?.position ? "selected" : ""}>Posisi yang Dilamar *</option>
-              <option value="Administrator" ${appState.identity?.position==="Administrator"?"selected":""}>Administrator</option>
-              <option value="Guru" ${appState.identity?.position==="Guru"?"selected":""}>Guru</option>
-              <option value="Technical Staff" ${appState.identity?.position==="Technical Staff"?"selected":""}>Technical Staff</option>
-            </select>
-          </div>
-          <div id="teacherOptions" class="form-group" style="display:none;">
-            <select id="teacherLevel">
-              <option value="" disabled selected>Kategori Guru</option>
-              <option value="Kindergartens">Kindergartens</option>
-              <option value="Primary">Primary</option>
-              <option value="Math">Math</option>
-              <option value="PE & Health">PE & Health</option>
-              <option value="Biology">Biology</option>
-            </select>
-          </div>
-          <div id="techOptions" class="form-group" style="display:none;">
-            <select id="techRole">
-              <option value="" disabled selected>Role Teknis</option>
-              <option value="Welder">Welder</option>
-              <option value="Wood Maintenance Technician">Wood Maintenance Technician</option>
-              <option value="Baker">Baker</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <select id="education" required>
-              <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pendidikan Terakhir *</option>
-              <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
-              <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
-              <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
-              <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
-              <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
-            </select>
-          </div>
-          <div class="form-group full-span">
-            <textarea id="explanation" placeholder="Keterangan Tambahan">${appState.identity?.explanation||''}</textarea>
-          </div>
-          <div class="form-group full-span text-right">
-            <input type="text" id="date" readonly value="${appState.identity?.date||''}" placeholder="Tanggal Pengisian" />
-          </div>
-          <div class="form-group full-span text-center">
-            <button type="submit" class="btn">Lanjut</button>
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('app').innerHTML = `
+    <form id="identityForm" class="identity-grid-form">
+      <div class="identity-header full-span">
+        <img src="https://files.catbox.moe/nmqo6a.png" alt="Logo Psikotes" />
+        <h1>Data Identitas</h1>
+        <p>Silakan isi data diri Anda dengan lengkap dan benar. Semua field <span class="star">*</span> wajib diisi.</p>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group">
+          <label for="name">Nama Lengkap <span class="star">*</span></label>
+          <input type="text" id="name" required value="${appState.identity?.name||''}">
+        </div>
+        <div class="identity-grid-group">
+          <label for="nickname">Nama Panggilan <span class="star">*</span></label>
+          <input type="text" id="nickname" required value="${appState.identity?.nickname||''}">
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group">
+          <label for="email">Email <span class="star">*</span></label>
+          <input type="email" id="email" required value="${appState.identity?.email||''}">
+        </div>
+        <div class="identity-grid-group">
+          <label for="phone">Nomor HP <span class="star">*</span></label>
+          <input type="tel" id="phone" required value="${appState.identity?.phone||''}">
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group">
+          <label for="dob">Tanggal Lahir <span class="star">*</span></label>
+          <input type="date" id="dob" max="${today}" required value="${appState.identity?.dob||''}">
+        </div>
+        <div class="identity-grid-group">
+          <label for="status">Status <span class="star">*</span></label>
+          <select id="status" required>
+            <option value="" disabled ${!appState.identity?.status ? "selected" : ""}>Pilih Status</option>
+            <option value="Lajang" ${appState.identity?.status==="Lajang"?"selected":""}>Lajang</option>
+            <option value="Menikah" ${appState.identity?.status==="Menikah"?"selected":""}>Menikah</option>
+            <option value="Cerai" ${appState.identity?.status==="Cerai"?"selected":""}>Cerai</option>
+            <option value="Duda/Janda" ${appState.identity?.status==="Duda/Janda"?"selected":""}>Duda/Janda</option>
+          </select>
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group full-span">
+          <label for="addressKTP">Alamat KTP <span class="star">*</span></label>
+          <input type="text" id="addressKTP" required value="${appState.identity?.addressKTP||''}">
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group full-span">
+          <label for="addressCurrent">Alamat Saat Ini <span class="star">*</span></label>
+          <input type="text" id="addressCurrent" required value="${appState.identity?.addressCurrent||''}" ${appState.identity?.sameAddress?'disabled':''}>
+          <div class="identity-checkbox-row">
+            <input type="checkbox" id="sameAddress" ${appState.identity?.sameAddress?'checked':''} />
+            <label for="sameAddress">Sama dengan Alamat KTP</label>
           </div>
         </div>
-      </form>
-    </div>
-  `;
+      </div>
+      <div id="dynamicRow"></div>
+      <div id="guruAlumniOptions" style="display:none;">
+        <div class="identity-alumni-box">
+          <div class="identity-checkbox-row">
+            <input type="checkbox" id="alumniSGS" ${appState.identity?.alumniSGS ? "checked" : ""} />
+            <label for="alumniSGS">Alumni Sugar Group Schools</label>
+          </div>
+          <div id="alumniLevels" style="display:none;margin-top:8px;">
+            <div class="alumni-grid-row">
+              <div class="identity-checkbox-row">
+                <input type="checkbox" id="alumniSD" ${appState.identity?.alumniSD ? "checked" : ""} />
+                <label for="alumniSD">SD</label>
+                <input type="text" id="alumniSDText" class="alumni-text" style="display:none;" placeholder="Tahun/Sekolah" value="${appState.identity?.alumniSDText||''}">
+              </div>
+              <div class="identity-checkbox-row">
+                <input type="checkbox" id="alumniSMP" ${appState.identity?.alumniSMP ? "checked" : ""} />
+                <label for="alumniSMP">SMP</label>
+                <input type="text" id="alumniSMPText" class="alumni-text" style="display:none;" placeholder="Tahun/Sekolah" value="${appState.identity?.alumniSMPText||''}">
+              </div>
+              <div class="identity-checkbox-row">
+                <input type="checkbox" id="alumniSMA" ${appState.identity?.alumniSMA ? "checked" : ""} />
+                <label for="alumniSMA">SMA</label>
+                <input type="text" id="alumniSMAText" class="alumni-text" style="display:none;" placeholder="Tahun/Sekolah" value="${appState.identity?.alumniSMAText||''}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group full-span">
+          <label for="explanation">Keterangan Tambahan</label>
+          <textarea id="explanation">${appState.identity?.explanation||''}</textarea>
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group full-span">
+          <label for="date">Tanggal Pengisian</label>
+          <input type="text" id="date" readonly value="${appState.identity?.date||''}" placeholder="Tanggal Pengisian" />
+        </div>
+      </div>
+      <div class="identity-grid-row">
+        <div class="identity-grid-group full-span" style="text-align:center;">
+          <button type="submit" class="btn-identity">Lanjut</button>
+        </div>
+      </div>
+    </form>
 
-     const id = document.getElementById.bind(document);
-    id('position').value = appState.identity?.position || "";
-    id('education').value = appState.identity?.education || "";
+<style>
+.identity-grid-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.1rem;
+  max-width: 950px;
+  margin: 40px auto 60px auto;
+  background: #fff;
+  padding: 44px 36px 40px 36px;
+  border-radius: 1.18rem;
+  box-shadow: 0 4px 36px #0002;
+  border: 2px solid #e4e9f2;
+}
+.identity-header {
+  text-align: center;
+  grid-column: 1 / -1;
+  margin-bottom: 12px;
+}
+.identity-header img { width: 92px; margin-bottom: 12px; }
+.identity-header h1 { font-size: 1.72rem; margin: 7px 0 2px 0;}
+.identity-header p { font-size: 1.12em; color: #405168; margin-bottom: 2px;}
+.star { color: #e03; font-size: 1em;}
+.identity-grid-row { display: flex; gap: 2.2rem; }
+.identity-grid-group { flex: 1; display: flex; flex-direction: column; gap: 0.6rem;}
+.identity-grid-group.full-span { flex: 1 1 100%; }
+input, select, textarea {
+  border: 1.6px solid #cbd4ea;
+  border-radius: 11px;
+  padding: 17px 16px;
+  font-size: 1.13em;
+  background: #f8fafd;
+  min-height: 52px;
+  transition: border .18s;
+  box-sizing: border-box;
+}
+input:focus, select:focus, textarea:focus {
+  border: 2px solid #318bfa;
+  background: #fff;
+}
+textarea { min-height: 88px; }
+.btn-identity {
+  background: linear-gradient(90deg,#318bfa 30%,#1461bf 100%);
+  color: #fff;
+  border: none;
+  border-radius: 13px;
+  font-size: 1.16em;
+  padding: 28px 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 2px 14px #1950b630;
+  transition: background .14s;
+  margin-top: 8px;
+}
+.btn-identity:hover {
+  background: linear-gradient(90deg,#165fab 0%,#1950b6 100%);
+}
+.identity-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 2px;
+}
+.identity-alumni-box {
+  border: 1.1px solid #dbe2ef;
+  border-radius: 9px;
+  background: #f3f6fb;
+  margin: 10px 0 4px 0;
+  padding: 18px 14px 12px 14px;
+}
+.alumni-grid-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.alumni-text {
+  font-size: 0.98em;
+  padding: 8px 11px;
+  border: 1.2px solid #bcd;
+  border-radius: 7px;
+  min-width: 90px;
+  margin-left: 8px;
+}
+@media (max-width:900px) {
+  .identity-grid-form { padding: 4vw 1.5vw;}
+  .identity-header img { width: 66px;}
+  .identity-grid-row { gap: 1.3rem;}
+}
+@media (max-width:650px) {
+  .identity-grid-form { padding: 5vw 1vw;}
+  .identity-header img { width:52px;}
+  .identity-grid-row, .alumni-grid-row { flex-direction: column; gap: 0.5rem; }
+}
+</style>
+`;
 
-    if (appState.identity?.position === "Guru") {
-        id('teacherOptions').style.display = 'block';
-        id('teacherLevel').value = appState.identity?.teacherLevel || "Kindergartens";
+  // ==== Dynamic Row Rendering ====
+  function renderDynamicRow() {
+    const pos = appState.identity?.position || "";
+    let html = "";
+    if (pos === "Guru") {
+      html = `
+      <div class="identity-grid-row">
+        <div class="identity-grid-group">
+          <label for="position">Posisi <span class="star">*</span></label>
+          <select id="position" required>
+            <option value="" disabled ${!pos ? "selected" : ""}>Pilih Posisi</option>
+            <option value="Administrator" ${pos==="Administrator"?"selected":""}>Administrator</option>
+            <option value="Guru" selected>Guru</option>
+            <option value="Technical Staff">Technical Staff</option>
+            <option value="Housekeeping">Housekeeping</option>
+          </select>
+        </div>
+        <div class="identity-grid-group">
+          <label for="teacherLevel">Kategori <span class="star">*</span></label>
+          <select id="teacherLevel" required>
+            <option value="" disabled ${!appState.identity?.teacherLevel ? "selected" : ""}>Pilih Kategori</option>
+            <option value="Kindergartens" ${appState.identity?.teacherLevel==="Kindergartens"?"selected":""}>Kindergartens</option>
+            <option value="Primary" ${appState.identity?.teacherLevel==="Primary"?"selected":""}>Primary</option>
+            <option value="Math" ${appState.identity?.teacherLevel==="Math"?"selected":""}>Math</option>
+            <option value="PE & Health" ${appState.identity?.teacherLevel==="PE & Health"?"selected":""}>PE & Health</option>
+            <option value="Biology" ${appState.identity?.teacherLevel==="Biology"?"selected":""}>Biology</option>
+          </select>
+        </div>
+        <div class="identity-grid-group">
+          <label for="education">Pendidikan <span class="star">*</span></label>
+          <select id="education" required>
+            <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pilih Pendidikan</option>
+            <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
+            <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
+            <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
+            <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
+            <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
+          </select>
+        </div>
+      </div>`;
+    } else if (pos === "Technical Staff") {
+      html = `
+      <div class="identity-grid-row">
+        <div class="identity-grid-group">
+          <label for="position">Posisi <span class="star">*</span></label>
+          <select id="position" required>
+            <option value="" disabled ${!pos ? "selected" : ""}>Pilih Posisi</option>
+            <option value="Administrator" ${pos==="Administrator"?"selected":""}>Administrator</option>
+            <option value="Guru" ${pos==="Guru"?"selected":""}>Guru</option>
+            <option value="Technical Staff" selected>Technical Staff</option>
+            <option value="Housekeeping">Housekeeping</option>
+          </select>
+        </div>
+        <div class="identity-grid-group">
+          <label for="techRole">Role Teknis <span class="star">*</span></label>
+          <select id="techRole" required>
+            <option value="" disabled ${!appState.identity?.techRole ? "selected" : ""}>Role Teknis</option>
+            <option value="Welder" ${appState.identity?.techRole==="Welder"?"selected":""}>Welder</option>
+            <option value="Wood Maintenance Technician" ${appState.identity?.techRole==="Wood Maintenance Technician"?"selected":""}>Wood Maintenance Technician</option>
+            <option value="Baker" ${appState.identity?.techRole==="Baker"?"selected":""}>Baker</option>
+          </select>
+        </div>
+        <div class="identity-grid-group">
+          <label for="education">Pendidikan <span class="star">*</span></label>
+          <select id="education" required>
+            <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pilih Pendidikan</option>
+            <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
+            <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
+            <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
+            <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
+            <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
+          </select>
+        </div>
+      </div>`;
+    } else {
+      html = `
+      <div class="identity-grid-row">
+        <div class="identity-grid-group">
+          <label for="position">Posisi <span class="star">*</span></label>
+          <select id="position" required>
+            <option value="" disabled ${!pos ? "selected" : ""}>Pilih Posisi</option>
+            <option value="Administrator" ${pos==="Administrator"?"selected":""}>Administrator</option>
+            <option value="Guru" ${pos==="Guru"?"selected":""}>Guru</option>
+            <option value="Technical Staff" ${pos==="Technical Staff"?"selected":""}>Technical Staff</option>
+            <option value="Housekeeping" ${pos==="Housekeeping"?"selected":""}>Housekeeping</option>
+          </select>
+        </div>
+        <div class="identity-grid-group">
+          <label for="education">Pendidikan <span class="star">*</span></label>
+          <select id="education" required>
+            <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pilih Pendidikan</option>
+            <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
+            <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
+            <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
+            <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
+            <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
+          </select>
+        </div>
+      </div>`;
     }
-    if (appState.identity?.position === "Technical Staff") {
-        id('techOptions').style.display = 'block';
-        id('techRole').value = appState.identity?.techRole || "Welder";
-    }
+    document.getElementById("dynamicRow").innerHTML = html;
+    if (document.getElementById('guruAlumniOptions'))
+      document.getElementById('guruAlumniOptions').style.display = (pos === "Guru") ? 'block' : 'none';
+  }
+  renderDynamicRow();
 
-    id('position').addEventListener('change', function() {
-        id('teacherOptions').style.display = this.value === 'Guru' ? 'block' : 'none';
-        id('techOptions').style.display = this.value === 'Technical Staff' ? 'block' : 'none';
+  // Event Handler dinamis
+  document.getElementById("identityForm").addEventListener("change", function(e) {
+    if (["position", "teacherLevel", "techRole", "education"].includes(e.target.id)) {
+      appState.identity.position = document.getElementById('position').value;
+      appState.identity.teacherLevel = document.getElementById('teacherLevel')?.value || '';
+      appState.identity.techRole = document.getElementById('techRole')?.value || '';
+      appState.identity.education = document.getElementById('education').value;
+      renderDynamicRow();
+    }
+  });
+
+  // Alumni logic
+  const id = document.getElementById.bind(document);
+  if (id('alumniSGS')) {
+    id('alumniSGS').addEventListener('change', function() {
+      id('alumniLevels').style.display = this.checked ? 'block' : 'none';
     });
-    id('sameAddress').addEventListener('change', function() {
-        if (this.checked) {
-            id('addressCurrent').value = id('addressKTP').value;
-            id('addressCurrent').disabled = true;
-            appState.identity.sameAddress = true;
-        } else {
-            id('addressCurrent').value = '';
-            id('addressCurrent').disabled = false;
-            appState.identity.sameAddress = false;
-        }
-    });
-    id('addressKTP').addEventListener('input', function() {
-        if (id('sameAddress').checked) id('addressCurrent').value = this.value;
-    });
-    document.getElementById('identityForm').onsubmit = submitIdentity;
+    if (id('alumniSGS').checked) id('alumniLevels').style.display = 'block';
+    if (id('alumniSD')) id('alumniSD').addEventListener('change', showAlumniInputs);
+    if (id('alumniSMP')) id('alumniSMP').addEventListener('change', showAlumniInputs);
+    if (id('alumniSMA')) id('alumniSMA').addEventListener('change', showAlumniInputs);
+    function showAlumniInputs() {
+      id('alumniSDText').style.display = id('alumniSD')?.checked ? 'inline-block' : 'none';
+      id('alumniSMPText').style.display = id('alumniSMP')?.checked ? 'inline-block' : 'none';
+      id('alumniSMAText').style.display = id('alumniSMA')?.checked ? 'inline-block' : 'none';
+    }
+    showAlumniInputs();
+  }
+  id('sameAddress').addEventListener('change', function() {
+    if (this.checked) {
+      id('addressCurrent').value = id('addressKTP').value;
+      id('addressCurrent').disabled = true;
+      id('addressCurrent').required = false;
+      appState.identity.sameAddress = true;
+    } else {
+      id('addressCurrent').value = '';
+      id('addressCurrent').disabled = false;
+      id('addressCurrent').required = true;
+      appState.identity.sameAddress = false;
+    }
+  });
+  id('addressKTP').addEventListener('input', function() {
+    if (id('sameAddress').checked) id('addressCurrent').value = this.value;
+  });
+  if (!id('sameAddress').checked) id('addressCurrent').required = true;
+
+  document.getElementById('identityForm').onsubmit = submitIdentity;
 }
 
-// --- Submit Identitas (renderHome) ---
+
 function submitIdentity(e) {
-    e.preventDefault();
-    const id = document.getElementById.bind(document);
-    let nickname = id('nickname').value.trim();
-    if (!nickname && id('name').value) {
-        nickname = id('name').value.trim().split(/\s+/)[0];
-        id('nickname').value = nickname;
-    }
+  e.preventDefault();
+  const id = document.getElementById.bind(document);
+  let nickname = id('nickname').value.trim();
+  if (!nickname && id('name').value) {
+    nickname = id('name').value.trim().split(/\s+/)[0];
+    id('nickname').value = nickname;
+  }
+  const position = id('position').value;
+  const education = id('education').value;
+  const teacherLevel = (position === "Guru") ? id('teacherLevel').value : '';
+  const techRole = (position === "Technical Staff") ? id('techRole').value : '';
 
-    appState.identity = {
-        name: id('name').value,
-        nickname: nickname,
-        email: id('email').value,
-        phone: id('phone').value,
-        dob: id('dob').value,
-        age: calculateAge(id('dob').value),
-        addressKTP: id('addressKTP').value,
-        addressCurrent: id('sameAddress').checked ? id('addressKTP').value : id('addressCurrent').value,
-        sameAddress: id('sameAddress').checked,
-        position: id('position').value,
-        teacherLevel: id('teacherLevel')?.value || '',
-        techRole: id('techRole')?.value || '',
-        education: id('education').value,
-        explanation: id('explanation').value,
-        date: id('date').value
-    };
+  appState.identity = {
+    name: id('name').value,
+    nickname: nickname,
+    email: id('email').value,
+    phone: id('phone').value,
+    dob: id('dob').value,
+    age: calculateAge(id('dob').value),
+    status: id('status').value,
+    addressKTP: id('addressKTP').value,
+    addressCurrent: id('sameAddress').checked ? id('addressKTP').value : id('addressCurrent').value,
+    sameAddress: id('sameAddress').checked,
+    position: position,
+    teacherLevel: teacherLevel,
+    techRole: techRole,
+    alumniSGS: id('alumniSGS')?.checked || false,
+    alumniSD: id('alumniSD')?.checked || false,
+    alumniSMP: id('alumniSMP')?.checked || false,
+    alumniSMA: id('alumniSMA')?.checked || false,
+    alumniSDText: id('alumniSDText')?.value || '',
+    alumniSMPText: id('alumniSMPText')?.value || '',
+    alumniSMAText: id('alumniSMAText')?.value || '',
+    education: education,
+    explanation: id('explanation').value,
+    date: id('date').value
+  };
 
-    localStorage.setItem('identity', JSON.stringify(appState.identity));
-    renderTestSelection(); // langsung ke pemilihan tes
+  localStorage.setItem('identity', JSON.stringify(appState.identity));
+  renderTestSelection();
 }
+
+
+
+// Tambahkan fungsi untuk umur
+
 
 if (appState.showTestCards === undefined) appState.showTestCards = false;
 function renderTestSelection() {
@@ -3950,21 +4207,19 @@ function renderTestSelection() {
     </style>
   `;
 
-  document.getElementById('testSelectionForm').onsubmit = function(e) {
-    e.preventDefault();
-    const selected = Array.from(document.querySelectorAll('input[name="selectedTests"]:checked')).map(el => el.value);
-    appState.selectedTests = selected;
-    localStorage.setItem('selectedTests', JSON.stringify(selected));
-    appState.showTestCards = false;
-    renderHome();
-  };
+// Handle Submit Test Selection Form
+document.getElementById('testSelectionForm').onsubmit = function(e) {
+  e.preventDefault();
+  const selected = Array.from(document.querySelectorAll('input[name="selectedTests"]:checked')).map(el => el.value);
+  appState.selectedTests = selected;
+  localStorage.setItem('selectedTests', JSON.stringify(selected));
+  appState.showTestCards = false;
+  renderHome();
+};
 }
-
- const instruksiList = [
+const instruksiList = [
 `<WELCOME>Selamat datang di platform tes Sugar Group Schools.</WELCOME>
-
 <HEADNOTE>Sebelum memulai, perhatikan beberapa hal penting berikut:</HEADNOTE>
-
 <div class="instruksi-section">
     <div class="section-title">📚 Jenis Tes</div>
     <div class="section-content">
@@ -3973,7 +4228,6 @@ function renderTestSelection() {
         • Pastikan memahami instruksi masing-masing tes sebelum mengerjakan
     </div>
 </div>
-
 <div class="instruksi-section">
     <div class="section-title">📥 Pengunduhan Hasil</div>
     <div class="section-content">
@@ -3982,7 +4236,6 @@ function renderTestSelection() {
         • Hasil akhir akan terkumpul dalam satu file PDF
     </div>
 </div>
-
 <div class="instruksi-section">
     <div class="section-title">🔧 Verifikasi Sistem & Urutan Langkah</div>
     <div class="section-content">
@@ -3994,7 +4247,6 @@ function renderTestSelection() {
         • Jika mengalami kendala, hubungi tim rekrutmen.
     </div>
 </div>
-
 <PENTING>
     <div class="warning-header">🚫 PENTING: LARANGAN SELAMA TES 🚫</div>
     <div class="warning-content">
@@ -4005,15 +4257,12 @@ function renderTestSelection() {
         <div class="warning-alert">Sistem akan mendeteksi dan mendiskualifikasi secara otomatis jika terjadi pelanggaran!</div>
     </div>
 </PENTING>
-
 <div style="text-align:center;margin-top:24px;font-size:1.2em;">
     Selamat mengerjakan. Semoga sukses! 💪
 </div>`
 ];
 
-
-
-// --- Render Home page dengan instruksi dan audio tombol ---
+// Render Home
 function renderHome() {
   setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
 
@@ -4025,10 +4274,9 @@ function renderHome() {
   const hasAdmin = adminList.some(t => selectedTests.includes(t));
   const isBoth = hasPsikotes && hasAdmin;
 
-  // 1. Blok greeting (akan hilang otomatis setelah instruksi selesai)
+  // Blok greeting
   let greetingHTML = '';
   if (!appState.showTestCards) {
-    // =========== SEBELUM INSTRUKSI ===============
     greetingHTML = `
       <div class="personal-greeting"
         style="margin:30px auto 30px auto;
@@ -4061,7 +4309,6 @@ function renderHome() {
       </div>
     `;
   } else {
-    // ============ SETELAH INSTRUKSI ===============
     greetingHTML = `
       <div class="personal-greeting"
         style="margin:30px auto 30px auto;
@@ -4086,7 +4333,6 @@ function renderHome() {
     `;
   }
 
-  // 2. Blok utama home
   let html = `
     <div class="card" id="homeCard" style="max-width:900px;margin:36px auto 0 auto;padding:0 0 38px 0;border-radius:27px;
       background:linear-gradient(135deg,#f5faff 88%,#e5f3ff 100%);
@@ -4106,27 +4352,18 @@ function renderHome() {
       ${greetingHTML}
   `;
 
-  // 3. Kartu tes & tombol download hanya jika instruksi sudah selesai
+  // Kartu tes & tombol download (jika instruksi selesai)
   if (appState.showTestCards) {
-    // --------- BLOK PSIKOTES ----------
     if (hasPsikotes) {
-     if (isBoth) html += `<div style="
-  margin-bottom:14px;
-  font-weight:800;
-  color:#14672e;
-  font-size:1.19em;
-  letter-spacing:.01em;
-  text-align:center;
-  border-bottom:2.5px solid #dbe6e0;
-  padding-bottom:5px;
-  max-width:370px;
-  margin-left:auto;
-  margin-right:auto;
-">
-  Kategori 1: Tes Psikologi
-</div>`;
-
-     html += `<div class="test-selection" style="padding:0 24px;">`;
+      if (isBoth) html += `<div style="
+        margin-bottom:14px;font-weight:800;color:#14672e;font-size:1.19em;
+        letter-spacing:.01em;text-align:center;
+        border-bottom:2.5px solid #dbe6e0;
+        padding-bottom:5px;max-width:370px;
+        margin-left:auto;margin-right:auto;">
+        Kategori 1: Tes Psikologi
+      </div>`;
+      html += `<div class="test-selection" style="padding:0 24px;">`;
       if (selectedTests.includes('IST')) html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>Tes IST</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>Tes Kraeplin</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('DISC')) html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>Tes DISC</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
@@ -4135,30 +4372,21 @@ function renderHome() {
       if (selectedTests.includes('GRAFIS')) html += `<div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')"><div class="test-icon">🎨</div><h3>Tes Grafis</h3><p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p><div class="time">Waktu: ~10 menit</div><div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       html += `</div>`;
     }
-    // --------- BLOK ADMIN/KEMAMPUAN ----------
     if (hasAdmin) {
-     if (isBoth) html += `<div style="
-  margin:38px auto 14px auto;
-  font-weight:800;
-  color:#1c4e81;
-  font-size:1.19em;
-  letter-spacing:.01em;
-  text-align:center;
-  border-bottom:2.5px solid #e1eaff;
-  padding-bottom:5px;
-  max-width:430px;
-">
-  Kategori 2: Tes Kemampuan/Administrasi
-</div>`;
-
-    html += `<div class="test-selection" style="padding:0 24px;">`;
-
+      if (isBoth) html += `<div style="
+        margin:38px auto 14px auto;font-weight:800;
+        color:#1c4e81;font-size:1.19em;
+        letter-spacing:.01em;text-align:center;
+        border-bottom:2.5px solid #e1eaff;
+        padding-bottom:5px;max-width:430px;">
+        Kategori 2: Tes Kemampuan/Administrasi
+      </div>`;
+      html += `<div class="test-selection" style="padding:0 24px;">`;
       if (selectedTests.includes('EXCEL')) html += `<div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')"><div class="test-icon">📑</div><h3>Tes Excel</h3><p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('TYPING')) html += `<div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')"><div class="test-icon">⌨️</div><h3>Tes Mengetik</h3><p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('SUBJECT')) html += `<div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')"><div class="test-icon">📚</div><h3>Tes Subjek</h3><p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       html += `</div>`;
     }
-    // --------- TOMBOL DOWNLOAD ---------
     html += `
     <div id="downloadPDFBox" style="text-align:center;margin:48px 0 0 0;">
       <button class="btn btn-download"
@@ -4190,7 +4418,7 @@ function renderHome() {
       </div>
     </div>
     `;
-  } // END if (appState.showTestCards)
+  }
 
   html += `</div>
   <style>
@@ -4202,7 +4430,7 @@ function renderHome() {
 
   document.getElementById('app').innerHTML = html;
 
-  // Tombol instruksi hanya muncul jika belum instruksi
+  // Tombol instruksi (jika belum instruksi)
   setTimeout(() => {
     const instruksiBtn = document.getElementById('btnShowInstruksi');
     if (instruksiBtn) {
@@ -4210,10 +4438,9 @@ function renderHome() {
       instruksiBtn.onclick = () => showInstruksiOverlay(nickname, instruksiList);
     }
   }, 300);
-
 }
 
-
+// Instruksi Overlay
 function showInstruksiOverlay(nickname, instruksiList) {
   setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
 
@@ -4231,7 +4458,7 @@ function showInstruksiOverlay(nickname, instruksiList) {
     document.body.appendChild(overlay);
   }
 
-  // --- RENDER LIST TES DIPILIH ---
+  // Tes dipilih
   const selectedTests = appState.selectedTests || JSON.parse(localStorage.getItem('selectedTests') || '[]');
   const testLabels = {
     IST: { icon:'🧠', label:'Tes IST' },
@@ -4317,120 +4544,119 @@ function showInstruksiOverlay(nickname, instruksiList) {
       </div>
     </div>
   `;
-    // Mesin ketik overlay
- const teks = instruksiList[0];
-const el = document.getElementById('subtitleInstruksiTyping');
-el.textContent = '';
-let i = 0;
-function typeLoop() {
-    let rawText = teks.substring(0, i);
-    let typed = rawText
-        .replace(/<WELCOME>(.*?)<\/WELCOME>/s, 
-            '<div style="font-size:1.6rem;font-weight:700;color:#2c7be5;text-align:center;margin:0 0 15px 0;line-height:1.4;">$1</div>')
-        .replace(/<HEADNOTE>(.*?)<\/HEADNOTE>/s, 
-            '<div style="font-size:1.25rem;font-weight:600;color:#3a506b;margin:0 0 15px 0;text-align:center;">$1</div>')
-        .replace(/<div class="instruksi-section">/g, 
-            '<div style="margin-bottom:18px;padding:15px;background:#f8fbff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.05);">')
-        .replace(/<div class="section-title">/g, 
-            '<div style="font-size:1.18rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;display:flex;align-items:center;gap:8px;">')
-        .replace(/<div class="section-content">/g, 
-            '<div style="padding-left:20px;font-size:1.08rem;line-height:1.6;color:#334e68;">')
-        .replace(/<PENTING>(.*?)<\/PENTING>/gs, 
-            '<div style="margin:22px 0;padding:18px;background:#fff8f0;border:2px solid #ff6b6b;border-radius:12px;box-shadow:0 4px 15px rgba(255,107,107,0.1);">$1</div>')
-        .replace(/<div class="warning-header">/g, 
-            '<div style="font-size:1.25rem;font-weight:800;color:#d32f2f;text-align:center;margin-bottom:15px;">')
-        .replace(/<div class="warning-content">/g, 
-            '<div style="font-size:1.1rem;line-height:1.6;color:#5a3e3e;padding:0 10px;">')
-        .replace(/<div class="warning-alert">/g, 
-            '<div style="margin-top:15px;padding:12px;background:#ffebee;border-radius:8px;font-weight:700;color:#b71c1c;text-align:center;border:1px dashed #f44336;">');
+  // Mesin ketik overlay
+  const teks = instruksiList[0];
+  const el = document.getElementById('subtitleInstruksiTyping');
+  el.textContent = '';
+  let i = 0;
+  function typeLoop() {
+      let rawText = teks.substring(0, i);
+      let typed = rawText
+          .replace(/<WELCOME>(.*?)<\/WELCOME>/s, 
+              '<div style="font-size:1.6rem;font-weight:700;color:#2c7be5;text-align:center;margin:0 0 15px 0;line-height:1.4;">$1</div>')
+          .replace(/<HEADNOTE>(.*?)<\/HEADNOTE>/s, 
+              '<div style="font-size:1.25rem;font-weight:600;color:#3a506b;margin:0 0 15px 0;text-align:center;">$1</div>')
+          .replace(/<div class="instruksi-section">/g, 
+              '<div style="margin-bottom:18px;padding:15px;background:#f8fbff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.05);">')
+          .replace(/<div class="section-title">/g, 
+              '<div style="font-size:1.18rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;display:flex;align-items:center;gap:8px;">')
+          .replace(/<div class="section-content">/g, 
+              '<div style="padding-left:20px;font-size:1.08rem;line-height:1.6;color:#334e68;">')
+          .replace(/<PENTING>(.*?)<\/PENTING>/gs, 
+              '<div style="margin:22px 0;padding:18px;background:#fff8f0;border:2px solid #ff6b6b;border-radius:12px;box-shadow:0 4px 15px rgba(255,107,107,0.1);">$1</div>')
+          .replace(/<div class="warning-header">/g, 
+              '<div style="font-size:1.25rem;font-weight:800;color:#d32f2f;text-align:center;margin-bottom:15px;">')
+          .replace(/<div class="warning-content">/g, 
+              '<div style="font-size:1.1rem;line-height:1.6;color:#5a3e3e;padding:0 10px;">')
+          .replace(/<div class="warning-alert">/g, 
+              '<div style="margin-top:15px;padding:12px;background:#ffebee;border-radius:8px;font-weight:700;color:#b71c1c;text-align:center;border:1px dashed #f44336;">');
 
-    el.innerHTML = typed + `<span class="blink-cursor">|</span>`;
-    if (i < teks.length) {
-        i++;
-        setTimeout(typeLoop, 12);
-    } else {
-        el.innerHTML = typed;
-        // Tambahkan animasi CSS untuk peringatan
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-                70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-            }
-            .blink-cursor {
-                animation: blink 1s infinite;
-            }
-            @keyframes blink {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0; }
-            }
-            #subtitleInstruksiTyping > div > div[style*="background:#ffebee"] {
-                animation: pulse 1.5s infinite;
-            }
-        `;
-        document.head.appendChild(style);
+      el.innerHTML = typed + `<span class="blink-cursor">|</span>`;
+      if (i < teks.length) {
+          i++;
+          setTimeout(typeLoop, 12);
+      } else {
+          el.innerHTML = typed;
+          // Animasi CSS
+          const style = document.createElement('style');
+          style.textContent = `
+              @keyframes pulse {
+                  0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+                  70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+                  100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+              }
+              .blink-cursor {
+                  animation: blink 1s infinite;
+              }
+              @keyframes blink {
+                  0%, 100% { opacity: 1; }
+                  50% { opacity: 0; }
+              }
+              #subtitleInstruksiTyping > div > div[style*="background:#ffebee"] {
+                  animation: pulse 1.5s infinite;
+              }
+          `;
+          document.head.appendChild(style);
 
-        // Tampilkan tombol selesai
-        const btn = document.getElementById('btnSelesaiInstruksi');
-        btn.style.display = "inline-block";
+          // Tampilkan tombol selesai
+          const btn = document.getElementById('btnSelesaiInstruksi');
+          btn.style.display = "inline-block";
 
-        // --- Cek & hapus pesan lama jika ada ---
-        const pesanLama = document.getElementById('pesanSelesaiInstruksi');
-        if (pesanLama) pesanLama.remove();
+          // Hapus pesan lama
+          const pesanLama = document.getElementById('pesanSelesaiInstruksi');
+          if (pesanLama) pesanLama.remove();
 
-        // Tambahkan pesan sebelum tombol selesai
-        let pesan = document.createElement('div');
-        pesan.id = "pesanSelesaiInstruksi";
-        pesan.style.marginTop = "30px";
-        pesan.style.marginBottom = "18px";
-        pesan.style.textAlign = "center";
-        pesan.style.color = "#1668a9";
-        pesan.style.fontSize = "1.11em";
-        pesan.style.fontWeight = "500";
-        pesan.innerHTML = `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
+          // Pesan sebelum tombol selesai
+          let pesan = document.createElement('div');
+          pesan.id = "pesanSelesaiInstruksi";
+          pesan.style.marginTop = "30px";
+          pesan.style.marginBottom = "18px";
+          pesan.style.textAlign = "center";
+          pesan.style.color = "#1668a9";
+          pesan.style.fontSize = "1.11em";
+          pesan.style.fontWeight = "500";
+          pesan.innerHTML = `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
 
-        btn.parentNode.parentNode.insertBefore(pesan, btn.parentNode);
-    }
-}
-typeLoop();
+          btn.parentNode.parentNode.insertBefore(pesan, btn.parentNode);
+      }
+  }
+  typeLoop();
 
-document.getElementById('btnSelesaiInstruksi').onclick = () => {
-    appState.showTestCards = true;  // <-- AKTIFKAN TEST CARD
-    overlay.remove();
-    renderHome();                   // <-- RENDER ULANG HOME SUPAYA KARTU TES MUNCUL
-    sudahCekDownload = true;
+  document.getElementById('btnSelesaiInstruksi').onclick = () => {
+      appState.showTestCards = true;
+      overlay.remove();
+      renderHome();
+      sudahCekDownload = true;
 
-    setTimeout(() => {
-        const box = document.getElementById('downloadPDFBox');
-        const pdfBtn = document.getElementById('btnDownloadPDF');
-        const cekMsg = document.getElementById('cekDownloadMsg');
-        let downloadClickCount = 0;
+      setTimeout(() => {
+          const box = document.getElementById('downloadPDFBox');
+          const pdfBtn = document.getElementById('btnDownloadPDF');
+          const cekMsg = document.getElementById('cekDownloadMsg');
+          let downloadClickCount = 0;
 
-        // Scroll ke elemen download box
-        if (box) {
-            setTimeout(() => {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-            }, 300);
-        }
+          if (box) {
+              setTimeout(() => {
+                  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+              }, 300);
+          }
 
-        enableDownloadButtonSetelahCek();
+          enableDownloadButtonSetelahCek();
 
-        if (cekMsg) cekMsg.style.display = "block";
+          if (cekMsg) cekMsg.style.display = "block";
 
-        if (pdfBtn && !pdfBtn.hasHandler) {
-            pdfBtn.onclick = function () {
-                downloadClickCount++;
-                generatePDF();
+          if (pdfBtn && !pdfBtn.hasHandler) {
+              pdfBtn.onclick = function () {
+                  downloadClickCount++;
+                  generatePDF();
 
-                if (downloadClickCount === 1) {
-                    pdfBtn.disabled = true;
-                    pdfBtn.classList.remove('blink');
-                    pdfBtn.style.opacity = "0.4";
-                    pdfBtn.style.pointerEvents = "none";
+                  if (downloadClickCount === 1) {
+                      pdfBtn.disabled = true;
+                      pdfBtn.classList.remove('blink');
+                      pdfBtn.style.opacity = "0.4";
+                      pdfBtn.style.pointerEvents = "none";
 
-                    if (cekMsg) {
-                        cekMsg.innerHTML = `
+                      if (cekMsg) {
+                          cekMsg.innerHTML = `
 <b>✅ Tombol sudah dicek.</b><br>
 Silakan periksa folder unduhan (Downloads) di browser Anda. File bernama <i>hasil-psikotes_[nama Anda].pdf</i> seharusnya telah terunduh.<br><br>
 Jika file tersebut tersedia, Anda dapat memulai dan mengerjakan seluruh tes yang diminta.<br><br>
@@ -4438,53 +4664,55 @@ Jika file tersebut tersedia, Anda dapat memulai dan mengerjakan seluruh tes yang
 Jika Anda telah menyelesaikan seluruh tes, Anda boleh mengklik tombol ini kembali untuk keluar dari sistem.
 `;
 
-                        cekMsg.style.display = "block";
-                    }
+                          cekMsg.style.display = "block";
+                      }
 
-                    setTimeout(() => {
-                        pdfBtn.disabled = false;
-                        pdfBtn.style.opacity = "1";
-                        pdfBtn.style.pointerEvents = "auto";
-                        pdfBtn.classList.add('blink');
-                    }, 1100);
-                }
+                      setTimeout(() => {
+                          pdfBtn.disabled = false;
+                          pdfBtn.style.opacity = "1";
+                          pdfBtn.style.pointerEvents = "auto";
+                          pdfBtn.classList.add('blink');
+                      }, 1100);
+                  }
 
-                else if (downloadClickCount === 2) {
-                    if (box) {
-                        box.innerHTML = `
-                            <div style="text-align:center;margin-top:24px;">
-                                <div style="color:#c00;font-weight:600;margin-bottom:14px;">
-                                   ⚠️ Tombol sudah diklik 2 kali.<br>
+                  else if (downloadClickCount === 2) {
+                      if (box) {
+                          box.innerHTML = `
+                              <div style="text-align:center;margin-top:24px;">
+                                  <div style="color:#c00;font-weight:600;margin-bottom:14px;">
+                                     ⚠️ Tombol sudah diklik 2 kali.<br>
 <b>Sebelum logout, pastikan Anda sudah mengumpulkan PDF hasil tes ke link berikut:</b><br>
 <a href="https://forms.gle/G69K56TRfxNnBXtr9" target="_blank" style="font-weight:bold;color:#1565c0;">https://forms.gle/G69K56TRfxNnBXtr9</a><br>
 Setelah mengumpulkan, silakan logout untuk menyelesaikan sesi.
+                                  </div>
+                                  <button class="btn btn-danger" id="btnLogoutPDF" style="padding:18px 40px;font-size:1.17rem;font-weight:700;">
+                                      🔒 Logout
+                                  </button>
+                              </div>
+                          `;
 
-                                </div>
-                                <button class="btn btn-danger" id="btnLogoutPDF" style="padding:18px 40px;font-size:1.17rem;font-weight:700;">
-                                    🔒 Logout
-                                </button>
-                            </div>
-                        `;
+                          document.getElementById('btnLogoutPDF').onclick = function () {
+                              localStorage.setItem('usedPragas', '1');
+                              localStorage.removeItem('identity');
+                              setTimeout(() => location.reload(), 250);
+                          };
 
-                        document.getElementById('btnLogoutPDF').onclick = function () {
-                            localStorage.setItem('usedPragas', '1');
-                            localStorage.removeItem('identity');
-                            setTimeout(() => location.reload(), 250);
-                        };
+                          setTimeout(() => {
+                              window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                          }, 300);
+                      }
 
-                        setTimeout(() => {
-                            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-                        }, 300);
-                    }
-
-                    if (cekMsg) cekMsg.style.display = "none";
-                }
-            };
-            pdfBtn.hasHandler = true;
-        }
-    }, 600);
-};
+                      if (cekMsg) cekMsg.style.display = "none";
+                  }
+              };
+              pdfBtn.hasHandler = true;
+          }
+      }, 600);
+  };
 }
+
+
+
 
 // --- Utility agar tombol download tetap aktif setelah cek instruksi ---
 function updateDownloadBtnStatusAfterInstruksi() {
@@ -5896,205 +6124,171 @@ const desk = {
 
 
   // Semua kombinasi 2 huruf (12 total)
-function gabunganDeskripsi(a, b) {
+function gabunganDeskripsi(a, b, posisi = "") {
   const key = [a, b].join('');
+  const key2 = [b, a].join('');
   const nama = namaPanggilan();
+
+  // ==== Deskripsi KHUSUS per kombinasi+posisi ====
+  const kombinasiPosisi = {
+    // ================= D-I =================
+    "DI-Guru": `<b>D-I Guru: Pemimpin Karismatik di Kelas</b><br>
+${nama} adalah guru yang penuh energi dan ketegasan, mampu memimpin kelas, mendorong siswa berani tampil, serta membangun motivasi belajar melalui pengaruh dan aksi nyata.`,
+    "DI-Administrator": `<b>D-I Administrator: Motor Penggerak Administrasi</b><br>
+${nama} tampil tegas, cepat mengambil inisiatif, sigap menegakkan aturan, dan menjadi inspirasi tim dalam inovasi serta efisiensi kerja.`,
+    "DI-Housekeeping": `<b>D-I Housekeeping: Supervisor Tangguh & Proaktif</b><br>
+${nama} mampu memimpin tim kebersihan dengan disiplin tinggi, berani bertanggung jawab, serta memastikan standar mutu kerja selalu tercapai.`,
+    "DI-Technical Staff": `<b>D-I Technical Staff: Troubleshooter & Pengambil Keputusan</b><br>
+${nama} unggul dalam memimpin solusi teknis di lapangan, cepat mengeksekusi keputusan, serta berani menghadapi masalah kompleks dengan sigap.`,
+
+    // ================= I-S =================
+    "IS-Guru": `<b>I-S Guru: Guru Humanis & Motivator Siswa</b><br>
+${nama} adalah guru yang ramah, empatik, dan sabar, mudah membangun suasana kelas yang suportif serta meningkatkan kepercayaan diri siswa.`,
+    "IS-Administrator": `<b>I-S Administrator: Penghubung Tim yang Hangat</b><br>
+${nama} mudah membangun komunikasi efektif, menjaga keharmonisan tim administrasi, dan menjadi penyemangat kerja kelompok.`,
+    "IS-Housekeeping": `<b>I-S Housekeeping: Koordinator Kolaboratif</b><br>
+${nama} mampu menjaga kekompakan tim, memberi dukungan moral, serta menciptakan suasana kerja yang nyaman di lingkungan housekeeping.`,
+    "IS-Technical Staff": `<b>I-S Technical Staff: Penjaga Harmoni Tim Teknisi</b><br>
+${nama} mudah bergaul, mampu menengahi konflik, dan menjaga kerjasama yang solid dalam penyelesaian tugas teknis.`,
+
+    // ================= C-S =================
+    "CS-Guru": `<b>C-S Guru: Pengajar Detail & Pendamping Setia</b><br>
+${nama} sangat teliti, sabar membimbing, dan konsisten dalam memberi arahan, memastikan setiap siswa memahami materi secara mendalam.`,
+    "CS-Administrator": `<b>C-S Administrator: Penjaga Data & Sistem</b><br>
+${nama} sangat terorganisir, teliti dalam administrasi, dan andal menjaga ketertiban serta validitas data organisasi.`,
+    "CS-Housekeeping": `<b>C-S Housekeeping: Standar Mutu & Kepastian Proses</b><br>
+${nama} teliti menjaga area bersih, disiplin mengikuti prosedur, serta konsisten dalam memenuhi standar kebersihan.`,
+    "CS-Technical Staff": `<b>C-S Technical Staff: Teknisi Presisi & Setia Prosedur</b><br>
+${nama} memastikan setiap langkah teknis dilakukan tepat dan detail, menjadi andalan dalam proses pemeliharaan alat.`,
+
+    // ================= S-C =================
+    "SC-Guru": `<b>S-C Guru: Penjaga Kualitas Pembelajaran</b><br>
+${nama} sangat konsisten dan terstruktur, mampu memberikan pembelajaran terarah, serta memastikan target pembelajaran tercapai.`,
+    "SC-Administrator": `<b>S-C Administrator: Sistematis & Penjaga Proses</b><br>
+${nama} teliti menjalankan administrasi, setia pada prosedur, dan memastikan seluruh proses berjalan lancar tanpa kesalahan.`,
+    "SC-Housekeeping": `<b>S-C Housekeeping: Penjamin Standar Kebersihan</b><br>
+${nama} selalu memastikan lingkungan tetap bersih, rapi, serta konsisten menjalankan jadwal kerja housekeeping.`,
+    "SC-Technical Staff": `<b>S-C Technical Staff: Pengendali Mutu Teknologi</b><br>
+${nama} konsisten dalam menjaga kualitas alat, teliti pada perawatan, dan selalu mematuhi SOP teknis.`,
+
+    // ================= I-D =================
+    "ID-Guru": `<b>I-D Guru: Komunikator Inspiratif</b><br>
+${nama} pandai memotivasi dan meyakinkan siswa, mampu memimpin kelas dengan kepercayaan diri, serta menginspirasi untuk berani berpendapat.`,
+    "ID-Administrator": `<b>I-D Administrator: Promotor Inovasi Administrasi</b><br>
+${nama} mampu membangun hubungan baik dengan seluruh tim, aktif mencari solusi baru, dan berani membuat gebrakan prosedur.`,
+    "ID-Housekeeping": `<b>I-D Housekeeping: Supervisor Komunikatif</b><br>
+${nama} cepat berkomunikasi dengan tim, memberi instruksi jelas, serta mampu memimpin dengan pendekatan persuasif.`,
+    "ID-Technical Staff": `<b>I-D Technical Staff: Koordinator Proyek Teknologi</b><br>
+${nama} mampu memimpin tim teknis, menggerakkan anggota, serta aktif memberi solusi inovatif pada masalah lapangan.`,
+
+    // ================= D-S =================
+    "DS-Guru": `<b>D-S Guru: Disiplin & Pendamping Siswa</b><br>
+${nama} tegas, sangat konsisten dalam menerapkan aturan kelas, serta mampu membimbing siswa menuju perilaku disiplin.`,
+    "DS-Administrator": `<b>D-S Administrator: Penggerak Proses & Penjaga Stabilitas</b><br>
+${nama} berperan aktif mengelola arus kerja administrasi, memimpin tim dengan ketegasan namun tetap suportif.`,
+    "DS-Housekeeping": `<b>D-S Housekeeping: Supervisor Konsisten</b><br>
+${nama} menjaga kedisiplinan dan stabilitas tim, memimpin dengan teladan, serta memastikan target kebersihan tercapai rutin.`,
+    "DS-Technical Staff": `<b>D-S Technical Staff: Pelaksana Stabil & Handal</b><br>
+${nama} disiplin, handal dalam troubleshooting, dan menjaga ritme kerja teknis agar tetap stabil dan efisien.`,
+
+    // ================= S-D =================
+    "SD-Guru": `<b>S-D Guru: Pendamping Stabil & Penengah Kelas</b><br>
+${nama} sangat sabar, mampu menyeimbangkan kebutuhan siswa, serta menjadi penyejuk dalam dinamika kelas.`,
+    "SD-Administrator": `<b>S-D Administrator: Penjaga Ritme Kerja</b><br>
+${nama} selalu menjaga kestabilan proses administrasi, mendukung tim dalam menyelesaikan tugas tanpa tekanan berlebih.`,
+    "SD-Housekeeping": `<b>S-D Housekeeping: Penjaga Ketertiban Kerja</b><br>
+${nama} mampu menata jadwal kerja tim, memberikan ketenangan, serta menjaga lingkungan tetap bersih dan kondusif.`,
+    "SD-Technical Staff": `<b>S-D Technical Staff: Stabil dalam Penanganan Masalah</b><br>
+${nama} selalu tenang menghadapi permasalahan teknis, stabil dalam pengambilan keputusan, dan mengutamakan kerja tim.`,
+
+    // ================= D-C =================
+    "DC-Guru": `<b>D-C Guru: Guru Logis & Tegas</b><br>
+${nama} mengajar dengan pendekatan logis, tegas menegakkan aturan, dan fokus pada pencapaian target belajar.`,
+    "DC-Administrator": `<b>D-C Administrator: Pemimpin Sistem & Standar</b><br>
+${nama} sangat tegas, kritis pada sistem kerja, dan mampu membenahi administrasi berdasarkan data dan logika.`,
+    "DC-Housekeeping": `<b>D-C Housekeeping: Supervisor Sistematis</b><br>
+${nama} mampu membangun sistem kerja efisien, menegakkan standar kebersihan tinggi, dan teliti pada setiap detail kerja.`,
+    "DC-Technical Staff": `<b>D-C Technical Staff: Teknisi Analitis & Solutif</b><br>
+${nama} cepat menganalisis masalah, tegas memberi instruksi, dan menjadi rujukan solusi teknis di tim.`,
+
+    // ================= C-D =================
+    "CD-Guru": `<b>C-D Guru: Guru Perfeksionis & Ambisius</b><br>
+${nama} sangat teliti, selalu mendorong siswa mencapai standar tinggi, dan gigih membangun budaya belajar berkualitas.`,
+    "CD-Administrator": `<b>C-D Administrator: Penjaga Mutu & Inovasi Prosedur</b><br>
+${nama} kritis terhadap kualitas data, gigih dalam meningkatkan sistem, dan berani memberi terobosan administrasi.`,
+    "CD-Housekeeping": `<b>C-D Housekeeping: Penjaga Mutu Kerja</b><br>
+${nama} memastikan standar kebersihan sangat tinggi, teliti pada detail kecil, dan mendorong tim housekeeping untuk terus berkembang.`,
+    "CD-Technical Staff": `<b>C-D Technical Staff: Teknisi Standar Tinggi</b><br>
+${nama} selalu menjaga kualitas hasil kerja, kritis pada hasil akhir, dan perfeksionis dalam troubleshooting alat.`,
+
+    // ================= I-C =================
+    "IC-Guru": `<b>I-C Guru: Komunikator Kreatif</b><br>
+${nama} kreatif menyampaikan materi, analitis dalam memberi contoh, serta inovatif dalam memecahkan masalah pembelajaran.`,
+    "IC-Administrator": `<b>I-C Administrator: Komunikator Sistematik</b><br>
+${nama} efektif membangun komunikasi tertulis dan lisan, analitis dalam administrasi, dan menyukai pengembangan sistem baru.`,
+    "IC-Housekeeping": `<b>I-C Housekeeping: Koordinator Efisiensi</b><br>
+${nama} cerdas berkomunikasi dengan tim, inovatif dalam sistem kerja, serta teliti memastikan efisiensi tugas housekeeping.`,
+    "IC-Technical Staff": `<b>I-C Technical Staff: Teknisi Inovatif & Analitis</b><br>
+${nama} inovatif dalam mencari solusi teknis, teliti dalam penanganan alat, serta komunikatif dalam koordinasi tim.`,
+
+    // ================= C-I =================
+    "CI-Guru": `<b>C-I Guru: Pengembang Kurikulum Kreatif</b><br>
+${nama} teliti menyusun materi, selalu mencari cara baru mengajar, dan memotivasi siswa untuk berpikir inovatif.`,
+    "CI-Administrator": `<b>C-I Administrator: Peneliti Sistem & Komunikasi</b><br>
+${nama} teliti dalam menganalisis data, komunikatif dengan tim, dan gigih mengembangkan sistem administrasi modern.`,
+    "CI-Housekeeping": `<b>C-I Housekeeping: Analisis Proses & Inovasi Kerja</b><br>
+${nama} mampu menganalisis proses kerja housekeeping, mengembangkan inovasi efisiensi, serta teliti pada setiap tugas.`,
+    "CI-Technical Staff": `<b>C-I Technical Staff: Pengembang Teknologi & Koordinator</b><br>
+${nama} senang melakukan perbaikan, inovasi teknis, serta menyusun prosedur kerja teknisi yang efektif.`,
+
+    // ================= S-I =================
+    "SI-Guru": `<b>S-I Guru: Fasilitator Ramah & Adaptif</b><br>
+${nama} selalu menciptakan suasana harmonis, mudah diterima siswa, dan adaptif dalam menghadapi dinamika kelas.`,
+    "SI-Administrator": `<b>S-I Administrator: Penengah & Penghubung Tim</b><br>
+${nama} menjaga keharmonisan, aktif menengahi konflik, serta mampu membangun suasana kerja yang nyaman.`,
+    "SI-Housekeeping": `<b>S-I Housekeeping: Pengatur Suasana Tim</b><br>
+${nama} selalu menjaga hubungan harmonis di tim housekeeping, memotivasi anggota, dan menengahi jika ada konflik.`,
+    "SI-Technical Staff": `<b>S-I Technical Staff: Teknisi Penyeimbang Tim</b><br>
+${nama} mampu menjaga kekompakan tim teknis, membantu menengahi masalah, dan membawa suasana positif.`
+
+  };
+
+  // ==== Deskripsi UMUM per kombinasi (fallback) ====
   const kombinasi = {
     "DI": `<b>Gabungan D-I: Pemimpin Karismatik & Dinamis</b><br>
-      ${nama} pribadi tegas, energik, dan selalu jadi motor penggerak tim. Cocok untuk situasi yang butuh keputusan cepat, pengaruh luas, dan aksi nyata.<ul>
-        <li><b>Kekuatan:</b>
-          Visioner, pengambil inisiatif, inspirator tim, mampu membangun kepercayaan rekan kerja, tahan tekanan kerja, cepat memotivasi orang lain, komunikator aktif, suka tantangan, dan sangat adaptif saat perubahan.</li>
-        <li><b>Area Pengembangan:</b>
-          Mengasah kesabaran dan fokus pada detail administratif, belajar mendengar pendapat anggota tim, mengembangkan empati untuk rekan kerja yang pendiam, mengurangi kecenderungan terlalu mendominasi, dan menjaga konsistensi tindak lanjut.</li>
-        <li><b>Kelemahan:</b>
-          Terkadang kurang sabar, ambisius tanpa memperhitungkan situasi, melewatkan detail penting, cenderung memaksakan kehendak, mudah kecewa jika ide tidak didukung tim.</li>
-        <li><b>Tantangan:</b>
-          Mengelola emosi dan ego saat tim tidak sejalan, merangkul anggota tim yang pasif, serta menahan diri agar tidak memaksakan kehendak sendiri saat rapat besar.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru Mapel</b>, <b>Guru Vokasi</b>, <b>Guru Olahraga</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>, 
-          <b>Manajer Kebun</b>, <b>Supervisor Produksi</b>, <b>Asisten Kepala Pabrik</b>, <b>Koordinator Lapangan</b>
-        </li>
-      </ul>`,
-
-    "ID": `<b>Gabungan I-D: Influencer Berani & Solutif</b><br>
-      ${nama} sangat komunikatif, ramah, dan suka memimpin lewat persuasi. Sumber inspirasi di lingkungan kerja.<ul>
-        <li><b>Kekuatan:</b>
-          Kemampuan public speaking, membangun jejaring luas, membangkitkan semangat kelompok, adaptif terhadap perubahan, komunikatif dengan berbagai kalangan, kreatif dalam mencari solusi baru, cepat merespon krisis.</li>
-        <li><b>Area Pengembangan:</b>
-          Melatih konsistensi kerja, fokus pada administrasi, menyelesaikan pekerjaan sampai tuntas, memperbaiki prioritas dan manajemen waktu, tidak mudah terdistraksi isu baru.</li>
-        <li><b>Kelemahan:</b>
-          Mudah bosan dengan rutinitas, kurang teliti administrasi, sering menunda detail kecil, bisa terlalu spontan dalam mengambil keputusan, kadang mengabaikan laporan tertulis.</li>
-        <li><b>Tantangan:</b>
-          Menjaga disiplin jadwal, menjaga performa di tengah banyak agenda, tetap membumi meski sering jadi spotlight, serta menahan keinginan multitasking yang berlebihan.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru Mapel</b>, <b>Guru Vokasi</b>, <b>Guru Olahraga</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>, 
-          <b>Public Relations Officer</b>, <b>Supervisor Personalia</b>, <b>Training & Development Officer</b>, <b>Field Promotion Coordinator</b>
-        </li>
-      </ul>`,
-
-    "DS": `<b>Gabungan D-S: Eksekutor Andal & Penjaga Kestabilan</b><br>
-      ${nama} disiplin, bertanggung jawab, jadi tulang punggung operasional dan penjaga mutu proses.<ul>
-        <li><b>Kekuatan:</b>
-          Konsistensi tinggi, loyal, telaten, mampu mengelola tim kecil, disiplin waktu, eksekusi rencana dengan teliti, sangat dapat diandalkan untuk rutinitas, tegas pada aturan kerja.</li>
-        <li><b>Area Pengembangan:</b>
-          Lebih terbuka dengan perubahan, meningkatkan fleksibilitas, berani improvisasi jika situasi mendadak, dan memperbaiki komunikasi dua arah.</li>
-        <li><b>Kelemahan:</b>
-          Kaku terhadap aturan, sulit menerima perubahan mendadak, pasif jika tak ada arahan jelas, kadang terjebak pada kebiasaan lama.</li>
-        <li><b>Tantangan:</b>
-          Adaptasi pada kebijakan baru, menjaga motivasi tim saat tekanan tinggi, menerima perubahan struktur kerja, serta menghindari burnout pada rutinitas tinggi.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru SD</b>, <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Supervisor Produksi Pabrik Gula</b>, <b>Mandor Lapangan</b>, <b>Staf Operasional Kebun</b>
-        </li>
-      </ul>`,
-
-    "SD": `<b>Gabungan S-D: Stabilisator Hasil & Penyeimbang</b><br>
-      ${nama} sabar, stabil, dan siap memimpin di saat krusial. Penjaga harmoni kelompok dan penengah konflik.<ul>
-        <li><b>Kekuatan:</b>
-          Loyalitas tinggi, menjaga harmoni kelompok, penengah saat konflik, mampu menyelesaikan masalah secara sistematis, bertanggung jawab pada tugas besar, dipercaya sebagai pendamping/mentor junior.</li>
-        <li><b>Area Pengembangan:</b>
-          Lebih proaktif dan ambil inisiatif, adaptasi cepat pada kebijakan baru, percaya diri bicara di forum, serta belajar asertif di depan publik.</li>
-        <li><b>Kelemahan:</b>
-          Kurang inisiatif inovasi, terlalu hati-hati, lambat ambil keputusan penting, kadang kurang vokal di tim.</li>
-        <li><b>Tantangan:</b>
-          Berani tampil di forum besar, keluar zona nyaman, memperluas pengaruh di luar rutinitas.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Supervisor HRD Kebun</b>, <b>Staf Administrasi Pabrik</b>
-        </li>
-      </ul>`,
-
-    "DC": `<b>Gabungan D-C: Pemimpin Teknis & Logis</b><br>
-      ${nama} kuat dalam berpikir sistematis, utamakan kualitas, dan mampu keputusan berbasis data.<ul>
-        <li><b>Kekuatan:</b>
-          Objektif, analitis, teliti, cepat pahami sistem baru, efisien, tegas pada SOP, mahir menyusun rencana kerja rinci, menjaga standar mutu, dan mampu mengawasi banyak proyek teknis sekaligus.</li>
-        <li><b>Area Pengembangan:</b>
-          Mengasah empati, meningkatkan komunikasi tim lintas bagian, memberi ruang pada ide baru dari staf, serta belajar menghadapi dinamika sosial kerja.</li>
-        <li><b>Kelemahan:</b>
-          Kurang peka emosi tim, bisa terlalu menuntut hasil sempurna, kadang mengabaikan suasana sosial, mudah lelah jika tim kurang terstruktur.</li>
-        <li><b>Tantangan:</b>
-          Menjembatani kebutuhan psikologis tim, seimbangkan target dengan relasi, belajar menghargai variasi gaya kerja.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Supervisor Teknik Mesin</b>, <b>Asisten Manajer QC Pabrik</b>, <b>Staff Pengembangan Sistem Perkebunan</b>
-        </li>
-      </ul>`,
-
-    "CD": `<b>Gabungan C-D: Perfeksionis Ambisius & Penggerak Standar</b><br>
-      ${nama} kritis, teliti, ingin hasil terbaik, gigih meningkatkan mutu, dan menjadi penggerak perubahan lewat standar tinggi.<ul>
-        <li><b>Kekuatan:</b>
-          Teliti, visioner, gigih mengejar target, suka inovasi, sangat memperhatikan kualitas, mampu analisis data, berani mengkritisi sistem lama, disiplin tinggi.</li>
-        <li><b>Area Pengembangan:</b>
-          Fleksibilitas saat perubahan, empati dalam komunikasi, terbuka ide baru, belajar menerima keberagaman cara kerja dan hasil yang tidak selalu sempurna.</li>
-        <li><b>Kelemahan:</b>
-          Mudah stres jika hasil tidak sesuai ekspektasi, sulit menerima kesalahan kecil, bisa terlalu kaku dengan SOP, suka membandingkan hasil tim lain.</li>
-        <li><b>Tantangan:</b>
-          Mengelola tekanan deadline dan perubahan mendadak, menjaga hubungan positif dengan rekan kerja.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Auditor QC Kebun</b>, <b>Penjamin Mutu Produksi</b>, <b>Pengembang SOP</b>
-        </li>
-      </ul>`,
-
+${nama} adalah pribadi tegas, energik, dan selalu menjadi motor penggerak dalam tim.`,
     "IS": `<b>Gabungan I-S: Relator Empatik & Guru Humanis</b><br>
-      ${nama} penghubung antarindividu, sabar, dan empatik, selalu membangun suasana nyaman.<ul>
-        <li><b>Kekuatan:</b>
-          Empati tinggi, membangun hubungan positif, telaten, mudah dipercaya, sabar, menjaga harmoni kelompok, penyemangat siswa dan rekan kerja, sangat diterima lingkungan baru.</li>
-        <li><b>Area Pengembangan:</b>
-          Ketegasan saat interaksi, menjaga batas profesional, lebih vokal dalam tim, meningkatkan kemampuan menegakkan aturan dengan tetap empatik.</li>
-        <li><b>Kelemahan:</b>
-          Terlalu mengalah, sulit menegakkan disiplin, mudah lelah jika beban emosi tinggi, kadang menghindari konflik meski perlu dihadapi.</li>
-        <li><b>Tantangan:</b>
-          Menyeimbangkan dukungan dan ketegasan, belajar berani menegur, menjaga energi saat menghadapi banyak permintaan.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru SD</b>, <b>Guru TK</b>, <b>Guru Olahraga</b>, <b>Admin Sekolah</b>,
-          <b>Staf Pelatihan Kebun</b>, <b>HRD Kebun</b>, <b>Pendamping Karyawan Baru</b>
-        </li>
-      </ul>`,
-
-    "SI": `<b>Gabungan S-I: Penengah Ramah & Fasilitator Komunitas</b><br>
-      ${nama} menciptakan suasana harmonis dan mudah diterima banyak kalangan.<ul>
-        <li><b>Kekuatan:</b>
-          Loyalitas, suasana kekeluargaan, penyejuk tim, mampu menyatukan karakter berbeda, aktif dalam komunitas, mudah membangun rasa aman di kelompok baru.</li>
-        <li><b>Area Pengembangan:</b>
-          Inisiatif tampil, berani ambil keputusan strategis, lebih sering sampaikan ide di forum besar, tingkatkan kepercayaan diri dalam memimpin kelompok kecil.</li>
-        <li><b>Kelemahan:</b>
-          Kurang berani mengambil posisi tidak populer, menahan ide karena takut konflik, terlalu mengutamakan kenyamanan dari pada perubahan.</li>
-        <li><b>Tantangan:</b>
-          Berani ambil langkah saat terjadi konflik, menjaga keseimbangan harmoni dan kebutuhan inovasi tim.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Staf HRD Kebun</b>, <b>Pendamping Karyawan Baru</b>, <b>Staf Kesejahteraan Kebun</b>
-        </li>
-      </ul>`,
-
-    "IC": `<b>Gabungan I-C: Komunikator Analitis & Inovator Edukasi</b><br>
-      ${nama} kreatif, logis, mampu menyampaikan materi kompleks dengan cara mudah dipahami.<ul>
-        <li><b>Kekuatan:</b>
-          Kreatif, presentasi data bagus, cepat adopsi teknologi, komunikatif di forum ilmiah, mampu menyederhanakan konsep sulit, senang sharing pengetahuan baru.</li>
-        <li><b>Area Pengembangan:</b>
-          Menentukan prioritas kerja, menjaga konsistensi proyek, disiplin administrasi, mengelola waktu agar tidak habis di banyak proyek sekaligus.</li>
-        <li><b>Kelemahan:</b>
-          Mudah terdistraksi isu baru, suka multitasking tapi kurang dokumentasi hasil, kadang menunda tugas kurang menarik.</li>
-        <li><b>Tantangan:</b>
-          Mengelola waktu proyek, pastikan semua ide terwujud nyata, belajar menolak proyek jika sudah overload.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Staf Pelatihan & Komunikasi Kebun</b>, <b>Trainer Produksi</b>, <b>Penyuluh Kebun</b>
-        </li>
-      </ul>`,
-
-    "CI": `<b>Gabungan C-I: Peneliti Inovatif & Pengembang Kurikulum</b><br>
-      ${nama} teliti, ingin tahu, suka mencari metode baru, dan kritis pada kebiasaan lama.<ul>
-        <li><b>Kekuatan:</b>
-          Analisis mendalam, inovatif, teliti riset, suka memperbaiki metode kerja, tertarik kembangkan kurikulum/standar baru, selalu mencari validasi data sebelum melangkah.</li>
-        <li><b>Area Pengembangan:</b>
-          Kolaborasi tim, terbuka kritik, menerima keberagaman pendekatan, belajar lebih luwes saat kerja kelompok lintas bidang.</li>
-        <li><b>Kelemahan:</b>
-          Terlalu kritis metode lama, sulit menerima perubahan tanpa data kuat, skeptis pada pola kerja spontanitas, bisa kecewa jika ide tidak diadopsi tim.</li>
-        <li><b>Tantangan:</b>
-          Menerima keberagaman gaya kerja, komunikasi lintas generasi, memperbaiki cara menyampaikan usulan ke manajemen.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru Mapel</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Analis Laboratorium Kebun</b>, <b>Staff R&D</b>, <b>Pengembang SOP Produksi</b>
-        </li>
-      </ul>`,
-
-    "SC": `<b>Gabungan S-C: Spesialis Presisi & Penjaga Kualitas</b><br>
-      ${nama} konsisten, teliti, dan sangat nyaman dengan aturan serta menjaga kualitas kerja.<ul>
-        <li><b>Kekuatan:</b>
-          Akurasi tinggi, telaten, loyal pada SOP, menjaga detail administratif, dipercaya rekan kerja, teliti dalam audit, jadi rujukan jika ada proses yang harus standar.</li>
-        <li><b>Area Pengembangan:</b>
-          Proaktif, berani tampil dan bicara di forum, belajar mengelola emosi saat perubahan mendadak, lebih terbuka pada usulan efisiensi proses.</li>
-        <li><b>Kelemahan:</b>
-          Sulit menerima perubahan mendadak, kurang ekspresif, kadang menutup diri dari inovasi, bisa pasif jika tidak diarahkan jelas.</li>
-        <li><b>Tantangan:</b>
-          Mengelola tekanan administratif yang menumpuk, belajar berbagi tugas dengan tim, tidak terlalu cemas pada kesalahan kecil.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Staf Administrasi Kebun</b>, <b>Teknisi Laboratorium</b>, <b>QA Staff</b>
-        </li>
-      </ul>`,
-
+${nama} adalah penghubung antarindividu yang memiliki empati tinggi, sangat sabar, dan konsisten membangun suasana kerja yang nyaman serta penuh dukungan.`,
     "CS": `<b>Gabungan C-S: Support Sistem Detail & Pendamping Setia</b><br>
-      ${nama} suka membantu, teliti, dan menjaga kelancaran administrasi.<ul>
-        <li><b>Kekuatan:</b>
-          Sangat detail, telaten, dipercaya rekan, loyal, sabar membimbing, sandaran tim saat audit/inspeksi, menjaga etika kerja dan administrasi rapi.</li>
-        <li><b>Area Pengembangan:</b>
-          Percaya diri, mau tampil menyampaikan pendapat, ekspresif, berani ambil peran lebih besar, terbuka pada tantangan baru.</li>
-        <li><b>Kelemahan:</b>
-          Kadang minder, takut salah, menghindari spotlight meski mampu, kurang vokal di forum, mudah cemas dengan risiko kecil.</li>
-        <li><b>Tantangan:</b>
-          Mengelola tekanan administratif banyak dan deadline ketat, belajar berbagi tugas dengan tim lain, mengembangkan kemampuan presentasi hasil kerja.</li>
-        <li><b>Cocok untuk:</b>
-          <b>Guru SD</b>, <b>Guru TK</b>, <b>Admin Sekolah</b>, <b>Staf Teknis</b>,
-          <b>Staf Administrasi Logistik Kebun</b>, <b>Petugas Pencatatan Produksi</b>, <b>Teknisi Laboratorium</b>
-        </li>
-      </ul>`
+${nama} adalah sosok yang senang membantu, sangat teliti, dan menjadi andalan utama dalam menjaga kelancaran administrasi di lingkungan kerja.`,
+    "SC": `<b>Gabungan S-C: Spesialis Presisi & Penjaga Kualitas</b><br>
+${nama} adalah figur yang konsisten, sangat teliti, dan selalu nyaman dengan aturan, serta sangat peduli terhadap kualitas kerja.`,
+    "ID": `<b>Gabungan I-D: Influencer Berani & Solutif</b><br>
+${nama} adalah sosok yang sangat komunikatif, ramah, serta memiliki naluri kepemimpinan lewat persuasi dan keteladanan.`,
+    "DS": `<b>Gabungan D-S: Eksekutor Andal & Penjaga Kestabilan</b><br>
+${nama} dikenal sebagai pribadi yang sangat disiplin, bertanggung jawab, dan menjadi tulang punggung dalam operasional tim.`,
+    "SD": `<b>Gabungan S-D: Stabilisator Hasil & Penyeimbang</b><br>
+${nama} adalah pribadi yang dikenal sangat sabar, stabil secara emosional, dan memiliki kesiapan mental untuk memimpin di saat-saat krusial.`,
+    "DC": `<b>Gabungan D-C: Pemimpin Teknis & Logis</b><br>
+${nama} merupakan sosok yang sangat kuat dalam berpikir sistematis, sangat menonjol dalam kualitas kerja, serta selalu mengedepankan pengambilan keputusan berbasis data dan fakta.`,
+    "CD": `<b>Gabungan C-D: Perfeksionis Ambisius & Penggerak Standar</b><br>
+${nama} adalah figur yang sangat kritis, teliti, selalu menginginkan hasil terbaik, dan gigih dalam meningkatkan mutu kerja tim maupun organisasi.`,
+    "IC": `<b>Gabungan I-C: Komunikator Analitis & Inovator Edukasi</b><br>
+${nama} adalah individu kreatif dan logis, yang piawai dalam menyampaikan materi kompleks dengan cara yang mudah dipahami.`,
+    "CI": `<b>Gabungan C-I: Peneliti Inovatif & Pengembang Kurikulum</b><br>
+${nama} adalah individu yang sangat teliti, ingin tahu, dan selalu bersemangat mencari metode-metode baru untuk pengembangan diri maupun tim.`,
+    "SI": `<b>Gabungan S-I: Penengah Ramah & Fasilitator Komunitas</b><br>
+${nama} adalah sosok yang selalu mampu menciptakan suasana harmonis dan sangat mudah diterima oleh berbagai kalangan.`
   };
-  // fallback
-  return kombinasi[key] || kombinasi[[b, a].join('')] || (desk[a] + "<br>" + desk[b]);
+
+  // ==== PRIORITY: kombinasi+posisi → swap → umum → swap umum ====
+  if (posisi && kombinasiPosisi[`${key}-${posisi}`]) return kombinasiPosisi[`${key}-${posisi}`];
+  if (posisi && kombinasiPosisi[`${key2}-${posisi}`]) return kombinasiPosisi[`${key2}-${posisi}`];
+  if (kombinasi[key]) return kombinasi[key];
+  if (kombinasi[key2]) return kombinasi[key2];
+  return "";
 }
+
 
 
   // Analisis pola grafik (tambahkan jika perlu)
@@ -6190,18 +6384,25 @@ function gabunganDeskripsi(a, b) {
 }
 
 
-  return {
-    dominan,
-    ranking: ranking.join(' > '),
-    deskripsi: gabunganDeskripsi(dominan[0], dominan[1]),
-    analisaPola: analisaPolaGrafik(),
-    nilai: {
-      D: arr.find(i => i.key === 'D').val,
-      I: arr.find(i => i.key === 'I').val,
-      S: arr.find(i => i.key === 'S').val,
-      C: arr.find(i => i.key === 'C').val
-    }
-  };
+return {
+  dominan,
+  ranking: ranking.join(' > '),
+  deskripsi: gabunganDeskripsi(dominan[0], dominan[1], identity.position),
+  analisaPola: analisaPolaGrafik(),
+  nilai: {
+    D: arr.find(i => i.key === 'D').val,
+    I: arr.find(i => i.key === 'I').val,
+    S: arr.find(i => i.key === 'S').val,
+    C: arr.find(i => i.key === 'C').val
+  },
+  y: {
+    D: arr.find(i => i.key === 'D').y,
+    I: arr.find(i => i.key === 'I').y,
+    S: arr.find(i => i.key === 'S').y,
+    C: arr.find(i => i.key === 'C').y
+  }
+};
+
 }
 
 
@@ -6223,100 +6424,167 @@ function showDISCResult() {
     const least  = analisa2DominanDISC(hasilDISC.least.D, hasilDISC.least.I, hasilDISC.least.S, hasilDISC.least.C, 'least', getPixelY);
     const change = analisa2DominanDISC(hasilDISC.change.D, hasilDISC.change.I, hasilDISC.change.S, hasilDISC.change.C, 'change', getPixelY);
 
-    // Rekomendasi peran (lengkap, otomatis deteksi kombinasi 2 huruf)
+    // ================ REKOMENDASI PERAN ================
     function rekomendasiPeran() {
       const roles = {
-        "DI": ["Manajer Penjualan", "Entrepreneur", "Pemimpin Tim", "Marketing Director"],
-        "ID": ["Marketing, Public Relations", "Event Organizer", "Business Development"],
-        "DS": ["Manajer Operasional", "Supervisor Produksi", "Koordinator Proyek", "Logistik Manager"],
-        "SD": ["Koordinator SDM", "Staf Pelayanan Publik", "Komunitas Leader"],
-        "DC": ["Manajer Proyek Teknis", "Insinyur Senior", "Konsultan Spesialis", "Quality Control Manager"],
-        "CD": ["Auditor", "Analis Sistem", "Project Manager", "Lead Engineer"],
-        "IS": ["HRD Manager", "Konselor", "Guru", "Customer Relations Manager"],
-        "SI": ["Guru SD", "Fasilitator Komunitas", "Pendamping Anak", "Team Builder"],
-        "IC": ["Marketing Analyst", "Konsultan Bisnis", "Pelatihan Korporat", "Peneliti Pasar"],
-        "CI": ["Peneliti", "Content Planner", "Data Scientist", "Business Analyst"],
-        "SC": ["Analis Data", "Akuntan", "Quality Assurance", "Peneliti"],
-        "CS": ["QA Tester", "Admin Proses", "Laboran", "Support Staff"]
+        "DI": [
+          "Manajer Penjualan",
+          "Entrepreneur",
+          "Pemimpin Tim",
+          "Marketing Director"
+        ],
+        "ID": [
+          "Marketing, Public Relations",
+          "Event Organizer",
+          "Business Development"
+        ],
+        "DS": [
+          "Manajer Operasional",
+          "Supervisor Produksi",
+          "Koordinator Proyek",
+          "Logistik Manager",
+          "Human Capital Staff"
+        ],
+        "SD": [
+          "Koordinator SDM",
+          "Staf Pelayanan Publik",
+          "Komunitas Leader",
+          "Human Capital Staff"
+        ],
+        "DC": [
+          "Manajer Proyek Teknis",
+          "Insinyur Senior",
+          "Konsultan Spesialis",
+          "Quality Control Manager"
+        ],
+        "CD": [
+          "Auditor",
+          "Analis Sistem",
+          "Project Manager",
+          "Lead Engineer"
+        ],
+        "IS": [
+          "HRD Manager",
+          "Konselor",
+          "Guru",
+          "Customer Relations Manager",
+          "Human Capital Staff"
+        ],
+        "SI": [
+          "Guru SD",
+          "Fasilitator Komunitas",
+          "Pendamping Anak",
+          "Team Builder",
+          "Human Capital Staff"
+        ],
+        "IC": [
+          "Marketing Analyst",
+          "Konsultan Bisnis",
+          "Pelatihan Korporat",
+          "Peneliti Pasar"
+        ],
+        "CI": [
+          "Peneliti",
+          "Content Planner",
+          "Data Scientist",
+          "Business Analyst"
+        ],
+        "SC": [
+          "Analis Data",
+          "Akuntan",
+          "Quality Assurance",
+          "Peneliti",
+          "Human Capital Staff"
+        ],
+        "CS": [
+          "QA Tester",
+          "Admin Proses",
+          "Laboran",
+          "Support Staff",
+          "Human Capital Staff"
+        ]
       };
       // Kombinasi tidak urut, harus cek dua arah!
-      const kode = [most.dominan[0], most.dominan[1]].join('');
-      const kode2 = [most.dominan[1], most.dominan[0]].join('');
+      const kode = most.dominan.join('');
+      const kode2 = most.dominan.slice().reverse().join('');
       return roles[kode] || roles[kode2] || ["Beragam, sesuaikan dengan minat dan pengalaman"];
     }
 
-    // Analisis kecocokan posisi (lengkap + detail teacherLevel)
- function cocokPosisi() {
-  if (!identity.position) return "";
+    // ================ KEC OCO KAN POSISI ================
+    function cocokPosisi() {
+      if (!identity.position) return "";
 
-  // Mapping kebutuhan posisi: urut dari "sangat sesuai", "cocok", lalu fallback "kurang cocok/tidak cocok"
-  const persyaratan = {
-    "Administrator": {
-      sangat: ["SC", "DC"],
-      cocok:  ["CS", "CD"],
-    },
-    "Guru": {
-      sangat: ["IS", "IC", "SI", "SC"],
-      cocok:  ["ID", "SD"],
-    },
-    "Technical Staff": {
-      sangat: ["DC", "SC"],
-      cocok:  ["CD", "CS"],
-    },
-    "Manajer": {
-      sangat: ["DI", "ID", "DC", "CD"],
-      cocok:  ["DS", "IS"],
-    }
-  };
-
-  // Dua kode kombinasi (misal DI & ID, biar tidak terbalik urutan)
-  const kode = [most.dominan[0], most.dominan[1]].join('');
-  const kode2 = [most.dominan[1], most.dominan[0]].join('');
-  const req = persyaratan[identity.position] || {};
-
-  // Default "Tidak Cocok"
-  let tingkat = "Tidak Cocok";
-  if ((req.sangat || []).includes(kode) || (req.sangat || []).includes(kode2)) tingkat = "SANGAT SESUAI";
-  else if ((req.cocok || []).includes(kode) || (req.cocok || []).includes(kode2)) tingkat = "COCOK";
-  else if (
-    [].concat(req.sangat || [], req.cocok || []).some(
-      x => kode.includes(x[0]) || kode.includes(x[1]) || kode2.includes(x[0]) || kode2.includes(x[1])
-    )
-  ) tingkat = "KURANG COCOK";
-
-  // Detail khusus untuk Guru SD/SMA
-  let detail = "";
-  if (identity.teacherLevel) {
-    if (identity.teacherLevel === "SD" && (kode.includes("I") || kode2.includes("I")))
-      detail += "Sangat cocok untuk mengajar anak-anak karena gaya komunikasi dan empati tinggi.<br>";
-    if (identity.teacherLevel === "SMA" && (kode.includes("C") || kode2.includes("C")))
-      detail += "Cocok untuk mata pelajaran eksakta dan pendekatan analitis.<br>";
-  }
-
-  // Output box warna sesuai tingkat kecocokan
-  return `
-    <div style="margin-top:16px;padding:14px;background:${
-      tingkat === "SANGAT SESUAI" ? '#e8f5e9'
-      : tingkat === "COCOK" ? '#f0f7fa'
-      : tingkat === "KURANG COCOK" ? '#fff7e6'
-      : '#ffebee'
-    };border-radius:8px;">
-      <b>Analisis Posisi "${identity.position}":</b>
-      <div>
-        ${
-          tingkat === "SANGAT SESUAI"
-            ? '✅ <span style="color:#18b172;font-weight:bold;">Cocok Sekali</span>'
-            : tingkat === "COCOK"
-            ? '✔️ <span style="color:#2176c7;font-weight:bold;">Cocok</span>'
-            : tingkat === "KURANG COCOK"
-            ? '⚠️ <span style="color:#de9000;font-weight:bold;">Kurang Cocok</span>'
-            : '❌ <span style="color:#c00;font-weight:bold;">Tidak Cocok</span>'
+      const persyaratan = {
+        "Administrator": {
+          sangat: ["SC", "DC"],
+          cocok:  ["CS", "CD"],
+        },
+        "Guru": {
+          sangat: ["IS", "IC", "SI", "SC"],
+          cocok:  ["ID", "SD"],
+        },
+        "Technical Staff": {
+          sangat: ["DC", "SC"],
+          cocok:  ["CD", "CS"],
+        },
+        "Manajer": {
+          sangat: ["DI", "ID", "DC", "CD"],
+          cocok:  ["DS", "IS"],
+        },
+        "Housekeeping": {
+          sangat: ["SC", "CS"],
+          cocok:  ["SI", "IC"],
+        },
+        "Human Capital": {
+          sangat: ["IS", "SI", "SC", "SD"],
+          cocok:  ["DS", "CS"],
         }
-      </div>
-      <div>${detail}</div>
-    </div>
-  `;
-}
+      };
+
+      const kode = most.dominan.join('');
+      const kode2 = most.dominan.slice().reverse().join('');
+      const req = persyaratan[identity.position] || {};
+
+      let tingkat = "Tidak Cocok";
+      if ((req.sangat || []).includes(kode) || (req.sangat || []).includes(kode2)) tingkat = "SANGAT SESUAI";
+      else if ((req.cocok || []).includes(kode) || (req.cocok || []).includes(kode2)) tingkat = "COCOK";
+      else if (
+        [].concat(req.sangat || [], req.cocok || []).some(
+          x => kode.includes(x[0]) || kode.includes(x[1]) || kode2.includes(x[0]) || kode2.includes(x[1])
+        )
+      ) tingkat = "KURANG COCOK";
+
+      let detail = "";
+      if (identity.teacherLevel) {
+        if (identity.teacherLevel === "SD" && (kode.includes("I") || kode2.includes("I")))
+          detail += "Sangat cocok untuk mengajar anak-anak karena gaya komunikasi dan empati tinggi.<br>";
+        if (identity.teacherLevel === "SMA" && (kode.includes("C") || kode2.includes("C")))
+          detail += "Cocok untuk mata pelajaran eksakta dan pendekatan analitis.<br>";
+      }
+
+      return `
+        <div style="margin-top:16px;padding:14px;background:${
+          tingkat === "SANGAT SESUAI" ? '#e8f5e9'
+          : tingkat === "COCOK" ? '#f0f7fa'
+          : tingkat === "KURANG COCOK" ? '#fff7e6'
+          : '#ffebee'
+        };border-radius:8px;">
+          <b>Analisis Posisi "${identity.position}":</b>
+          <div>
+            ${
+              tingkat === "SANGAT SESUAI"
+                ? '✅ <span style="color:#18b172;font-weight:bold;">Cocok Sekali</span>'
+                : tingkat === "COCOK"
+                ? '✔️ <span style="color:#2176c7;font-weight:bold;">Cocok</span>'
+                : tingkat === "KURANG COCOK"
+                ? '⚠️ <span style="color:#de9000;font-weight:bold;">Kurang Cocok</span>'
+                : '❌ <span style="color:#c00;font-weight:bold;">Tidak Cocok</span>'
+            }
+          </div>
+          <div>${detail}</div>
+        </div>
+      `;
+    }
 
 
     // Analisis tekanan dan potensi stres (lebih adaptif)
@@ -6324,20 +6592,23 @@ function analisaTekanan() {
   const tekanan = [];
   const strategi = [];
 
-  // Deteksi sumber stres pada grafik Least (K)
-  if (least.nilai.D > 10) {
+  // Ambil posisi grafik (pixelY) untuk masing-masing faktor pada grafik Least (K)
+  // Asumsikan arr sudah urut sesuai pixel grafik (y paling besar = paling bawah)
+  const thresholdBawah = 300; // contoh, sesuaikan tinggi canvas grafikmu
+
+  if (least.y.D > thresholdBawah) {
     tekanan.push("Kesulitan jika berada di lingkungan yang sangat birokratis atau diatur ketat.");
     strategi.push("Libatkan dalam pengambilan keputusan dan beri otonomi dalam menjalankan tugas, agar tetap termotivasi.");
   }
-  if (least.nilai.I > 10) {
+  if (least.y.I > thresholdBawah) {
     tekanan.push("Stres jika akses pada interaksi sosial atau komunikasi dibatasi.");
     strategi.push("Pastikan adanya forum, meeting, atau ruang diskusi rutin agar kebutuhan komunikasi tetap terpenuhi.");
   }
-  if (least.nilai.S > 10) {
+  if (least.y.S > thresholdBawah) {
     tekanan.push("Stres saat menghadapi perubahan mendadak atau lingkungan kerja yang tidak stabil.");
     strategi.push("Lakukan perubahan secara bertahap, informasikan rencana lebih awal, dan berikan waktu adaptasi yang cukup.");
   }
-  if (least.nilai.C > 10) {
+  if (least.y.C > thresholdBawah) {
     tekanan.push("Frustasi jika menghadapi ketidakpastian, aturan yang ambigu, atau data/instruksi tidak jelas.");
     strategi.push("Berikan petunjuk dan struktur kerja yang jelas, lengkap dengan standar operasional prosedur (SOP) dan data pendukung.");
   }
@@ -6357,6 +6628,7 @@ function analisaTekanan() {
     </div>
   `;
 }
+
 
 analisaHTML = `
   <div style="margin-top:28px; border-radius:11px; background:#f8fafb; padding:20px 26px;">
@@ -7428,11 +7700,12 @@ function renderAdminExcelSheet() {
 }
 
 
-// ==================== TES KETIK ====================
+// ==================== TES KETIK (PENILAIAN PER HURUF) ====================
 
 function renderTypingTest() {
   // Soal pengetikan (bukan instruksi!)
-  const typingText = `Sugar Group Schools merupakan institusi pendidikan yang berada di bawah naungan perusahaan agribisnis terintegrasi, tersebar di tiga perusahaan gula terbesar di Indonesia. Sekolah ini didirikan untuk mendukung proses pendidikan bagi anak-anak karyawan serta masyarakat sekitar. Visi kami adalah menjadi pelopor utama dalam menghasilkan lulusan berkualitas tinggi yang berjiwa profesional dan menguasai teknologi modern.`;
+ const typingText = `Sugar Group Schools merupakan institusi pendidikan yang berada di bawah naungan perusahaan agribisnis terintegrasi, tersebar di tiga perusahaan gula terbesar di Indonesia. Sekolah ini didirikan dengan tujuan utama untuk mendukung proses pendidikan dan pengembangan generasi bangsa melalui sistem pembelajaran yang berkualitas dan relevan dengan kebutuhan zaman. Dengan komitmen untuk menciptakan lingkungan belajar yang kondusif dan inovatif, kami berupaya menjadi pelopor dalam menghasilkan lulusan berkualitas tinggi yang tidak hanya berjiwa profesional, tetapi juga mampu menguasai teknologi modern dan siap bersaing di era globalisasi.`;
+
 
   const waktuTyping = 120; // 2 menit
 
@@ -7445,9 +7718,11 @@ function renderTypingTest() {
     <div class="card" style="max-width:600px;margin:auto;">
       <div class="header"><h2>Uji Mengetik</h2></div>
       <div style="margin-bottom:18px;">
-        <b>Instruksi:</b>
+        <b>Instruksi Penting!</b>
         <ul style="line-height:1.7;">
           <li>Ketik ulang teks di bawah <b>tanpa menyalin</b> (copy-paste tidak diperbolehkan).</li>
+          <li style="color:#c00;font-weight:bold;">Penilaian <u>per huruf</u>, bukan per kata! Typo satu huruf TIDAK bikin huruf/kata lain ikut salah.</li>
+          <li>Tidak ada toleransi typo, spasi, koma, atau huruf yang beda: semua harus sama persis.</li>
           <li>Waktu pengerjaan: <b><span id="typingTimer">${formatTypingTime(waktuTyping)}</span></b></li>
         </ul>
       </div>
@@ -7468,7 +7743,7 @@ function renderTypingTest() {
         oncopy="return false" onpaste="return false" oncut="return false"
       ></textarea>
       <div id="typingLiveStats" style="margin:11px 0 3px 0;font-size:1.06em;color:#157;">
-        <b>Kata Benar:</b> 0 | <b>Kata Salah:</b> 0 | <b>Belum diketik:</b> 0 | <b>Akurasi:</b> 0% | <b>WPM:</b> 0
+        <b>Huruf Benar:</b> 0 | <b>Huruf Salah:</b> 0 | <b>Belum diketik:</b> 0 | <b>Akurasi:</b> 0% | <b>WPM:</b> 0
       </div>
       <div style="margin-top:22px;text-align:center;">
         <button class="btn" id="btnTypingDone">Selesai</button>
@@ -7496,13 +7771,13 @@ function renderTypingTest() {
   document.getElementById('btnTypingDone').onclick = () => endTypingTest(false);
 
   function updateTypingStats() {
-    // Split per kata (hapus spasi berlebih)
-    const input = inputEl.value.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
-    const expected = typingText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
-
+    const input = inputEl.value;
+    const expected = typingText;
     let benar = 0, salah = 0, belum = 0;
-    for (let i = 0; i < expected.length; i++) {
-      if (input[i] === undefined || input[i] === '') {
+    const maxLen = Math.max(input.length, expected.length);
+
+    for (let i = 0; i < maxLen; i++) {
+      if (input[i] === undefined) {
         belum++;
       } else if (input[i] === expected[i]) {
         benar++;
@@ -7511,19 +7786,15 @@ function renderTypingTest() {
       }
     }
 
-    // Akurasi: benar / (benar + salah) [dari yang sudah DIKETIK]
     const totalDiketik = benar + salah;
-    const persen = totalDiketik ? (benar / totalDiketik * 100) : 0;
-
-    // WPM (hitung dari jumlah kata diketik)
-    const wpm = Math.round(input.length / ((waktuTyping - appState.timeLeft) / 60 + 1e-6));
-
-    // Progress bar (jumlah kata yg diketik)
+    const persen = totalDiketik ? (benar / (benar + salah) * 100) : 0;
+    // WPM: total karakter yang diketik dibagi 5 per menit
+    const wpm = Math.round(input.length / 5 / ((waktuTyping - appState.timeLeft) / 60 + 1e-6));
     const progress = Math.min(100, input.length / expected.length * 100);
-    document.getElementById('progressTypingBarInner').style.width = `${progress}%`;
 
+    document.getElementById('progressTypingBarInner').style.width = `${progress}%`;
     document.getElementById('typingLiveStats').innerHTML =
-      `<b>Kata Benar:</b> ${benar} | <b>Kata Salah:</b> ${salah} | <b>Belum diketik:</b> ${belum} | <b>Akurasi:</b> ${persen.toFixed(1)}% | <b>WPM:</b> ${isFinite(wpm) && wpm >= 0 ? wpm : 0}`;
+      `<b>Huruf Benar:</b> ${benar} | <b>Huruf Salah:</b> ${salah} | <b>Belum diketik:</b> ${belum} | <b>Akurasi:</b> ${persen.toFixed(1)}% | <b>WPM:</b> ${isFinite(wpm) && wpm >= 0 ? wpm : 0}`;
   }
   updateTypingStats();
 }
@@ -7541,12 +7812,13 @@ function endTypingTest(timeIsUp = false) {
   clearInterval(appState.typingTimer);
 
   const hasilKetik = document.getElementById('typingInput').value;
-  const kunci = appState.typingText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
-  const userInput = hasilKetik.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
-
+  const kunci = appState.typingText;
+  const userInput = hasilKetik;
   let benar = 0, salah = 0, belum = 0;
-  for (let i = 0; i < kunci.length; i++) {
-    if (userInput[i] === undefined || userInput[i] === '') {
+  const maxLen = Math.max(userInput.length, kunci.length);
+
+  for (let i = 0; i < maxLen; i++) {
+    if (userInput[i] === undefined) {
       belum++;
     } else if (userInput[i] === kunci[i]) {
       benar++;
@@ -7556,12 +7828,11 @@ function endTypingTest(timeIsUp = false) {
   }
 
   const totalDiketik = benar + salah;
-  const persenBenar = totalDiketik ? (benar / totalDiketik * 100).toFixed(1) : 0;
-  const wpm = Math.round(userInput.length / ((120 - appState.timeLeft) / 60 + 1e-6));
+  const persenBenar = totalDiketik ? (benar / (benar + salah) * 100).toFixed(1) : 0;
+  const wpm = Math.round(userInput.length / 5 / ((120 - appState.timeLeft) / 60 + 1e-6));
   const sisa = appState.timeLeft;
-  const totalKata = kunci.length;
+  const totalHuruf = kunci.length;
 
-  // Simpan ke state
   appState.answers.TYPING = {
     text: hasilKetik,
     wpm,
@@ -7569,24 +7840,28 @@ function endTypingTest(timeIsUp = false) {
     benar,
     salah,
     belum,
-    total: totalKata,
+    total: totalHuruf,
     waktu: 120 - sisa,
     waktuSisa: sisa
   };
   appState.completed.TYPING = true;
 
-  // Hasil + tombol selesai
   document.getElementById('app').innerHTML = `
     <div class="card" style="max-width:520px;margin:auto;">
       <div class="header"><h2>Hasil Tes Mengetik</h2></div>
       <div style="margin:20px 0 10px 0;font-size:1.1em;">
-        <b>Kata benar:</b> ${benar} <br>
-        <b>Kata salah:</b> ${salah} <br>
+        <b>Huruf benar:</b> ${benar} <br>
+        <b>Huruf salah:</b> ${salah} <br>
         <b>Belum diketik:</b> ${belum} <br>
         <b>Akurasi:</b> ${persenBenar}% <br>
         <b>Kecepatan:</b> ${wpm} kata/menit (WPM) <br>
         <b>Waktu digunakan:</b> ${(120 - sisa)} detik <br>
         <b>Status:</b> ${timeIsUp ? '<span style="color:#c00;">Waktu habis</span>' : 'Selesai'}
+        <div style="margin-top:12px;color:#c00;font-weight:bold;">
+          Penilaian: <u>Setiap huruf dibandingkan satu per satu (index-nya sama)!</u><br>
+          Salah di satu huruf TIDAK bikin huruf lain ikut salah. Semua harus sama persis.<br>
+          Tidak ada toleransi typo!
+        </div>
       </div>
       <div style="margin-top:18px;text-align:center;">
         <button class="btn" onclick="renderHome()">Selesai</button>
@@ -7594,10 +7869,6 @@ function endTypingTest(timeIsUp = false) {
     </div>
   `;
 }
-
-
-
-
 
 
 // ==================== Timer Functions ====================
@@ -7736,29 +8007,45 @@ async function generatePDF() {
   }
 
   // Kolom kiri identitas
-  let y1 = y;
-  y1 = drawLabelValueFix(doc, col1_x, y1, "Nama", id.name || "-");
-  y1 = drawLabelValueFix(doc, col1_x, y1, "No. HP", id.phone || "-");
-  y1 = drawLabelValueFix(doc, col1_x, y1, "Tgl Lahir", id.dob ? new Date(id.dob).toLocaleDateString('id-ID') : '-');
-  y1 = drawLabelValueFix(doc, col1_x, y1, "Usia", id.age || "-");
-  y1 = drawLabelValueFix(doc, col1_x, y1, "Posisi", id.position || "-");
-  if (id.position === 'Guru') y1 = drawLabelValueFix(doc, col1_x, y1, "Kategori Guru", id.teacherLevel || "-");
-  if (id.position === 'Technical Staff') y1 = drawLabelValueFix(doc, col1_x, y1, "Role Teknis", id.techRole || "-");
-  y1 = drawLabelValueFix(doc, col1_x, y1, "Pendidikan", id.education || "-");
+ // KOLOM KIRI IDENTITAS
+let y1 = y;
+y1 = drawLabelValueFix(doc, col1_x, y1, "Nama Lengkap", id.name || "-");
+y1 = drawLabelValueFix(doc, col1_x, y1, "Nama Panggilan", id.nickname || "-");
+y1 = drawLabelValueFix(doc, col1_x, y1, "No. HP", id.phone || "-");
+y1 = drawLabelValueFix(doc, col1_x, y1, "Tgl Lahir", id.dob ? new Date(id.dob).toLocaleDateString('id-ID') : '-');
+y1 = drawLabelValueFix(doc, col1_x, y1, "Usia", id.age || "-"); // bisa skip kalau tidak perlu
+y1 = drawLabelValueFix(doc, col1_x, y1, "Status", id.status || "-");
+y1 = drawLabelValueFix(doc, col1_x, y1, "Posisi", id.position || "-");
+if (id.position === 'Guru') y1 = drawLabelValueFix(doc, col1_x, y1, "Kategori Guru", id.teacherLevel || "-");
+if (id.position === 'Technical Staff') y1 = drawLabelValueFix(doc, col1_x, y1, "Role Teknis", id.techRole || "-");
+y1 = drawLabelValueFix(doc, col1_x, y1, "Pendidikan", id.education || "-");
 
-  // Kolom kanan identitas
-  let y2 = y;
-  y2 = drawLabelValueFix(doc, col2_x, y2, "Email", id.email || "-", {labelWidth:30, maxWidth:67, fontSize:7});
-  y2 = drawLabelValueFix(doc, col2_x, y2, "Almt KTP", id.addressKTP || "-", {labelWidth:30, maxWidth:67, fontSize:7});
-  y2 = drawLabelValueFix(doc, col2_x, y2, "Almt Saat Ini", id.addressCurrent || "-", {labelWidth:30, maxWidth:67, fontSize:7});
-  y2 = drawLabelValueFix(doc, col2_x, y2, "Tanggal Tes", id.date || "-", {labelWidth:30, fontSize:7});
+// KOLOM KANAN IDENTITAS
+let y2 = y;
+y2 = drawLabelValueFix(doc, col2_x, y2, "Email", id.email || "-", {labelWidth:30, maxWidth:67, fontSize:7});
+y2 = drawLabelValueFix(doc, col2_x, y2, "Alamat KTP", id.addressKTP || "-", {labelWidth:30, maxWidth:67, fontSize:7});
+y2 = drawLabelValueFix(doc, col2_x, y2, "Alamat Saat Ini", id.addressCurrent || "-", {labelWidth:30, maxWidth:67, fontSize:7});
+y2 = drawLabelValueFix(doc, col2_x, y2, "Keterangan Tambahan", id.explanation || "-", {labelWidth:30, maxWidth:67, fontSize:7});
+y2 = drawLabelValueFix(doc, col2_x, y2, "Tanggal Pengisian", id.date || "-", {labelWidth:30, fontSize:7});
 
-  // Jaga jarak bawah identitas
-  const yMaxIdentitas = Math.max(y1, y2);
-  let ySection = yMaxIdentitas + 5;
+// BAGIAN ALUMNI (di bawah identitas)
+const yMaxIdentitas = Math.max(y1, y2);
+let ySection = yMaxIdentitas + 7;
 
-  // Cek page limit setelah identitas
-  if (ySection > 265) { doc.addPage(); ySection = 20; }
+if (id.alumniSGS) {
+  let alumniText = "Alumni Sugar Group Schools:";
+  let alumniArr = [];
+  if (id.alumniSD) alumniArr.push("SD" + (id.alumniSDText ? ` (${id.alumniSDText})` : ""));
+  if (id.alumniSMP) alumniArr.push("SMP" + (id.alumniSMPText ? ` (${id.alumniSMPText})` : ""));
+  if (id.alumniSMA) alumniArr.push("SMA" + (id.alumniSMAText ? ` (${id.alumniSMAText})` : ""));
+  alumniText += " " + (alumniArr.length > 0 ? alumniArr.join(", ") : "-");
+  doc.setFontSize(8);
+  doc.text(alumniText, col1_x, ySection);
+  ySection += 6;
+}
+
+// Cek page limit setelah identitas
+if (ySection > 265) { doc.addPage(); ySection = 20; }
 
   // ========== IST ==========
   if (
@@ -8100,103 +8387,397 @@ try {
     // REKOMENDASI KARIR
     let roles = (function(){
      const rolesMap = {
-    "DD": [
-      "Kepala Divisi",
-      "Project Leader",
-      "Direktur Eksekutif",
-      "Supervisor Operasional"
-    ],
-    "DI": [
-      "Manajer Penjualan",
-      "Entrepreneur",
-      "Head of Marketing",
-      "Ketua Organisasi"
-    ],
-    "DS": [
-      "Manajer Operasional",
-      "Supervisor Produksi",
-      "Koordinator Proyek",
-      "Kepala Sekolah"
-    ],
-    "DC": [
-      "Manajer Proyek Teknis",
-      "Quality Control Manager",
-      "Kepala Laboratorium",
-      "Kepala Program Studi"
-    ],
-    "ID": [
-      "Creative Director",
-      "Public Relations Manager",
-      "Business Trainer",
-      "Koordinator Ekstrakurikuler"
-    ],
-    "II": [
-      "MC",
-      "Event Organizer",
-      "Motivator",
-      "Trainer"
-    ],
-    "IS": [
-      "HRD Manager",
-      "Konselor",
-      "Guru",
-      "Community Engagement Specialist"
-    ],
-    "IC": [
-      "Marketing Analyst",
-      "Business Consultant",
-      "Pelatih Korporat",
-      "Peneliti Pasar"
-    ],
-    "SD": [
-      "Admin Operasional",
-      "Koordinator Proyek",
-      "Wakil Kepala Sekolah",
-      "Team Support Lead"
-    ],
-    "SI": [
-      "Relationship Manager",
-      "Customer Success Specialist",
-      "Guru SD",
-      "Community Facilitator"
-    ],
-    "SS": [
-      "Customer Service Senior",
-      "Pembina Organisasi",
-      "Supervisor Layanan",
-      "Guru Bimbingan Konseling"
-    ],
-    "SC": [
-      "Analis Data",
-      "Akuntan",
-      "Quality Assurance",
-      "Peneliti"
-    ],
-    "CD": [
-      "Engineer R&D",
-      "Business Analyst",
-      "IT Project Lead",
-      "Koordinator Kurikulum"
-    ],
-    "CI": [
-      "Content Planner",
-      "Market Researcher",
-      "Konsultan Pendidikan",
-      "Trainer Bisnis"
-    ],
-    "CS": [
-      "Staff Laboratorium",
-      "Data Entry Supervisor",
-      "QA Tester",
-      "Admin Proses"
-    ],
-    "CC": [
-      "Quality Control Manager",
-      "Compliance Officer",
-      "Auditor",
-      "Analis Sistem"
-    ]
-  };
+ "DD": [
+    "Kepala Divisi",
+    "Project Leader",
+    "Direktur Eksekutif",
+    "Supervisor Operasional",
+    // Non-staff
+    "Mandor Proyek",
+    "Koordinator Lapangan",
+    "Kepala Regu Satpam",
+    "Penyelia Pabrik",
+    "Pengawas Gudang",
+    "Koordinator Konstruksi",
+    // Perkebunan
+    "Kepala Afdeling",
+    "Mandor Besar (Mandor 1)",
+    "Pengawas Panen",
+    "Asisten Kepala Kebun",
+    "Koordinator Traksi (Alat Berat)",
+    "Kepala Gudang Pupuk",
+    // Bengkel
+    "Kepala Bengkel",
+    "Kepala Mekanik",
+    "Mandor Bengkel",
+    // Pekerja Kasar/Umum
+    "Mandor Bongkar Muat",
+    "Pengawas Tukang Bangunan",
+    "Koordinator Pekerja Borongan"
+  ],
+  "DI": [
+    "Manajer Penjualan",
+    "Entrepreneur",
+    "Head of Marketing",
+    "Ketua Organisasi",
+    // Non-staff
+    "Wirausaha (UMKM)",
+    "Koordinator Event Lapangan",
+    "Pengelola Usaha Kuliner",
+    "Koordinator Sales Canvasser",
+    "Pemilik Outlet Retail",
+    "Koordinator Tim Pemasaran",
+    // Perkebunan
+    "Asisten Agronomi",
+    "Pengawas Pemupukan",
+    "Koordinator Pemanenan",
+    "Pengelola Kebun Kemitraan",
+    "Koordinator Pemasaran Hasil Kebun",
+    // Bengkel
+    "Pemilik Bengkel",
+    "Koordinator Montir",
+    // Pekerja Kasar/Umum
+    "Koordinator Kuli Panggul",
+    "Mandor Lapangan Proyek"
+  ],
+  "DS": [
+    "Manajer Operasional",
+    "Supervisor Produksi",
+    "Koordinator Proyek",
+    "Kepala Sekolah",
+    // Non-staff
+    "Mandor Lapangan",
+    "Pengawas Produksi",
+    "Penyelia Kebun",
+    "Kepala Shift Pabrik",
+    "Koordinator Tim Lapangan",
+    "Foreman",
+    // Perkebunan
+    "Mandor Panen",
+    "Mandor Rawat",
+    "Pengawas Kebun",
+    "Asisten Lapangan",
+    "Penyelia Traksi",
+    "Kepala Regu Pemeliharaan",
+    // Bengkel
+    "Mandor Mekanik",
+    "Pengawas Bengkel",
+    // Pekerja Kasar/Umum
+    "Mandor Tukang Kebun",
+    "Mandor Tukang Batu",
+    "Koordinator Kuli Bangunan"
+  ],
+  "DC": [
+    "Manajer Proyek Teknis",
+    "Quality Control Manager",
+    "Kepala Laboratorium",
+    "Kepala Program Studi",
+    // Non-staff
+    "Pengawas Konstruksi",
+    "Teknisi Senior",
+    "Kepala Bengkel",
+    "Koordinator Maintenance",
+    "Kepala Teknisi Mesin",
+    "Penyelia Produksi",
+    // Perkebunan
+    "Pengawas Mutu TBS/Gula",
+    "Asisten Teknik Pabrik",
+    "Kepala Unit Workshop",
+    "Pengawas Pabrik Pengolahan",
+    "Teknisi Lapangan Perkebunan",
+    // Bengkel
+    "Teknisi Diagnostik",
+    "Mekanik Senior",
+    "Foreman Bengkel",
+    // Pekerja Kasar/Umum
+    "Pengawas Tukang Las",
+    "Mandor Bongkaran"
+  ],
+  "ID": [
+    "Creative Director",
+    "Public Relations Manager",
+    "Business Trainer",
+    "Koordinator Ekstrakurikuler",
+    // Non-staff
+    "MC Profesional",
+    "Event Organizer Freelance",
+    "Koordinator Komunitas",
+    "Pelatih Ekstrakurikuler",
+    "Instruktur Outbound",
+    "Penggerak Komunitas",
+    // Perkebunan
+    "Penyuluh Lapangan",
+    "Motivator Petani Plasma",
+    "Koordinator Pelatihan Petani",
+    "Fasilitator Program Kemitraan",
+    // Bengkel
+    "Trainer Otomotif",
+    "Instruktur Bengkel",
+    // Pekerja Kasar/Umum
+    "Pemandu Proyek Outbound",
+    "Pelatih Lapangan"
+  ],
+  "II": [
+    "MC",
+    "Event Organizer",
+    "Motivator",
+    "Trainer",
+    // Non-staff
+    "Pemandu Wisata",
+    "Pengisi Acara",
+    "Host Acara Komunitas",
+    "Pelatih Kebugaran",
+    "Pemandu Outbound",
+    "Fasilitator Kegiatan Sosial",
+    // Perkebunan
+    "Fasilitator Sosialisasi Program Kebun",
+    "Koordinator Penyuluhan Lapangan",
+    "Fasilitator Kesejahteraan Petani",
+    // Bengkel
+    "Instruktur Pelatihan Bengkel",
+    // Pekerja Kasar/Umum
+    "Fasilitator Kegiatan Lapangan",
+    "Koordinator Pekerja Lepas"
+  ],
+  "IS": [
+    "HRD Manager",
+    "Konselor",
+    "Guru",
+    "Community Engagement Specialist",
+    // Non-staff
+    "Relawan Sosial",
+    "Pekerja Sosial",
+    "Guru Les Privat",
+    "Pendamping Disabilitas",
+    "Fasilitator Pelatihan Masyarakat",
+    "Asisten Pendidikan Anak",
+    // Perkebunan
+    "Penyuluh Kesehatan Perkebunan",
+    "Pendamping CSR Kebun",
+    "Fasilitator Program Anak Petani",
+    "Asisten Klinik Kebun",
+    // Bengkel
+    "Customer Service Bengkel",
+    // Pekerja Kasar/Umum
+    "Pendamping Karyawan Lapangan",
+    "Pemandu Pekerja Baru"
+  ],
+  "IC": [
+    "Marketing Analyst",
+    "Business Consultant",
+    "Pelatih Korporat",
+    "Peneliti Pasar",
+    // Non-staff
+    "Content Creator",
+    "Pengelola Sosial Media",
+    "Freelance Konsultan Bisnis",
+    "Penulis Lepas",
+    "Pengelola Marketplace",
+    "Praktisi Riset Mandiri",
+    // Perkebunan
+    "Penyusun Data Panen",
+    "Asisten Surveyor Lahan",
+    "Petugas Data Produksi",
+    "Enumerator Riset Kebun",
+    // Bengkel
+    "Penginput Data Bengkel",
+    // Pekerja Kasar/Umum
+    "Pengumpul Data Lapangan",
+    "Pengawas Proyek Survey"
+  ],
+  "SD": [
+    "Admin Operasional",
+    "Koordinator Proyek",
+    "Wakil Kepala Sekolah",
+    "Team Support Lead",
+    // Non-staff
+    "Operator Mesin",
+    "Mandor Shift",
+    "Penyelia Gudang",
+    "Petugas Logistik",
+    "Pengatur Jadwal Lapangan",
+    "Penyusun Barang",
+    // Perkebunan
+    "Operator Traktor/Alat Berat",
+    "Mandor Transportasi TBS/Gula",
+    "Petugas Pengiriman Hasil Kebun",
+    "Penyusun Rotasi Kerja Lapangan",
+    // Bengkel
+    "Operator Mesin Bubut",
+    "Teknisi Las",
+    "Operator Alat Berat Bengkel",
+    // Pekerja Kasar/Umum
+    "Operator Forklift",
+    "Pengangkat Barang",
+    "Tukang Angkut"
+  ],
+  "SI": [
+    "Relationship Manager",
+    "Customer Success Specialist",
+    "Guru SD",
+    "Community Facilitator",
+    // Non-staff
+    "Fasilitator Komunitas",
+    "Pembina Pramuka",
+    "Guru Bimbel",
+    "Pendamping Kegiatan Sosial",
+    "Penggerak PKK",
+    "Relawan Pendidikan",
+    // Perkebunan
+    "Pembina Kelompok Tani",
+    "Fasilitator Koperasi Kebun",
+    "Pendamping Pekerja Lapangan",
+    // Bengkel
+    "Penerima Tamu Bengkel",
+    // Pekerja Kasar/Umum
+    "Penerima Barang Gudang",
+    "Pengatur Antrian Lapangan"
+  ],
+  "SS": [
+    "Customer Service Senior",
+    "Pembina Organisasi",
+    "Supervisor Layanan",
+    "Guru Bimbingan Konseling",
+    // Non-staff
+    "Petugas Layanan Umum",
+    "Pendamping Anak",
+    "Relawan Pelayanan Publik",
+    "Pemandu Kegiatan Sosial",
+    "Pendamping Lansia",
+    "Pengasuh PAUD",
+    // Perkebunan
+    "Pendamping Buruh Panen",
+    "Petugas Sosial Perkebunan",
+    "Pengelola Mess Karyawan",
+    // Bengkel
+    "Asisten Mekanik",
+    // Pekerja Kasar/Umum
+    "Penjaga Gudang",
+    "Pembersih Area Kerja"
+  ],
+  "SC": [
+    "Analis Data",
+    "Akuntan",
+    "Quality Assurance",
+    "Peneliti",
+    // Non-staff
+    "Teknisi Laboratorium",
+    "Operator Produksi",
+    "Pengolah Data Lapangan",
+    "Pengecek Barang",
+    "Petugas Inventaris",
+    "Surveyor",
+    // Perkebunan
+    "Petugas Uji Mutu TBS/Gula",
+    "Laboran Pabrik",
+    "Penguji Sampel Tanah",
+    "Petugas Inventaris Kebun",
+    "Surveyor Lahan",
+    // Bengkel
+    "Pengecek Sparepart",
+    "Teknisi Uji Kualitas",
+    // Pekerja Kasar/Umum
+    "Pemeriksa Barang Gudang",
+    "Petugas Sortir"
+  ],
+  "CD": [
+    "Engineer R&D",
+    "Business Analyst",
+    "IT Project Lead",
+    "Koordinator Kurikulum",
+    // Non-staff
+    "Teknisi Lapangan",
+    "Instruktur Teknologi",
+    "Penyelia Mesin",
+    "Teknisi Listrik",
+    "Montir Senior",
+    "Kepala Teknisi Lapangan",
+    // Perkebunan
+    "Teknisi Alat Berat Kebun",
+    "Asisten Teknik Pabrik",
+    "Montir Traktor",
+    "Teknisi Mesin Panen",
+    "Teknisi Irigasi Kebun",
+    // Bengkel
+    "Mekanik Alat Berat",
+    "Teknisi Hydraulic",
+    // Pekerja Kasar/Umum
+    "Tukang Las",
+    "Tukang Bubut"
+  ],
+  "CI": [
+    "Content Planner",
+    "Market Researcher",
+    "Konsultan Pendidikan",
+    "Trainer Bisnis",
+    // Non-staff
+    "Pengelola Konten Digital",
+    "Penulis Konten Freelance",
+    "Instruktur Kursus Online",
+    "Pembicara Seminar",
+    "Penyusun Materi Pelatihan",
+    "Praktisi Pelatihan Komunitas",
+    // Perkebunan
+    "Fasilitator Pelatihan Petani",
+    "Pembina Kelompok Belajar Tani",
+    "Penyuluh Kesejahteraan Karyawan Kebun",
+    // Bengkel
+    "Instruktur Magang Bengkel",
+    // Pekerja Kasar/Umum
+    "Pengarsip Lapangan",
+    "Petugas Kebersihan Area Kerja"
+  ],
+  "CS": [
+    "Staff Laboratorium",
+    "Data Entry Supervisor",
+    "QA Tester",
+    "Admin Proses",
+    // Non-staff
+    "Operator Mesin Produksi",
+    "Teknisi Junior",
+    "Petugas QC Lapangan",
+    "Pengolah Data Mandiri",
+    "Pengarsip Lapangan",
+    "Petugas Administrasi Lapangan",
+    // Perkebunan
+    "Petugas QC Panen",
+    "Asisten Laboratorium Kebun",
+    "Petugas Sortasi TBS/Gula",
+    "Penginput Data Panen",
+    // Bengkel
+    "Pembantu Mekanik",
+    "Petugas Gudang Sparepart",
+    // Pekerja Kasar/Umum
+    "Pengepak Barang",
+    "Tukang Bersih Mesin"
+  ],
+  "CC": [
+    "Quality Control Manager",
+    "Compliance Officer",
+    "Auditor",
+    "Analis Sistem",
+    // Non-staff
+    "Petugas Pemeriksa Barang",
+    "Inspektur Lapangan",
+    "Petugas Kalibrasi",
+    "Pengecek Mutu",
+    "Petugas Validasi",
+    "Pemeriksa Dokumen Teknis",
+    // Perkebunan
+    "Petugas Inspeksi Kebun",
+    "Asisten Auditor Internal Kebun",
+    "Pengawas Mutu Lapangan",
+    "Petugas Administrasi Panen",
+    "Penguji Sampel Pabrik",
+    // Bengkel
+    "Petugas Uji Standar Bengkel",
+    "Inspektur Peralatan",
+    // Pekerja Kasar/Umum
+    "Tukang Cuci Mobil",
+    "Petugas Kebersihan Umum"
+  ]
+};
+
   // Urutan dominan, bukan sort!
       const k = most.dominan.slice().sort().join('');
       return rolesMap[k] || ["Beragam, sesuaikan dengan minat dan pengalaman"];
@@ -8214,12 +8795,14 @@ try {
     let simbol = "-";
     let detail = "";
     if (identity.position) {
-      const persyaratan = {
-        "Administrator": [["SC", "DC"], ["CS", "CD"]],
-        "Guru": [["IS", "IC", "SI", "SC"], ["ID", "SD"]],
-        "Technical Staff": [["DC", "SC"], ["CD", "CS"]],
-        "Manajer": [["DI", "ID", "DC", "CD"], ["DS", "IS"]]
-      };
+     const persyaratan = {
+  "Administrator": [["SC", "DC"], ["CS", "CD"]],
+  "Guru": [["IS", "IC", "SI", "SC"], ["ID", "SD"]],
+  "Technical Staff": [["DC", "SC"], ["CD", "CS"]],
+  "Manajer": [["DI", "ID", "DC", "CD"], ["DS", "IS"]],
+  "Housekeeping": [["SC", "CS"], ["DC", "IS"]]
+  // Atur kombinasi sesuai kebutuhan assessment-mu!
+};
       const k = most.dominan.slice().sort().join('');
       if (persyaratan[identity.position]?.[0]?.includes(k)) {
         simbol = "CC";
@@ -8262,21 +8845,21 @@ if (identity.position) {
     const mostDetails = [
       `  - Tipe Dominan: ${most.dominan.join(' dan ')} (${most.ranking})`,
       `  - Deskripsi: ${stripHTML(most.deskripsi)}`,
-      `  - Implikasi: ${getImplication(most.dominan[0], 'most')}`
+      `  - Implikasi: ${getImplication(most.dominan.join(""), 'most', posisi)}`
     ].join('\n');
 
     const introLeast = `• Grafik Least (K): Menggambarkan respons ${nickname} terhadap tekanan dan tantangan.`;
     const leastDetails = [
       `  - Tipe Dominan: ${least.dominan.join(' dan ')} (${least.ranking})`,
       `  - Deskripsi: ${stripHTML(least.deskripsi)}`,
-      `  - Implikasi: ${getImplication(least.dominan[0], 'least')}`
+      `  - Implikasi: ${getImplication(least.dominan.join(""), 'least', posisi)}`
     ].join('\n');
 
     const introChange = `• Grafik Change (P-K): Merefleksikan kemampuan adaptasi ${nickname} antara situasi normal dan tekanan.`;
     const changeDetails = [
       `  - Kombinasi Dominan: ${change.dominan.join(' dan ')} (${change.ranking})`,
       `  - Deskripsi: ${stripHTML(change.deskripsi)}`,
-      `  - Implikasi: ${getImplication(change.dominan[0], 'change')}`
+      `  - Implikasi: ${getImplication(change.dominan.join(""), 'change', posisi)}`
     ].join('\n');
 
     // Gabungkan semua jadi satu string dengan newline antar bagian
@@ -8286,7 +8869,6 @@ if (identity.position) {
       introChange, changeDetails
     ].join('\n');
   })();
-
 
   const cocokStr = (
     simbol === "CC" ? "SANGAT SESUAI" :
@@ -8375,51 +8957,272 @@ if (ySection > 265) {
 }
 
 
-function getImplication(dominantType, graphType) {
+function getImplication(dominantType, graphType, position, nickname = "Peserta") {
+  const pos = position;
+  const key = (dominantType && dominantType.length > 0) ? dominantType[0] : '';
   const implications = {
     D: {
-      most: "Cenderung mengambil kepemimpinan dan membuat keputusan cepat",
-      least: "Mungkin menunjukkan sikap konfrontatif saat under pressure",
-      change: "Potensi peningkatan kontrol emosi dalam situasi stres"
+      Administrator: {
+        most: `
+Sebagai pribadi bertipe Dominan, ${nickname} menunjukkan peran yang sangat kuat dalam mengatur dan memimpin tim administrasi. ${nickname} sigap mengambil inisiatif, berani mengusulkan perbaikan sistem kerja, dan tidak segan menegakkan aturan demi menjaga ketertiban administrasi. Dorongan untuk terus bergerak maju, serta kemauan mendorong anggota tim ke arah produktivitas, membuat ${nickname} menjadi motor penggerak tercapainya standar administrasi yang tinggi dan efisien. Karakter ini sangat penting terutama ketika institusi membutuhkan ketegasan, percepatan, dan hasil nyata di bidang tata kelola administrasi.
+        `.trim(),
+        least: `
+Saat menghadapi tekanan besar atau perubahan mendadak, karakter Dominan dalam diri ${nickname} dapat berubah menjadi kekakuan berlebihan dalam menjalankan aturan, bahkan menuntut standar yang sangat tinggi dari rekan kerja. Sikap ini kadang membuat suasana kerja tegang dan komunikasi menjadi kurang lancar. Maka penting bagi ${nickname} untuk selalu membuka komunikasi dua arah, meningkatkan empati, dan memperkuat kerja sama tim agar tekanan tidak berujung pada demotivasi anggota.
+        `.trim(),
+        change: `
+Dalam menghadapi tekanan deadline administrasi atau perubahan sistem, ${nickname} tetap mampu menjaga kendali dan memberikan arahan yang jelas. Namun, tantangannya adalah membuka diri pada masukan rekan sejawat dan meningkatkan fleksibilitas, sehingga sistem kerja tetap adaptif dan efisien walaupun target berubah-ubah.
+        `.trim()
+      },
+      Guru: {
+        most: `
+Sebagai sosok Dominan, ${nickname} tampil sebagai pemimpin kelas yang tegas dan mampu mengambil keputusan secara cepat. Karakter ini sangat mendukung pengelolaan kelas aktif, terutama ketika dibutuhkan tindakan tegas menjaga disiplin siswa. ${nickname} cenderung mampu membentuk suasana belajar yang terarah, memberikan arahan yang jelas, dan menjadi teladan keberanian serta kemandirian di lingkungan pendidikan. Kemampuan ini sangat penting untuk memastikan proses pembelajaran berjalan lancar dan target akademik tercapai.
+        `.trim(),
+        least: `
+Saat tekanan atau konflik muncul di kelas, sisi Dominan pada ${nickname} bisa berubah menjadi kecenderungan otoriter, kurang sabar, bahkan terlalu menuntut siswa. Sikap seperti ini bisa mengurangi rasa nyaman siswa. Oleh sebab itu, ${nickname} perlu menyeimbangkan antara ketegasan dan empati, sehingga siswa tetap merasa dihargai serta dibimbing dengan hati.
+        `.trim(),
+        change: `
+Menghadapi perubahan kurikulum, aturan sekolah, atau tekanan di kelas, ${nickname} tetap dapat menjaga peran pemimpin dan memastikan kelas berjalan sesuai rencana. Namun, fleksibilitas dan kreativitas dalam pendekatan belajar sangat penting agar kelas tidak hanya disiplin tapi juga mampu menyesuaikan diri dengan kebutuhan siswa yang beragam.
+        `.trim()
+      },
+      "Technical Staff": {
+        most: `
+Dalam peran sebagai tenaga teknis, ${nickname} yang bertipe Dominan sangat sigap mengatasi masalah, berani mengambil keputusan perbaikan, dan mampu memimpin pelaksanaan solusi di lapangan. Dorongan untuk bergerak cepat, mencari solusi tuntas, serta menjaga standar mutu tinggi menjadi ciri utama kinerja ${nickname}. Karakter ini sangat dibutuhkan terutama pada situasi teknis yang memerlukan reaksi cepat dan ketegasan.
+        `.trim(),
+        least: `
+Pada situasi tekanan atau konflik di tim teknis, kecenderungan Dominan dalam diri ${nickname} dapat membuatnya bertindak tergesa-gesa atau menuntut hasil sempurna dari tim. Akibatnya, komunikasi teknis bisa menjadi terlalu singkat, bahkan kurang sabar terhadap proses. Untuk itu, ${nickname} perlu melatih kemampuan komunikasi, mendengarkan pendapat anggota tim, dan menjaga suasana kerja tetap kondusif walaupun dalam tekanan.
+        `.trim(),
+        change: `
+Ketika terjadi perubahan mendadak atau tekanan pekerjaan meningkat, ${nickname} tetap mampu bertahan dan bergerak cepat mengambil keputusan. Namun, di sisi lain, penting bagi ${nickname} untuk tetap mengutamakan prosedur keselamatan kerja, mendokumentasikan langkah-langkah teknis dengan teliti, serta terbuka terhadap masukan dari rekan teknis demi kelancaran operasional jangka panjang.
+        `.trim()
+      },
+      Housekeeping: {
+        most: `
+Sebagai pribadi Dominan, ${nickname} sangat cepat dan tegas dalam mengambil keputusan untuk memastikan area kerja selalu bersih, rapi, serta memenuhi standar tinggi yang ditetapkan perusahaan. Karakter kepemimpinan ${nickname} sangat menonjol dalam mengatur ritme kerja tim, memotivasi anggota agar selalu bekerja optimal, serta tidak ragu menegur jika ditemukan pelanggaran aturan kebersihan. Komitmen terhadap hasil nyata serta dorongan untuk terus memperbaiki proses kerja menjadi fondasi utama yang membuat performa tim Housekeeping tetap prima dan disiplin.
+        `.trim(),
+        least: `
+Ketika menghadapi tekanan tinggi, karakter Dominan dalam diri ${nickname} bisa muncul sebagai kecenderungan terlalu keras menegakkan aturan kebersihan atau menunjukkan ketidaksabaran pada anggota tim yang kurang disiplin. Sikap ini berisiko menciptakan jarak emosional dengan rekan kerja, menurunkan motivasi tim, dan membuat suasana kerja menjadi kurang kondusif. Penting bagi ${nickname} untuk meningkatkan sensitivitas komunikasi, memberikan umpan balik yang membangun, serta mengasah kemampuan mendengarkan agar suasana tim tetap harmonis di bawah tekanan.
+        `.trim(),
+        change: `
+Pada saat beban kerja meningkat atau terjadi perubahan metode kerja, ${nickname} tetap mampu menyesuaikan strategi dengan cepat dan mengambil alih kendali situasi. Tantangan utamanya adalah membuka diri terhadap masukan anggota tim agar perubahan yang dilakukan lebih efektif dan diterima bersama. Kemampuan mengelola tekanan, mendelegasikan tugas secara proporsional, dan menumbuhkan semangat kolaborasi akan memperkuat peran ${nickname} sebagai pemimpin Housekeeping yang adaptif dan inspiratif.
+        `.trim()
+      }
     },
     I: {
-      most: "Membangun hubungan interpersonal dengan mudah",
-      least: "Mengalami kesulitan dalam situasi yang membutuhkan fokus tinggi",
-      change: "Kemampuan beradaptasi sosial di berbagai situasi"
+      Administrator: {
+        most: `
+Sebagai tipe Influencer, ${nickname} mahir membangun komunikasi efektif dengan rekan kerja maupun pihak luar, memudahkan koordinasi dan memperlancar seluruh proses administrasi. ${nickname} sering menjadi sumber inspirasi dan motivasi di lingkungan kerja, menciptakan suasana kerja yang hangat dan suportif, serta mudah menjalin hubungan baik antarbagian. Karakter ini membuat proses pelayanan dan administrasi berjalan lancar, penuh kolaborasi, serta minim konflik.
+        `.trim(),
+        least: `
+Ketika beban kerja tinggi, ${nickname} yang berorientasi pada hubungan sosial cenderung terdistraksi oleh percakapan, interaksi informal, atau kegiatan non-prioritas. Hal ini bisa mengurangi fokus pada target kerja utama. Untuk mengimbanginya, ${nickname} perlu memperkuat disiplin pribadi, menjaga batas profesionalitas, serta memprioritaskan tugas administratif yang esensial tanpa mengabaikan keharmonisan hubungan kerja.
+        `.trim(),
+        change: `
+Di bawah tekanan atau saat menghadapi target yang ketat, ${nickname} tetap mampu membangun sinergi tim, menjaga suasana kerja tetap positif, dan memberikan semangat kepada rekan kerja. Namun, penting untuk tetap menjaga keseimbangan antara keakraban dengan tanggung jawab profesional, serta tetap fokus pada hasil kerja yang terukur.
+        `.trim()
+      },
+      Guru: {
+        most: `
+Sebagai Guru yang bertipe Influencer, ${nickname} sangat pandai membangun hubungan hangat dengan siswa dan menciptakan suasana pembelajaran yang menyenangkan serta komunikatif. Karakter ini menjadikan ${nickname} sumber motivasi dan inspirasi bagi murid-muridnya. Kelas yang dipimpin oleh ${nickname} biasanya terasa hidup, penuh antusiasme, serta sangat terbuka untuk diskusi dan ekspresi pendapat. Kemampuan ini sangat mendukung proses pembelajaran yang efektif dan membangun kedekatan emosional antara guru dan siswa.
+        `.trim(),
+        least: `
+Saat menghadapi tekanan di kelas, ${nickname} mungkin cenderung terlalu larut dalam interaksi sosial hingga tujuan pembelajaran menjadi kurang terfokus. Ada risiko kehilangan arah pembelajaran jika terlalu mengutamakan suasana akrab. Oleh sebab itu, ${nickname} perlu memperkuat pengelolaan waktu, menegaskan batas interaksi, dan memastikan sasaran pembelajaran tetap tercapai dengan baik tanpa mengurangi nuansa kekeluargaan.
+        `.trim(),
+        change: `
+Dalam menghadapi tantangan atau perubahan dalam dunia pendidikan, ${nickname} tetap dapat menjaga suasana kelas tetap positif dan semangat belajar siswa tetap tinggi. Namun, perlu dikontrol agar kedekatan emosional tidak mengganggu objektivitas, serta tetap memprioritaskan pencapaian akademik.
+        `.trim()
+      },
+      "Technical Staff": {
+        most: `
+Sebagai tenaga teknis dengan karakter Influencer, ${nickname} unggul dalam membangun komunikasi dan koordinasi yang baik antaranggota tim. Hal ini membuat proses kerja lebih efisien, minim miskomunikasi, dan penuh kolaborasi. ${nickname} sering menjadi penghubung yang memperlancar jalannya pekerjaan teknis, mampu meredam konflik, serta menjaga motivasi kerja tim tetap tinggi dalam kondisi apapun.
+        `.trim(),
+        least: `
+Saat menghadapi kendala teknis, kecenderungan terlalu santai atau kurang tegas dapat membuat solusi berjalan lebih lambat. Dalam situasi seperti ini, ${nickname} perlu belajar meningkatkan ketegasan dalam memberikan instruksi, memastikan setiap anggota tim memahami peran dan tanggung jawabnya, serta menjaga agar proses kerja tetap berjalan sesuai target teknis yang ditetapkan.
+        `.trim(),
+        change: `
+Di bawah tekanan kerja teknis, ${nickname} mampu menjaga suasana tim tetap kooperatif dan komunikatif. Namun, penting untuk memastikan bahwa komunikasi yang baik juga diiringi dengan aksi nyata dalam menyelesaikan permasalahan teknis, bukan hanya mengandalkan diskusi atau suasana positif semata.
+        `.trim()
+      },
+      Housekeeping: {
+        most: `
+Sebagai pribadi bertipe Influencer di lingkungan Housekeeping, ${nickname} menjadi sumber semangat dan motivasi bagi seluruh tim. Kemampuan ${nickname} membangun kerja sama, menciptakan suasana harmonis, dan menumbuhkan rasa kebersamaan sangat membantu meningkatkan produktivitas serta kenyamanan kerja. ${nickname} selalu membawa aura positif yang membuat suasana kerja terasa ringan, penuh dukungan, serta mudah mengajak anggota tim untuk saling membantu. Pendekatan komunikatif dan empati yang tinggi dari ${nickname} sangat diperlukan dalam menjaga kekompakan dan loyalitas tim Housekeeping.
+        `.trim(),
+        least: `
+Dalam tekanan atau ketika target belum tercapai, ${nickname} kadang lebih memprioritaskan suasana hati tim dibandingkan pencapaian standar kerja yang ditetapkan. Ada risiko menghindari konfrontasi langsung, sehingga standar kerja menjadi kurang optimal. Untuk itu, ${nickname} perlu belajar menyeimbangkan keramahan dan ketegasan, serta memastikan pencapaian target kebersihan tetap menjadi prioritas utama.
+        `.trim(),
+        change: `
+Dalam masa sibuk atau deadline mendesak, ${nickname} tetap mampu menjaga motivasi dan semangat tim. Namun, penting bagi ${nickname} untuk tetap disiplin terhadap prosedur kerja, tidak terlalu larut dalam suasana, dan memastikan hasil kerja tetap optimal di bawah tekanan.
+        `.trim()
+      }
     },
     S: {
-      most: "Memberikan stabilitas dan konsistensi dalam tim",
-      least: "Kesulitan beradaptasi dengan perubahan mendadak",
-      change: "Peningkatan fleksibilitas menghadapi perubahan"
+      Administrator: {
+        most: `
+Sebagai tipe Steadiness, ${nickname} sangat teratur, teliti, dan andal dalam memastikan proses administrasi berjalan lancar dan minim kesalahan. Konsistensi kerja yang tinggi membuat ${nickname} menjadi andalan dalam menjaga kelancaran dokumen, arsip, dan segala urusan administratif. ${nickname} biasanya sabar menghadapi proses, tetap tenang dalam menyelesaikan tugas, serta cenderung bertahan dengan sistem kerja yang sudah terbukti efektif.
+        `.trim(),
+        least: `
+Ketika menghadapi perubahan prosedur atau sistem baru, ${nickname} cenderung resisten atau lambat beradaptasi. Sikap ini bisa menjadi penghambat pembaruan dan inovasi dalam administrasi. Untuk itu, penting bagi ${nickname} untuk membuka diri terhadap pembaruan, aktif mencari cara meningkatkan efisiensi, dan tetap responsif terhadap kebutuhan organisasi yang berkembang.
+        `.trim(),
+        change: `
+Saat beban kerja meningkat atau terjadi perubahan mendadak, ${nickname} tetap mampu menjaga konsistensi dan kualitas pekerjaan. Namun, untuk bisa bertahan dalam dinamika administrasi modern, ${nickname} perlu terus mengembangkan kemampuan proaktif dalam menerima perubahan, baik dalam prosedur maupun teknologi.
+        `.trim()
+      },
+      Guru: {
+        most: `
+Sebagai guru tipe Steadiness, ${nickname} sangat konsisten, sabar, dan mampu menciptakan lingkungan belajar yang stabil serta aman bagi siswa. Siswa merasa nyaman dan percaya untuk berkembang dalam kelas yang dipimpin oleh ${nickname}, karena suasana yang disiplin dan penuh perhatian. Pendekatan ini sangat mendukung keberhasilan proses belajar berkelanjutan.
+        `.trim(),
+        least: `
+Saat menghadapi perubahan kurikulum atau dinamika kelas, ${nickname} cenderung kurang fleksibel. Hal ini bisa membuat kelas sulit menyesuaikan diri dengan tuntutan zaman atau kebutuhan siswa. ${nickname} perlu meningkatkan kemampuan adaptasi, mencari inovasi dalam metode belajar, dan lebih terbuka terhadap umpan balik dari siswa maupun rekan guru.
+        `.trim(),
+        change: `
+Ketika tekanan pekerjaan meningkat, ${nickname} tetap bisa menjaga stabilitas dan ketenangan kelas. Namun, agar kualitas pembelajaran tetap terjaga, ${nickname} perlu terus membuka diri terhadap inovasi dan berbagai metode pembelajaran baru.
+        `.trim()
+      },
+      "Technical Staff": {
+        most: `
+Sebagai tenaga teknis dengan tipe Steadiness, ${nickname} memastikan setiap pekerjaan dilakukan dengan teliti, hati-hati, dan minim risiko kesalahan. Konsistensi dan keandalan menjadi nilai lebih yang membuat ${nickname} sangat dipercaya oleh rekan kerja maupun atasan. Semua SOP teknis diikuti dengan disiplin, sehingga hasil kerja tetap terjamin kualitasnya.
+        `.trim(),
+        least: `
+Ketika dihadapkan pada perubahan alat, prosedur, atau sistem baru, ${nickname} cenderung butuh waktu lebih lama untuk beradaptasi. Akibatnya, proses upgrade teknologi bisa tertunda. Untuk menghadapi tantangan era modern, ${nickname} perlu terus mengasah kemampuan belajar hal baru dan lebih terbuka terhadap perubahan.
+        `.trim(),
+        change: `
+Dalam tekanan kerja teknis atau perubahan mendadak, ${nickname} mampu menjaga standar kualitas, namun harus lebih responsif dan fleksibel dalam menyikapi situasi lapangan, sehingga hasil kerja tetap efisien dan sesuai kebutuhan organisasi.
+        `.trim()
+      },
+      Housekeeping: {
+        most: `
+Sebagai pribadi tipe Steadiness di Housekeeping, ${nickname} sangat menjaga standar kebersihan secara konsisten dan dapat diandalkan dalam rutinitas harian. ${nickname} memastikan setiap area tetap rapi, pekerjaan dilakukan teliti, dan tidak mudah lalai terhadap detail kebersihan. Sikap sabar dan kestabilan kerja menjadikan ${nickname} tulang punggung dalam menjaga kualitas layanan Housekeeping.
+        `.trim(),
+        least: `
+Saat terjadi perubahan pola kerja, shifting jadwal, atau penambahan tugas baru, ${nickname} cenderung sulit beradaptasi. Hal ini kadang membuat tim Housekeeping kurang responsif terhadap kebutuhan organisasi yang terus berkembang. Oleh sebab itu, ${nickname} perlu lebih fleksibel, aktif bertanya, dan belajar metode kerja baru demi mendukung performa tim.
+        `.trim(),
+        change: `
+Ketika tekanan meningkat, ${nickname} tetap stabil, teliti, dan tidak mudah panik. Namun, peningkatan adaptasi dan keterbukaan terhadap perubahan sangat diperlukan agar kinerja Housekeeping tetap optimal di segala kondisi.
+        `.trim()
+      }
     },
     C: {
-      most: "Analitis dan teliti dalam menyelesaikan masalah",
-      least: "Cenderung perfectionist yang menghambat progres",
-      change: "Kemampuan menyeimbangkan akurasi dan efisiensi"
+      Administrator: {
+        most: `
+Sebagai tipe Compliance, ${nickname} sangat teliti dan sistematis dalam pengelolaan data maupun dokumen administrasi. Setiap detail dipastikan benar sebelum proses dilanjutkan. Standar kualitas tinggi dan akurasi menjadi ciri utama kerja ${nickname}, sehingga setiap output administrasi sangat bisa diandalkan, minim kesalahan, dan rapi.
+        `.trim(),
+        least: `
+Kecenderungan untuk terlalu banyak pengecekan atau menunda pengambilan keputusan karena ingin semuanya sempurna, kadang membuat proses kerja menjadi lambat. Untuk meningkatkan efisiensi, ${nickname} perlu menyeimbangkan antara kebutuhan akurasi dan kecepatan, serta belajar mendelegasikan tugas jika perlu.
+        `.trim(),
+        change: `
+Di bawah tekanan, ${nickname} tetap menjaga kualitas hasil kerja, namun kadang menjadi terlalu kaku terhadap standar atau enggan mengambil risiko. Perlu lebih fleksibel dan terbuka pada masukan untuk menciptakan sistem administrasi yang adaptif.
+        `.trim()
+      },
+      Guru: {
+        most: `
+Sebagai guru tipe Compliance, ${nickname} sangat teliti, terorganisir, dan mampu menyusun rencana pembelajaran serta evaluasi dengan sistematis. Semua administrasi kelas tersusun rapi dan setiap progres siswa terpantau jelas. ${nickname} sangat memperhatikan detail, sehingga kualitas pembelajaran dan penilaian selalu terjaga tinggi.
+        `.trim(),
+        least: `
+Terkadang, ${nickname} bisa terlalu kaku atau perfeksionis, membuat suasana kelas menjadi kurang dinamis dan siswa kurang bebas mengekspresikan kreativitas. Untuk menciptakan lingkungan belajar yang lebih hidup, ${nickname} perlu melonggarkan standar sesekali dan memberi ruang untuk eksperimen.
+        `.trim(),
+        change: `
+Ketika beban kerja meningkat, ${nickname} tetap menjaga kualitas pembelajaran, namun penting untuk lebih fleksibel dan menyesuaikan pendekatan sesuai kebutuhan masing-masing siswa agar perkembangan akademik lebih merata.
+        `.trim()
+      },
+      "Technical Staff": {
+        most: `
+Sebagai tenaga teknis Compliance, ${nickname} sangat analitis dan detail dalam menyelesaikan setiap masalah teknis. Tidak ada hal kecil yang terlewat dari pengamatan dan penanganan ${nickname}, sehingga hasil kerja teknis selalu aman, rapi, dan berkualitas tinggi.
+        `.trim(),
+        least: `
+Kecenderungan perfeksionis terkadang membuat troubleshooting berjalan lebih lama dan solusi teknis menjadi kurang praktis. Untuk mengimbangi, ${nickname} perlu belajar mengatur prioritas, membedakan antara detail penting dan minor, serta meningkatkan efisiensi dalam penyelesaian masalah.
+        `.trim(),
+        change: `
+Dalam kondisi tertekan atau terjadi kendala mendadak, ${nickname} tetap menjaga kualitas dan keamanan kerja. Namun, peningkatan efisiensi serta kemampuan mengatur waktu sangat penting agar proses kerja teknis tetap berjalan optimal di segala situasi.
+        `.trim()
+      },
+      Housekeeping: {
+        most: `
+Sebagai tipe Compliance di Housekeeping, ${nickname} sangat teliti, rapi, dan disiplin dalam memastikan seluruh area bersih sesuai standar tertinggi. Setiap prosedur dijalankan dengan hati-hati, tidak mudah melewatkan detail sekecil apapun, dan selalu melakukan pengecekan ulang sebelum meninggalkan area kerja. Sikap profesional dan penuh tanggung jawab menjadikan ${nickname} pilar utama dalam menjaga reputasi layanan Housekeeping.
+        `.trim(),
+        least: `
+Kecenderungan terlalu fokus pada detail kecil kadang membuat efisiensi kerja tim menjadi menurun, karena terlalu banyak waktu terbuang pada pengecekan minor. Untuk itu, ${nickname} perlu belajar memperhatikan keseimbangan antara kualitas dan efisiensi, serta mempercayakan tugas-tugas ringan pada anggota tim lain agar target tercapai lebih efektif.
+        `.trim(),
+        change: `
+Ketika tekanan kerja meningkat atau harus mengerjakan banyak area sekaligus, ${nickname} tetap menjaga standar kebersihan dan teliti pada detail. Namun, harus diingat agar tidak terlalu terpaku pada standar pribadi sehingga menghambat kecepatan kerja tim secara keseluruhan.
+        `.trim()
+      }
     }
   };
-  return implications[dominantType]?.[graphType] || "Tidak ada data implikasi spesifik";
+
+  // Safe get & template support
+  let txt = implications[key]?.[pos]?.[graphType];
+  if (txt) return txt.replace(/\$\{nickname\}/g, nickname);
+  return "Deskripsi implikasi khusus untuk posisi ini belum tersedia.";
 }
+
+
+// ====== 2. CONTOH PEMANGGILAN (PASTIKAN HANYA 1 HURUF, BUKAN GABUNGAN) ======
+const dominantType = most.dominan[0]; // <-- ambil HANYA huruf pertama
+const implication = getImplication(dominantType, 'most', 'Housekeeping');
+// dst.
 
 function getCompatibilityReason(symbol, dominantType, position) {
+  const pos = position; // TANPA .toLowerCase()!
   const reasons = {
-    CC: `Dominansi ${dominantType} sangat selaras dengan tuntutan utama posisi ${position}`,
-    C: `Karakter ${dominantType} mendukung sebagian besar kebutuhan posisi ${position}`,
-    "!": `Ada beberapa aspek dalam ${position} yang membutuhkan pengembangan lebih lanjut`,
-    XX: `Ditemukan gap signifikan antara profil kandidat dan kebutuhan posisi`
+    Administrator: {
+      CC: `Dominansi ${dominantType} sangat sesuai dengan tuntutan posisi Administrator, terutama dalam hal ketelitian, inisiatif, dan kemampuan kerja sama dalam pengelolaan dokumen serta sistem kantor.`,
+      C: `Karakter ${dominantType} cukup mendukung kebutuhan posisi Administrator, meski masih perlu peningkatan di beberapa aspek seperti efisiensi atau kolaborasi tim.`,
+      "!": `Beberapa aspek penting pada posisi Administrator belum sepenuhnya didukung oleh karakter ${dominantType}, sehingga perlu pengembangan lebih lanjut.`,
+      XX: `Ada gap besar antara profil kepribadian dan tuntutan posisi Administrator. Dibutuhkan pertimbangan mendalam sebelum ditempatkan.`
+    },
+    Guru: {
+      CC: `Dominansi ${dominantType} sangat selaras dengan kebutuhan utama seorang Guru, terutama dalam mengelola kelas, membimbing siswa, dan menciptakan lingkungan belajar yang positif.`,
+      C: `Karakter ${dominantType} sudah mendukung sebagian besar tuntutan profesi Guru, namun masih ada beberapa area yang perlu pengembangan agar lebih optimal dalam mengajar dan membimbing siswa.`,
+      "!": `Beberapa aspek utama profesi Guru belum sepenuhnya tercakup oleh karakter ${dominantType}. Diperlukan pengembangan lebih lanjut untuk menyesuaikan diri dengan kebutuhan kelas dan dinamika pendidikan.`,
+      XX: `Terdapat gap signifikan antara profil kepribadian ini dan kebutuhan profesi Guru. Dibutuhkan pertimbangan dan pengembangan mendalam sebelum menempati posisi ini.`
+    },
+    "Technical Staff": {
+      CC: `Dominansi ${dominantType} sangat cocok untuk posisi Technical Staff, khususnya dalam penyelesaian masalah teknis secara efektif, disiplin, dan kerja tim.`,
+      C: `Karakter ${dominantType} sudah mendukung sebagian besar kebutuhan Technical Staff, namun perlu ditingkatkan pada aspek kecepatan, komunikasi, atau adaptasi teknologi.`,
+      "!": `Ada beberapa aspek peran Technical Staff yang belum sepenuhnya sesuai karakter ${dominantType}. Perlu pelatihan atau pendampingan.`,
+      XX: `Gap besar antara kepribadian dan kebutuhan Technical Staff. Perlu pertimbangan lebih sebelum penempatan.`
+    },
+    Housekeeping: {
+      CC: `Dominansi ${dominantType} sangat mendukung peran Housekeeping, baik dalam menjaga standar, memimpin tim, maupun memastikan area kerja tetap bersih dan aman.`,
+      C: `Karakter ${dominantType} sudah memenuhi sebagian besar kebutuhan di Housekeeping, namun ada beberapa area kerja yang perlu ditingkatkan untuk hasil maksimal.`,
+      "!": `Terdapat beberapa kesenjangan antara karakter ${dominantType} dan kebutuhan peran Housekeeping. Perlu pengembangan untuk meningkatkan kinerja dan kolaborasi tim.`,
+      XX: `Gap signifikan antara profil dan kebutuhan posisi Housekeeping. Disarankan evaluasi lanjutan sebelum penempatan.`
+    }
   };
-  return reasons[symbol] || "Tidak tersedia informasi detail kecocokan";
+
+  return reasons[pos]?.[symbol] || `Deskripsi kecocokan khusus untuk posisi ${position} belum tersedia.`;
 }
 
-function getStrengthArea(dominantType) {
+function getStrengthArea(dominantType, position) {
+  const pos = position;
   const strengths = {
-    D: "pengambilan keputusan dan kepemimpinan",
-    I: "membangun relasi dan kolaborasi",
-    S: "menciptakan lingkungan kerja stabil",
-    C: "analisis data dan penyelesaian masalah teknis"
+    D: {
+      Administrator: "mengambil inisiatif perbaikan administrasi dan memimpin pelaksanaan prosedur",
+      Guru: "mengelola kelas dengan tegas dan membuat keputusan strategis untuk kemajuan pembelajaran",
+      "Technical Staff": "mengambil keputusan cepat dalam troubleshooting dan memimpin solusi teknis",
+      Housekeeping: "memimpin dan mengatur tim kerja, memastikan standar kebersihan selalu terpenuhi"
+    },
+    I: {
+      Administrator: "memudahkan komunikasi antar divisi dan membangun suasana kerja yang kondusif",
+      Guru: "membangun semangat dan motivasi belajar, serta menjalin relasi positif dengan siswa",
+      "Technical Staff": "memudahkan koordinasi tim teknis dan menjaga kerja sama di lapangan",
+      Housekeeping: "membangun kolaborasi tim yang harmonis, menjaga semangat dan kekompakan kerja"
+    },
+    S: {
+      Administrator: "menjamin konsistensi, kerapian, dan keandalan sistem administrasi",
+      Guru: "menyediakan kestabilan dan pendampingan berkelanjutan bagi siswa di kelas",
+      "Technical Staff": "menjaga konsistensi hasil kerja dan mengutamakan prosedur keselamatan",
+      Housekeeping: "menjaga rutinitas dan kestabilan standar kebersihan setiap hari"
+    },
+    C: {
+      Administrator: "mengelola data, dokumen, dan laporan dengan teliti dan sistematis",
+      Guru: "menyusun rencana belajar dan evaluasi secara detail, menjaga kualitas pendidikan",
+      "Technical Staff": "melakukan pemeriksaan teknis secara detail, memastikan tidak ada kesalahan kecil",
+      Housekeeping: "memastikan kebersihan setiap area secara detail, tidak melewatkan hal kecil"
+    }
   };
-  return strengths[dominantType] || "kekuatan spesifik";
+  return strengths[dominantType]?.[pos] || "kekuatan spesifik sesuai posisi";
 }
+
+
 
 function getDevelopmentArea(dominantType) {
   const areas = {
@@ -8719,8 +9522,26 @@ const requirementPAPI = {
       K: 'ketegasan pengambilan keputusan',
       O: 'relasi personal'
     }
+  },
+  "Housekeeping": {
+    utama: ['C', 'D', 'W', 'N', 'G', 'E'],
+    pendukung: ['K', 'T', 'Z', 'F', 'A'],
+    highlight: {
+      C: 'keteraturan & kerapian kerja',
+      D: 'ketelitian & perhatian pada detail',
+      W: 'kepatuhan terhadap aturan & SOP',
+      N: 'tanggung jawab menyelesaikan tugas',
+      G: 'semangat kerja & inisiatif',
+      E: 'pengendalian emosi & ketenangan',
+      K: 'ketegasan menjalankan tugas',
+      T: 'kecepatan & aktivitas fisik',
+      Z: 'adaptasi pada perubahan & permintaan mendadak',
+      F: 'loyalitas terhadap organisasi',
+      A: 'inisiatif meningkatkan kualitas kerja'
+    }
   }
 };
+
 
 function analisisKecocokanPAPIDetail(scores, posisi, nama = "Kandidat") {
   const req = requirementPAPI[posisi];
