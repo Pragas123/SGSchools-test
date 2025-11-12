@@ -11,34 +11,42 @@
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
             --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .navbar-brand img {
             height: 40px;
-            margin-right: 10px;
         }
         
         .sidebar {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: white;
             min-height: calc(100vh - 56px);
-            padding: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
         
         .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--dark-color);
             padding: 12px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
         }
         
         .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: var(--secondary-color);
             color: white;
-            background-color: rgba(255, 255, 255, 0.1);
         }
         
         .sidebar .nav-link i {
@@ -48,433 +56,974 @@
         }
         
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
             border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
         }
         
         .card-header {
-            background-color: white;
-            border-bottom: 1px solid #eaeaea;
-            font-weight: 600;
-            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
             border-radius: 10px 10px 0 0 !important;
-        }
-        
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--secondary-color);
+            padding: 15px 20px;
         }
         
         .btn-primary {
             background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            border: none;
+            padding: 10px 20px;
         }
         
-        .btn-danger {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
+        .btn-primary:hover {
+            background-color: #2980b9;
         }
         
-        .stats-card {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .stats-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
-        
-        .welcome-banner {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 30px;
+        .auth-container {
+            background-color: white;
             border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+        
+        .auth-logo {
+            text-align: center;
             margin-bottom: 20px;
+        }
+        
+        .auth-logo img {
+            height: 80px;
+        }
+        
+        .page-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-icon {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-color);
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .hidden {
+            display: none;
         }
         
         .form-section {
             margin-bottom: 30px;
-        }
-        
-        .form-section h4 {
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        
-        .verification-badge {
-            background-color: #2ecc71;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: inline-block;
-            margin-left: 10px;
-        }
-        
-        .table th {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px 0;
-            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
-        <div class="container">
-            <a class="navbar-brand" href="#">
+    <!-- Halaman Verifikasi Email -->
+    <div id="emailVerificationPage" class="container mt-5">
+        <div class="auth-container">
+            <div class="auth-logo">
                 <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png" alt="Sugar Group Schools Logo">
-                Sugar Group Schools
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> John Doe
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
-                        </ul>
-                    </li>
-                </ul>
             </div>
-        </div>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar d-md-block">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <i class="fas fa-home"></i> Beranda
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-user"></i> Data Diri
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-box"></i> Material Request
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-tools"></i> Service Request
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-calendar-minus"></i> Form Cuti
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-file-signature"></i> Leave Permit
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-history"></i> Riwayat Permohonan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-chart-bar"></i> Laporan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-bell"></i> Notifikasi
-                            </a>
-                        </li>
-                    </ul>
+            <h2 class="text-center mb-4">Verifikasi Email</h2>
+            <p class="text-center mb-4">Silakan masukkan alamat email Anda untuk memulai proses pendaftaran</p>
+            
+            <form id="emailVerificationForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Alamat Email</label>
+                    <input type="email" class="form-control" id="email" required>
                 </div>
+                <button type="submit" class="btn btn-primary w-100">Kirim Kode Verifikasi</button>
+            </form>
+            
+            <div id="verificationCodeSection" class="hidden mt-4">
+                <p>Kode verifikasi telah dikirim ke email Anda. Silakan masukkan kode tersebut di bawah ini:</p>
+                <form id="verificationCodeForm">
+                    <div class="mb-3">
+                        <label for="verificationCode" class="form-label">Kode Verifikasi</label>
+                        <input type="text" class="form-control" id="verificationCode" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Verifikasi</button>
+                </form>
             </div>
-
-            <!-- Main Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h2>Selamat Datang, John Doe!</h2>
-                            <p class="mb-0">Selasa, 15 Maret 2023</p>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <span class="verification-badge">
-                                <i class="fas fa-check-circle me-1"></i> Email Terverifikasi
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stats Cards -->
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <i class="fas fa-box fa-2x text-primary mb-3"></i>
-                                <h5 class="card-title">Material Request</h5>
-                                <div class="stats-number">5</div>
-                                <p class="text-muted">Permintaan Aktif</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <i class="fas fa-tools fa-2x text-primary mb-3"></i>
-                                <h5 class="card-title">Service Request</h5>
-                                <div class="stats-number">3</div>
-                                <p class="text-muted">Permintaan Aktif</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <i class="fas fa-calendar-minus fa-2x text-primary mb-3"></i>
-                                <h5 class="card-title">Cuti</h5>
-                                <div class="stats-number">12</div>
-                                <p class="text-muted">Hari Tersisa</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <i class="fas fa-file-signature fa-2x text-primary mb-3"></i>
-                                <h5 class="card-title">Leave Permit</h5>
-                                <div class="stats-number">2</div>
-                                <p class="text-muted">Izin Pending</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Data Diri -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span>Data Diri</span>
-                                <button class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-edit me-1"></i> Edit
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center mb-3">
-                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-img">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <p><strong>Nama Lengkap:</strong><br>John Doe</p>
-                                        <p><strong>Jabatan:</strong><br>Guru Matematika</p>
-                                        <p><strong>Departemen:</strong><br>Sekolah Menengah</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p><strong>Email:</strong><br>john.doe@sugargroup.edu</p>
-                                        <p><strong>No. Telepon:</strong><br>+62 812 3456 7890</p>
-                                        <p><strong>Tanggal Bergabung:</strong><br>15 Januari 2020</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                Aksi Cepat
-                            </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <button class="btn btn-outline-primary w-100 py-3">
-                                            <i class="fas fa-box fa-2x mb-2"></i><br>
-                                            Material Request
-                                        </button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-outline-primary w-100 py-3">
-                                            <i class="fas fa-tools fa-2x mb-2"></i><br>
-                                            Service Request
-                                        </button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-outline-primary w-100 py-3">
-                                            <i class="fas fa-calendar-minus fa-2x mb-2"></i><br>
-                                            Form Cuti
-                                        </button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-outline-primary w-100 py-3">
-                                            <i class="fas fa-file-signature fa-2x mb-2"></i><br>
-                                            Leave Permit
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recent Activities -->
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                Aktivitas Terbaru
-                            </div>
-                            <div class="card-body">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <i class="fas fa-box text-primary me-2"></i>
-                                            Material Request #MR-2023-045
-                                        </div>
-                                        <span class="badge bg-warning">Pending</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <i class="fas fa-tools text-primary me-2"></i>
-                                            Service Request #SR-2023-078
-                                        </div>
-                                        <span class="badge bg-success">Selesai</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <i class="fas fa-file-signature text-primary me-2"></i>
-                                            Leave Permit #LP-2023-032
-                                        </div>
-                                        <span class="badge bg-info">Disetujui</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <i class="fas fa-calendar-minus text-primary me-2"></i>
-                                            Form Cuti #FC-2023-019
-                                        </div>
-                                        <span class="badge bg-danger">Ditolak</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Material Request Form -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        Material Request
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="materialName" class="form-label">Nama Material</label>
-                                        <input type="text" class="form-control" id="materialName" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="materialQuantity" class="form-label">Jumlah</label>
-                                        <input type="number" class="form-control" id="materialQuantity" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="materialUrgency" class="form-label">Tingkat Urgensi</label>
-                                        <select class="form-select" id="materialUrgency" required>
-                                            <option value="">Pilih Urgensi</option>
-                                            <option value="low">Rendah</option>
-                                            <option value="medium">Sedang</option>
-                                            <option value="high">Tinggi</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="materialReason" class="form-label">Alasan Permintaan</label>
-                                        <textarea class="form-control" id="materialReason" rows="3" required></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Ajukan Permintaan</button>
-                        </form>
-                    </div>
-                </div>
-            </main>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Sugar Group Schools</h5>
-                    <p>Platform manajemen internal untuk staf dan guru Sugar Group Schools.</p>
-                </div>
-                <div class="col-md-3">
-                    <h5>Tautan Cepat</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light">Kebijakan Privasi</a></li>
-                        <li><a href="#" class="text-light">Syarat & Ketentuan</a></li>
-                        <li><a href="#" class="text-light">Bantuan</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Kontak</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-phone me-2"></i> (021) 1234-5678</li>
-                        <li><i class="fas fa-envelope me-2"></i> info@sugargroup.edu</li>
-                        <li><i class="fas fa-map-marker-alt me-2"></i> Jakarta, Indonesia</li>
-                    </ul>
-                </div>
+    <!-- Halaman Pembuatan Akun -->
+    <div id="accountCreationPage" class="container mt-5 hidden">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png" alt="Sugar Group Schools Logo">
             </div>
-            <hr>
-            <div class="text-center">
-                <p class="mb-0">&copy; 2023 Sugar Group Schools. All rights reserved.</p>
-            </div>
+            <h2 class="text-center mb-4">Buat Akun Anda</h2>
+            
+            <form id="accountCreationForm">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-control" id="fullName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Buat Akun</button>
+            </form>
         </div>
-    </footer>
+    </div>
 
-    <!-- Modal for Email Verification (shown before login) -->
-    <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="verificationModalLabel">Verifikasi Email</h5>
+    <!-- Halaman Login -->
+    <div id="loginPage" class="container mt-5 hidden">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png" alt="Sugar Group Schools Logo">
+            </div>
+            <h2 class="text-center mb-4">Login</h2>
+            
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="loginUsername" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" required>
                 </div>
-                <div class="modal-body text-center">
-                    <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png" alt="Sugar Group Schools Logo" class="mb-3" style="height: 60px;">
-                    <h4>Selamat Datang di Sugar Group Schools</h4>
-                    <p>Sebelum melanjutkan, silakan verifikasi alamat email Anda. Kami telah mengirimkan tautan verifikasi ke email Anda.</p>
-                    <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="Masukkan alamat email Anda" required>
+                <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            
+            <p class="text-center mt-3">Belum punya akun? <a href="#" id="showEmailVerification">Daftar di sini</a></p>
+        </div>
+    </div>
+
+    <!-- Aplikasi Utama (Setelah Login) -->
+    <div id="mainApp" class="hidden">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png" alt="Sugar Group Schools Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i> <span id="userFullName">Nama Pengguna</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> Profil</a></li>
+                                <li><a class="dropdown-item" href="#" id="settingsLink"><i class="fas fa-cog"></i> Pengaturan</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-2 col-md-3 sidebar p-0">
+                    <div class="d-flex flex-column p-3">
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active" data-page="home">
+                                    <i class="fas fa-home"></i> Beranda
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="profile">
+                                    <i class="fas fa-user"></i> Data Diri
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="materialRequest">
+                                    <i class="fas fa-box"></i> Material Request
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="serviceRequest">
+                                    <i class="fas fa-tools"></i> Service Request
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="leaveForm">
+                                    <i class="fas fa-calendar-alt"></i> Form Cuti
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="leavePermit">
+                                    <i class="fas fa-file-signature"></i> Leave Permit
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="attendance">
+                                    <i class="fas fa-clipboard-check"></i> Kehadiran
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="payroll">
+                                    <i class="fas fa-money-check"></i> Penggajian
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-page="documents">
+                                    <i class="fas fa-folder"></i> Dokumen
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <button class="btn btn-primary w-100 mb-2">Kirim Tautan Verifikasi</button>
-                    <p class="text-muted">Sudah verifikasi? <a href="#" data-bs-dismiss="modal">Masuk ke aplikasi</a></p>
+                </div>
+
+                <!-- Konten Utama -->
+                <div class="col-lg-10 col-md-9 p-4">
+                    <!-- Halaman Beranda -->
+                    <div id="homePage" class="page-content">
+                        <h2 class="page-title">Beranda</h2>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <div class="dashboard-icon">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <h5 class="card-title">Profil Saya</h5>
+                                        <p class="card-text">Lihat dan edit data diri Anda</p>
+                                        <a href="#" class="btn btn-primary" data-page="profile">Buka</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <div class="dashboard-icon">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <h5 class="card-title">Material Request</h5>
+                                        <p class="card-text">Ajukan permintaan material</p>
+                                        <a href="#" class="btn btn-primary" data-page="materialRequest">Buka</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <div class="dashboard-icon">
+                                            <i class="fas fa-tools"></i>
+                                        </div>
+                                        <h5 class="card-title">Service Request</h5>
+                                        <p class="card-text">Ajukan permintaan layanan</p>
+                                        <a href="#" class="btn btn-primary" data-page="serviceRequest">Buka</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <div class="dashboard-icon">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <h5 class="card-title">Form Cuti</h5>
+                                        <p class="card-text">Ajukan permohonan cuti</p>
+                                        <a href="#" class="btn btn-primary" data-page="leaveForm">Buka</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Pengumuman Terbaru</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-info">
+                                            <h6>Pelatihan Pengembangan Diri</h6>
+                                            <p class="mb-0">Akan diadakan pelatihan pengembangan diri untuk semua staf pada tanggal 15 November 2023. Silakan daftar melalui aplikasi ini.</p>
+                                        </div>
+                                        <div class="alert alert-warning">
+                                            <h6>Perubahan Jadwal Kerja</h6>
+                                            <p class="mb-0">Mulai bulan depan, jadwal kerja akan disesuaikan. Informasi lebih lanjut akan diumumkan kemudian.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Status Terkini</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Material Request:</strong> <span class="status-badge status-approved">Disetujui</span></p>
+                                        <p><strong>Service Request:</strong> <span class="status-badge status-pending">Menunggu</span></p>
+                                        <p><strong>Form Cuti:</strong> <span class="status-badge status-approved">Disetujui</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Data Diri -->
+                    <div id="profilePage" class="page-content hidden">
+                        <h2 class="page-title">Data Diri</h2>
+                        
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-4">
+                                <img src="https://via.placeholder.com/150" alt="Foto Profil" class="profile-pic mb-3">
+                                <h4 id="profileName">Nama Lengkap</h4>
+                                <p id="profilePosition">Posisi/Jabatan</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-section">
+                                    <h5>Informasi Pribadi</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nama Lengkap</label>
+                                                <input type="text" class="form-control" value="John Doe" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tanggal Lahir</label>
+                                                <input type="text" class="form-control" value="15 Januari 1985" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Jenis Kelamin</label>
+                                                <input type="text" class="form-control" value="Laki-laki" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Status Pernikahan</label>
+                                                <input type="text" class="form-control" value="Menikah" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h5>Informasi Kontak</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="text" class="form-control" value="john.doe@sugar-schools.com" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nomor Telepon</label>
+                                                <input type="text" class="form-control" value="08123456789" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Alamat</label>
+                                        <textarea class="form-control" rows="3" readonly>Jl. Pendidikan No. 123, Jakarta Selatan</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h5>Informasi Pekerjaan</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Posisi</label>
+                                                <input type="text" class="form-control" value="Guru Matematika" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Departemen</label>
+                                                <input type="text" class="form-control" value="Akademik" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tanggal Mulai Bekerja</label>
+                                                <input type="text" class="form-control" value="1 Maret 2018" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Status Karyawan</label>
+                                                <input type="text" class="form-control" value="Tetap" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Material Request -->
+                    <div id="materialRequestPage" class="page-content hidden">
+                        <h2 class="page-title">Material Request</h2>
+                        
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Ajukan Permintaan Material</h5>
+                                <button class="btn btn-primary" id="newMaterialRequestBtn">
+                                    <i class="fas fa-plus"></i> Permintaan Baru
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <form id="materialRequestForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="materialType" class="form-label">Jenis Material</label>
+                                                <select class="form-select" id="materialType" required>
+                                                    <option value="">Pilih Jenis Material</option>
+                                                    <option value="alat_tulis">Alat Tulis</option>
+                                                    <option value="bahan_praktikum">Bahan Praktikum</option>
+                                                    <option value="buku">Buku</option>
+                                                    <option value="elektronik">Perangkat Elektronik</option>
+                                                    <option value="lainnya">Lainnya</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="materialQuantity" class="form-label">Jumlah</label>
+                                                <input type="number" class="form-control" id="materialQuantity" min="1" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="materialDescription" class="form-label">Deskripsi Material</label>
+                                        <textarea class="form-control" id="materialDescription" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="materialUrgency" class="form-label">Tingkat Urgensi</label>
+                                        <select class="form-select" id="materialUrgency" required>
+                                            <option value="rendah">Rendah</option>
+                                            <option value="sedang">Sedang</option>
+                                            <option value="tinggi">Tinggi</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="materialNeededBy" class="form-label">Dibutuhkan Pada</label>
+                                        <input type="date" class="form-control" id="materialNeededBy" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Ajukan Permintaan</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Riwayat Permintaan Material</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jenis Material</th>
+                                                <th>Deskripsi</th>
+                                                <th>Jumlah</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="materialRequestHistory">
+                                            <!-- Data akan diisi oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Service Request -->
+                    <div id="serviceRequestPage" class="page-content hidden">
+                        <h2 class="page-title">Service Request</h2>
+                        
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Ajukan Permintaan Layanan</h5>
+                                <button class="btn btn-primary" id="newServiceRequestBtn">
+                                    <i class="fas fa-plus"></i> Permintaan Baru
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <form id="serviceRequestForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="serviceType" class="form-label">Jenis Layanan</label>
+                                                <select class="form-select" id="serviceType" required>
+                                                    <option value="">Pilih Jenis Layanan</option>
+                                                    <option value="perbaikan">Perbaikan</option>
+                                                    <option value="pemeliharaan">Pemeliharaan</option>
+                                                    <option value="instalasi">Instalasi</option>
+                                                    <option value="konsultasi">Konsultasi</option>
+                                                    <option value="lainnya">Lainnya</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="serviceLocation" class="form-label">Lokasi</label>
+                                                <input type="text" class="form-control" id="serviceLocation" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="serviceDescription" class="form-label">Deskripsi Masalah/Layanan</label>
+                                        <textarea class="form-control" id="serviceDescription" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="serviceUrgency" class="form-label">Tingkat Urgensi</label>
+                                        <select class="form-select" id="serviceUrgency" required>
+                                            <option value="rendah">Rendah</option>
+                                            <option value="sedang">Sedang</option>
+                                            <option value="tinggi">Tinggi</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="servicePreferredDate" class="form-label">Tanggal yang Diinginkan</label>
+                                        <input type="date" class="form-control" id="servicePreferredDate" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Ajukan Permintaan</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Riwayat Permintaan Layanan</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jenis Layanan</th>
+                                                <th>Deskripsi</th>
+                                                <th>Lokasi</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="serviceRequestHistory">
+                                            <!-- Data akan diisi oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Form Cuti -->
+                    <div id="leaveFormPage" class="page-content hidden">
+                        <h2 class="page-title">Form Cuti</h2>
+                        
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Ajukan Permohonan Cuti</h5>
+                                <button class="btn btn-primary" id="newLeaveRequestBtn">
+                                    <i class="fas fa-plus"></i> Permohonan Baru
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <form id="leaveRequestForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="leaveType" class="form-label">Jenis Cuti</label>
+                                                <select class="form-select" id="leaveType" required>
+                                                    <option value="">Pilih Jenis Cuti</option>
+                                                    <option value="tahunan">Cuti Tahunan</option>
+                                                    <option value="sakit">Cuti Sakit</option>
+                                                    <option value="melahirkan">Cuti Melahirkan</option>
+                                                    <option value="penting">Cuti Penting</option>
+                                                    <option value="lainnya">Lainnya</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="leaveDays" class="form-label">Jumlah Hari</label>
+                                                <input type="number" class="form-control" id="leaveDays" min="1" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="leaveStartDate" class="form-label">Tanggal Mulai</label>
+                                                <input type="date" class="form-control" id="leaveStartDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="leaveEndDate" class="form-label">Tanggal Selesai</label>
+                                                <input type="date" class="form-control" id="leaveEndDate" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="leaveReason" class="form-label">Alasan Cuti</label>
+                                        <textarea class="form-control" id="leaveReason" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="leaveContact" class="form-label">Kontak Selama Cuti</label>
+                                        <input type="text" class="form-control" id="leaveContact" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Ajukan Permohonan</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Riwayat Permohonan Cuti</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal Pengajuan</th>
+                                                <th>Jenis Cuti</th>
+                                                <th>Periode</th>
+                                                <th>Jumlah Hari</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="leaveRequestHistory">
+                                            <!-- Data akan diisi oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Leave Permit -->
+                    <div id="leavePermitPage" class="page-content hidden">
+                        <h2 class="page-title">Leave Permit</h2>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Izin Keluar</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="leavePermitForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="permitType" class="form-label">Jenis Izin</label>
+                                                <select class="form-select" id="permitType" required>
+                                                    <option value="">Pilih Jenis Izin</option>
+                                                    <option value="pribadi">Keperluan Pribadi</option>
+                                                    <option value="keluarga">Keperluan Keluarga</option>
+                                                    <option value="kesehatan">Keperluan Kesehatan</option>
+                                                    <option value="lainnya">Lainnya</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="permitDuration" class="form-label">Durasi (jam)</label>
+                                                <input type="number" class="form-control" id="permitDuration" min="1" max="8" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="permitStartTime" class="form-label">Waktu Mulai</label>
+                                                <input type="datetime-local" class="form-control" id="permitStartTime" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="permitEndTime" class="form-label">Waktu Selesai</label>
+                                                <input type="datetime-local" class="form-control" id="permitEndTime" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="permitReason" class="form-label">Alasan Izin</label>
+                                        <textarea class="form-control" id="permitReason" rows="3" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Ajukan Izin</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Riwayat Izin</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jenis Izin</th>
+                                                <th>Waktu</th>
+                                                <th>Durasi</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="leavePermitHistory">
+                                            <!-- Data akan diisi oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Kehadiran -->
+                    <div id="attendancePage" class="page-content hidden">
+                        <h2 class="page-title">Kehadiran</h2>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Rekap Kehadiran Bulan Ini</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h3 id="daysPresent">20</h3>
+                                                <p class="mb-0">Hari Hadir</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h3 id="daysAbsent">2</h3>
+                                                <p class="mb-0">Hari Absen</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h3 id="daysLate">1</h3>
+                                                <p class="mb-0">Terlambat</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h3 id="daysLeave">2</h3>
+                                                <p class="mb-0">Cuti</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Riwayat Kehadiran</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jam Masuk</th>
+                                                <th>Jam Keluar</th>
+                                                <th>Status</th>
+                                                <th>Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="attendanceHistory">
+                                            <!-- Data akan diisi oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Penggajian -->
+                    <div id="payrollPage" class="page-content hidden">
+                        <h2 class="page-title">Penggajian</h2>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Slip Gaji Terbaru</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Periode</label>
+                                            <input type="text" class="form-control" value="Oktober 2023" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Gaji Pokok</label>
+                                            <input type="text" class="form-control" value="Rp 8.000.000" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tunjangan</label>
+                                            <input type="text" class="form-control" value="Rp 1.500.000" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Potongan</label>
+                                            <input type="text" class="form-control" value="Rp 750.000" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Lembur</label>
+                                            <input type="text" class="form-control" value="Rp 500.000" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Take Home Pay</strong></label>
+                                            <input type="text" class="form-control" value="Rp 9.250.000" readonly style="font-weight: bold; color: #2c3e50;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary"><i class="fas fa-download"></i> Unduh Slip Gaji</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Riwayat Penggajian</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Periode</th>
+                                                <th>Gaji Pokok</th>
+                                                <th>Tunjangan</th>
+                                                <th>Potongan</th>
+                                                <th>Take Home Pay</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="payrollHistory">
+                                            <!-- Data akan diisi oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Halaman Dokumen -->
+                    <div id="documentsPage" class="page-content hidden">
+                        <h2 class="page-title">Dokumen</h2>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Dokumen Saya</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card document-card">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
+                                                <h5 class="card-title">Kontrak Kerja</h5>
+                                                <p class="card-text">Dokumen kontrak kerja Anda</p>
+                                                <a href="#" class="btn btn-primary">Lihat</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card document-card">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-file-word fa-3x text-primary mb-3"></i>
+                                                <h5 class="card-title">Surat Pernyataan</h5>
+                                                <p class="card-text">Surat pernyataan integritas</p>
+                                                <a href="#" class="btn btn-primary">Lihat</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card document-card">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-file-excel fa-3x text-success mb-3"></i>
+                                                <h5 class="card-title">Laporan Kinerja</h5>
+                                                <p class="card-text">Laporan kinerja triwulan</p>
+                                                <a href="#" class="btn btn-primary">Lihat</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -482,10 +1031,238 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Show verification modal on page load (for demo purposes)
+        // Data contoh untuk aplikasi
+        const sampleData = {
+            user: {
+                fullName: "John Doe",
+                email: "john.doe@sugar-schools.com",
+                position: "Guru Matematika",
+                department: "Akademik"
+            },
+            materialRequests: [
+                { id: 1, date: "2023-10-15", type: "Alat Tulis", description: "Pulpen dan buku catatan", quantity: 10, status: "approved" },
+                { id: 2, date: "2023-10-20", type: "Bahan Praktikum", description: "Bahan kimia untuk praktikum", quantity: 5, status: "pending" }
+            ],
+            serviceRequests: [
+                { id: 1, date: "2023-10-10", type: "Perbaikan", description: "AC ruang kelas tidak berfungsi", location: "Ruang Kelas 101", status: "approved" },
+                { id: 2, date: "2023-10-25", type: "Pemeliharaan", description: "Pemeliharaan komputer lab", location: "Laboratorium Komputer", status: "pending" }
+            ],
+            leaveRequests: [
+                { id: 1, date: "2023-10-05", type: "Tahunan", startDate: "2023-11-01", endDate: "2023-11-05", days: 5, status: "approved" },
+                { id: 2, date: "2023-10-28", type: "Sakit", startDate: "2023-11-10", endDate: "2023-11-10", days: 1, status: "pending" }
+            ],
+            leavePermits: [
+                { id: 1, date: "2023-10-12", type: "Pribadi", startTime: "2023-10-12T10:00", endTime: "2023-10-12T12:00", duration: 2, status: "approved" }
+            ],
+            attendance: [
+                { date: "2023-10-01", checkIn: "07:55", checkOut: "16:05", status: "present", note: "" },
+                { date: "2023-10-02", checkIn: "08:05", checkOut: "16:10", status: "present", note: "Terlambat 5 menit" },
+                { date: "2023-10-03", checkIn: "07:50", checkOut: "16:00", status: "present", note: "" }
+            ],
+            payroll: [
+                { period: "September 2023", basicSalary: "Rp 8.000.000", allowance: "Rp 1.500.000", deduction: "Rp 750.000", takeHomePay: "Rp 8.750.000" },
+                { period: "Oktober 2023", basicSalary: "Rp 8.000.000", allowance: "Rp 1.500.000", deduction: "Rp 750.000", takeHomePay: "Rp 9.250.000" }
+            ]
+        };
+
+        // Status terjemahan
+        const statusText = {
+            pending: "Menunggu",
+            approved: "Disetujui",
+            rejected: "Ditolak",
+            present: "Hadir",
+            absent: "Absen",
+            late: "Terlambat"
+        };
+
+        // Status kelas CSS
+        const statusClass = {
+            pending: "status-pending",
+            approved: "status-approved",
+            rejected: "status-rejected"
+        };
+
+        // Fungsi untuk menampilkan halaman berdasarkan ID
+        function showPage(pageId) {
+            // Sembunyikan semua halaman
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Tampilkan halaman yang dipilih
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Perbarui menu aktif di sidebar
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Tandai menu yang aktif
+            document.querySelector(`.sidebar .nav-link[data-page="${pageId.replace('Page', '')}"]`).classList.add('active');
+        }
+
+        // Fungsi untuk memuat data ke tabel
+        function loadTableData(tableId, data, columns) {
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = '';
+            
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                
+                columns.forEach(column => {
+                    const cell = document.createElement('td');
+                    
+                    if (column === 'status') {
+                        cell.innerHTML = `<span class="status-badge ${statusClass[item[column]]}">${statusText[item[column]]}</span>`;
+                    } else {
+                        cell.textContent = item[column];
+                    }
+                    
+                    row.appendChild(cell);
+                });
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Inisialisasi aplikasi saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function() {
-            var verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
-            verificationModal.show();
+            // Tampilkan halaman verifikasi email pertama kali
+            document.getElementById('emailVerificationPage').classList.remove('hidden');
+            
+            // Event listener untuk form verifikasi email
+            document.getElementById('emailVerificationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Simulasi pengiriman kode verifikasi
+                document.getElementById('verificationCodeSection').classList.remove('hidden');
+                alert('Kode verifikasi telah dikirim ke email Anda. (Simulasi: Kode = 123456)');
+            });
+            
+            // Event listener untuk form kode verifikasi
+            document.getElementById('verificationCodeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const code = document.getElementById('verificationCode').value;
+                
+                // Simulasi verifikasi kode
+                if (code === '123456') {
+                    document.getElementById('emailVerificationPage').classList.add('hidden');
+                    document.getElementById('accountCreationPage').classList.remove('hidden');
+                } else {
+                    alert('Kode verifikasi salah. Coba lagi.');
+                }
+            });
+            
+            // Event listener untuk form pembuatan akun
+            document.getElementById('accountCreationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulasi pembuatan akun
+                alert('Akun berhasil dibuat! Silakan login.');
+                
+                document.getElementById('accountCreationPage').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+            });
+            
+            // Event listener untuk form login
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulasi login
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                if (username && password) {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('mainApp').classList.remove('hidden');
+                    
+                    // Isi data pengguna
+                    document.getElementById('userFullName').textContent = sampleData.user.fullName;
+                    document.getElementById('profileName').textContent = sampleData.user.fullName;
+                    document.getElementById('profilePosition').textContent = sampleData.user.position;
+                    
+                    // Muat data ke tabel
+                    loadTableData('materialRequestHistory', sampleData.materialRequests, ['date', 'type', 'description', 'quantity', 'status']);
+                    loadTableData('serviceRequestHistory', sampleData.serviceRequests, ['date', 'type', 'description', 'location', 'status']);
+                    loadTableData('leaveRequestHistory', sampleData.leaveRequests, ['date', 'type', 'startDate', 'days', 'status']);
+                    loadTableData('leavePermitHistory', sampleData.leavePermits, ['date', 'type', 'startTime', 'duration', 'status']);
+                    loadTableData('attendanceHistory', sampleData.attendance, ['date', 'checkIn', 'checkOut', 'status', 'note']);
+                    loadTableData('payrollHistory', sampleData.payroll, ['period', 'basicSalary', 'allowance', 'deduction', 'takeHomePay']);
+                    
+                    // Tampilkan halaman beranda
+                    showPage('homePage');
+                } else {
+                    alert('Username dan password harus diisi.');
+                }
+            });
+            
+            // Event listener untuk link "Daftar di sini" di halaman login
+            document.getElementById('showEmailVerification').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('emailVerificationPage').classList.remove('hidden');
+            });
+            
+            // Event listener untuk menu sidebar
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page') + 'Page';
+                    showPage(page);
+                });
+            });
+            
+            // Event listener untuk tombol logout
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    document.getElementById('mainApp').classList.add('hidden');
+                    document.getElementById('loginPage').classList.remove('hidden');
+                    
+                    // Reset form login
+                    document.getElementById('loginForm').reset();
+                }
+            });
+            
+            // Event listener untuk form material request
+            document.getElementById('materialRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Permintaan material berhasil diajukan!');
+                this.reset();
+            });
+            
+            // Event listener untuk form service request
+            document.getElementById('serviceRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Permintaan layanan berhasil diajukan!');
+                this.reset();
+            });
+            
+            // Event listener untuk form leave request
+            document.getElementById('leaveRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Permohonan cuti berhasil diajukan!');
+                this.reset();
+            });
+            
+            // Event listener untuk form leave permit
+            document.getElementById('leavePermitForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Izin keluar berhasil diajukan!');
+                this.reset();
+            });
+            
+            // Event listener untuk tombol baru di berbagai form
+            document.getElementById('newMaterialRequestBtn').addEventListener('click', function() {
+                document.getElementById('materialRequestForm').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            document.getElementById('newServiceRequestBtn').addEventListener('click', function() {
+                document.getElementById('serviceRequestForm').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            document.getElementById('newLeaveRequestBtn').addEventListener('click', function() {
+                document.getElementById('leaveRequestForm').scrollIntoView({ behavior: 'smooth' });
+            });
         });
     </script>
 </body>
