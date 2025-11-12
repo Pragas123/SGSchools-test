@@ -1,522 +1,565 @@
-import React, { useState, useEffect } from "react";
-
-// Sugar Group Schools - Single-file React prototype
-// - Uses Tailwind CSS classes (assumes Tailwind available in the host project)
-// - Simulates email verification (console.log the code). In production, wire to an email provider.
-// - Uses a mock 'preloadedUsers' dataset to simulate that you already have their data.
-// - After verification an account is created (username/password), user logs in and sees prefilled profile.
-// - Provides Material Request, Service Request, Leave Form, Leave Permit
-// - Stores accounts and requests in localStorage for persistence across reloads.
-
-// --------------------------- MOCK / ADMIN DATA (replace with real DB) ---------------------------
-const preloadedUsers = {
-  // key = email
-  "andi.sari@sugargroup.sch.id": {
-    name: "Andi Sari",
-    employeeId: "SGS-001",
-    role: "Teacher",
-    campus: "Jakarta Utara",
-    phone: "081234567890",
-    address: "Jl. Merpati No. 10",
-    birthDate: "1990-04-12",
-    photo: "https://files.catbox.moe/nmqo6a.png" // using provided logo as placeholder photo
-  },
-  "budi.putra@sugargroup.sch.id": {
-    name: "Budi Putra",
-    employeeId: "SGS-002",
-    role: "Admin",
-    campus: "Bandung",
-    phone: "081098765432",
-    address: "Jl. Melati No. 3",
-    birthDate: "1985-09-02",
-    photo: "https://files.catbox.moe/nmqo6a.png"
-  }
-};
-
-// Utility: localStorage helpers
-const LS = {
-  get(key, fallback) {
-    try {
-      const v = JSON.parse(localStorage.getItem(key));
-      return v === null ? fallback : v;
-    } catch (e) {
-      return fallback;
-    }
-  },
-  set(key, val) {
-    localStorage.setItem(key, JSON.stringify(val));
-  }
-};
-
-// Keep verification codes in memory (simulation). In production you'd store temporarily in server.
-const verificationStore = {};
-
-// --------------------------- App ---------------------------
-export default function App() {
-  const [route, setRoute] = useState("auth"); // auth, login, home
-  const [message, setMessage] = useState(null);
-  const [currentUser, setCurrentUser] = useState(LS.get("sgs_currentUser", null));
-
-  useEffect(() => {
-    if (currentUser) {
-      setRoute("home");
-      LS.set("sgs_currentUser", currentUser);
-    } else {
-      setRoute("auth");
-    }
-  }, []);
-
-  useEffect(() => {
-    LS.set("sgs_users", LS.get("sgs_users", {}));
-  }, []);
-
-  function logout() {
-    setCurrentUser(null);
-    LS.set("sgs_currentUser", null);
-    setRoute("login");
-  }
-
-  return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <Header user={currentUser} onLogout={logout} />
-
-        {route === "auth" && (
-          <div className="mt-8">
-            <EmailVerification
-              onVerified={(account) => {
-                setCurrentUser(account);
-                setMessage({ type: "success", text: "Akun berhasil dibuat — Anda sudah login." });
-                setRoute("home");
-              }}
-            />
-            <div className="mt-6 text-sm text-slate-500">Sudah punya akun? <button className="text-blue-600 underline" onClick={() => setRoute("login")}>Login di sini</button></div>
-          </div>
-        )}
-
-        {route === "login" && (
-          <div className="mt-8">
-            <Login onLogin={(acc) => { setCurrentUser(acc); setRoute("home"); }} onBack={() => setRoute("auth")} />
-          </div>
-        )}
-
-        {route === "home" && currentUser && (
-          <div className="mt-6">
-            <Home user={currentUser} updateUser={(u) => { setCurrentUser(u); }} />
-          </div>
-        )}
-
-        {message && (
-          <div className={`mt-4 p-3 rounded ${message.type === "success" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>{message.text}</div>
-        )}
-
-        <div className="mt-10 text-xs text-slate-400">Prototype: untuk produksi hubungkan backend & provider email. (Simulasi kode verifikasi dicetak di console.)</div>
-      </div>
-    </div>
-  );
-}
-
-// --------------------------- Header ---------------------------
-function Header({ user, onLogout }) {
-  return (
-    <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
-      <div className="flex items-center gap-3">
-        <img src="https://files.catbox.moe/nmqo6a.png" alt="logo" className="w-12 h-12 rounded" />
-        <div>
-          <div className="text-lg font-semibold">Sugar Group Schools</div>
-          <div className="text-sm text-slate-500">Employee self-service prototype</div>
-        </div>
-      </div>
-      <div>
-        {user ? (
-          <div className="flex items-center gap-3">
-            <div className="text-sm text-slate-600">{user.name}</div>
-            <button className="px-3 py-1 bg-red-50 text-red-700 rounded" onClick={onLogout}>Logout</button>
-          </div>
-        ) : (
-          <div className="text-sm text-slate-500">Welcome — please verify your email to create account</div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// --------------------------- Email Verification Flow ---------------------------
-function EmailVerification({ onVerified }) {
-  const [step, setStep] = useState(1); // 1 = enter email, 2 = enter code, 3 = set credentials
-  const [email, setEmail] = useState("");
-  const [codeInput, setCodeInput] = useState("");
-  const [accountName, setAccountName] = useState("");
-
-  function sendCode() {
-    const normalized = email.trim().toLowerCase();
-    if (!normalized) return alert("Masukkan email yang valid.");
-
-    // Check if this email exists in preloadedUsers — represents admin data
-    if (!preloadedUsers[normalized]) {
-      if (!confirm("Email tidak ditemukan di data. Anda ingin tetap melanjutkan pendaftaran manual?")) return;
-      // allow manual creation
-    }
-
-    // create 6-digit code
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    verificationStore[normalized] = code;
-
-    // Simulate sending email — in production, send via email provider
-    console.log(`SIMULATED EMAIL to ${normalized}: verif code = ${code}`);
-    alert("Kode verifikasi telah dikirim (simulasi). Periksa console (dev). Untuk produksi hubungkan ke SMTP/SendGrid/Mailgun/dll.");
-    setStep(2);
-  }
-
-  function verifyCode() {
-    const normalized = email.trim().toLowerCase();
-    if (verificationStore[normalized] && verificationStore[normalized] === codeInput.trim()) {
-      // move to credentials. Pre-populate name if we have preloaded data
-      const preload = preloadedUsers[normalized];
-      setAccountName(preload ? preload.name : "");
-      setStep(3);
-    } else {
-      alert("Kode verifikasi salah. Cek kembali.");
-    }
-  }
-
-  function createAccount(password) {
-    const normalized = email.trim().toLowerCase();
-
-    // create username automatically from email prefix if not exists
-    const username = normalized.split("@")[0];
-
-    const users = LS.get("sgs_users", {});
-    // If preloaded profile exists, attach it; otherwise create a minimal profile
-    const profile = preloadedUsers[normalized] || {
-      name: accountName || username,
-      employeeId: `TMP-${Math.floor(1000 + Math.random() * 9000)}`,
-      role: "Staff",
-      campus: "Unknown",
-      phone: "",
-      address: "",
-      birthDate: "",
-      photo: "https://files.catbox.moe/nmqo6a.png"
-    };
-
-    const account = { username, email: normalized, password, ...profile };
-    users[username] = account;
-    LS.set("sgs_users", users);
-
-    // cleanup verification
-    delete verificationStore[normalized];
-
-    // log them in
-    LS.set("sgs_currentUser", account);
-    onVerified(account);
-  }
-
-  return (
-    <div className="bg-white p-6 rounded shadow">
-      <h2 className="text-xl font-semibold mb-3">Verifikasi Email</h2>
-      {step === 1 && (
-        <div className="space-y-3">
-          <p className="text-sm text-slate-600">Masukkan email institusi Anda untuk menerima kode verifikasi. Sistem akan membuat username otomatis dan meminta Anda membuat password.</p>
-          <input className="w-full p-2 border rounded" placeholder="email@domain" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <div className="flex gap-2">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={sendCode}>Kirim kode</button>
-          </div>
-        </div>
-      )}
-
-      {step === 2 && (
-        <div className="space-y-3">
-          <p className="text-sm">Masukkan 6 digit kode verifikasi yang dikirim ke email Anda.</p>
-          <input className="w-40 p-2 border rounded" value={codeInput} onChange={(e) => setCodeInput(e.target.value)} />
-          <div className="flex gap-2">
-            <button className="px-4 py-2 bg-green-600 text-white rounded" onClick={verifyCode}>Verifikasi</button>
-            <button className="px-4 py-2 bg-slate-100 rounded" onClick={() => setStep(1)}>Kembali</button>
-          </div>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div className="space-y-3">
-          <p className="text-sm">Akun Anda hampir selesai. Username otomatis dibuat dari email; masukkan password.</p>
-          <div>
-            <label className="text-sm block">Nama (bisa diedit)</label>
-            <input className="w-full p-2 border rounded" value={accountName} onChange={(e) => setAccountName(e.target.value)} />
-          </div>
-          <PasswordForm onCreate={createAccount} />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function PasswordForm({ onCreate }) {
-  const [pw, setPw] = useState("");
-  const [pw2, setPw2] = useState("");
-
-  function submit() {
-    if (!pw || pw.length < 6) return alert("Password minimal 6 karakter.");
-    if (pw !== pw2) return alert("Password tidak sama.");
-    onCreate(pw);
-  }
-
-  return (
-    <div className="space-y-2">
-      <input placeholder="Password" type="password" className="w-full p-2 border rounded" value={pw} onChange={(e) => setPw(e.target.value)} />
-      <input placeholder="Ulangi Password" type="password" className="w-full p-2 border rounded" value={pw2} onChange={(e) => setPw2(e.target.value)} />
-      <div className="flex gap-2">
-        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={submit}>Buat Akun & Login</button>
-      </div>
-    </div>
-  );
-}
-
-// --------------------------- Login ---------------------------
-function Login({ onLogin, onBack }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  function attempt() {
-    const users = LS.get("sgs_users", {});
-    if (users[username] && users[username].password === password) {
-      LS.set("sgs_currentUser", users[username]);
-      onLogin(users[username]);
-    } else {
-      alert("Username atau password salah.");
-    }
-  }
-
-  return (
-    <div className="bg-white p-6 rounded shadow">
-      <h3 className="text-lg font-semibold mb-3">Login</h3>
-      <input className="w-full p-2 border rounded mb-2" placeholder="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input className="w-full p-2 border rounded mb-2" placeholder="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <div className="flex gap-2">
-        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={attempt}>Login</button>
-        <button className="px-4 py-2 bg-slate-100 rounded" onClick={onBack}>Kembali</button>
-      </div>
-    </div>
-  );
-}
-
-// --------------------------- Home & Dashboard ---------------------------
-function Home({ user, updateUser }) {
-  const [tab, setTab] = useState("profile");
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="md:col-span-1 bg-white p-4 rounded shadow">
-        <ProfileCard user={user} onUpdate={(u) => { updateUser(u); const users = LS.get("sgs_users", {}); users[u.username] = u; LS.set("sgs_users", users); LS.set("sgs_currentUser", u); }} />
-        <nav className="mt-4 space-y-2">
-          <button className={`w-full text-left p-2 rounded ${tab === "profile" ? "bg-blue-50" : "bg-slate-50"}`} onClick={() => setTab("profile")}>Profile</button>
-          <button className={`w-full text-left p-2 rounded ${tab === "material" ? "bg-blue-50" : "bg-slate-50"}`} onClick={() => setTab("material")}>Material Request</button>
-          <button className={`w-full text-left p-2 rounded ${tab === "service" ? "bg-blue-50" : "bg-slate-50"}`} onClick={() => setTab("service")}>Service Request</button>
-          <button className={`w-full text-left p-2 rounded ${tab === "leave" ? "bg-blue-50" : "bg-slate-50"}`} onClick={() => setTab("leave")}>Form Cuti</button>
-          <button className={`w-full text-left p-2 rounded ${tab === "permit" ? "bg-blue-50" : "bg-slate-50"}`} onClick={() => setTab("permit")}>Leave Permit</button>
-          <button className={`w-full text-left p-2 rounded ${tab === "requests" ? "bg-blue-50" : "bg-slate-50"}`} onClick={() => setTab("requests")}>My Requests</button>
-        </nav>
-      </div>
-
-      <div className="md:col-span-2 bg-white p-4 rounded shadow">
-        {tab === "profile" && <ProfileEditor user={user} onSave={(u) => updateUser(u)} />}
-        {tab === "material" && <MaterialRequestForm user={user} />}
-        {tab === "service" && <ServiceRequestForm user={user} />}
-        {tab === "leave" && <LeaveForm user={user} type="cuti" />}
-        {tab === "permit" && <LeaveForm user={user} type="permit" />}
-        {tab === "requests" && <RequestsList user={user} />}
-      </div>
-    </div>
-  );
-}
-
-function ProfileCard({ user, onUpdate }) {
-  return (
-    <div className="flex items-center gap-3">
-      <img src={user.photo || "https://files.catbox.moe/nmqo6a.png"} alt="foto" className="w-20 h-20 rounded" />
-      <div>
-        <div className="font-semibold">{user.name}</div>
-        <div className="text-sm text-slate-600">{user.role} — {user.campus}</div>
-        <div className="mt-2 text-xs text-slate-500">ID: {user.employeeId}</div>
-      </div>
-    </div>
-  );
-}
-
-function ProfileEditor({ user, onSave }) {
-  const [form, setForm] = useState({ ...user });
-  function save() {
-    onSave(form);
-    alert("Profil disimpan.");
-  }
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-3">Data Diri</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <input className="p-2 border rounded" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-        <input className="p-2 border rounded" value={form.employeeId} onChange={(e) => setForm({ ...form, employeeId: e.target.value })} />
-        <input className="p-2 border rounded" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} />
-        <input className="p-2 border rounded" value={form.campus} onChange={(e) => setForm({ ...form, campus: e.target.value })} />
-        <input className="p-2 border rounded" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-        <input className="p-2 border rounded" value={form.birthDate} onChange={(e) => setForm({ ...form, birthDate: e.target.value })} />
-        <input className="p-2 border rounded md:col-span-2" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
-      </div>
-      <div className="mt-4">
-        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={save}>Simpan Data</button>
-      </div>
-    </div>
-  );
-}
-
-// --------------------------- Requests & Forms ---------------------------
-function newRequestBase(user, category) {
-  return {
-    id: `REQ-${Date.now()}-${Math.floor(Math.random() * 900)}`,
-    createdAt: new Date().toISOString(),
-    username: user.username,
-    name: user.name,
-    category,
-    status: "submitted",
-    notes: ""
-  };
-}
-
-function MaterialRequestForm({ user }) {
-  const [items, setItems] = useState([{ name: "", quantity: 1 }]);
-
-  function addItem() { setItems([...items, { name: "", quantity: 1 }]); }
-  function updateItem(i, field, value) { const c = [...items]; c[i][field] = value; setItems(c); }
-
-  function submit() {
-    const req = newRequestBase(user, "material");
-    req.items = items.filter(it => it.name.trim());
-    if (!req.items.length) return alert("Tambahkan minimal 1 item.");
-    const all = LS.get("sgs_requests", []);
-    all.push(req);
-    LS.set("sgs_requests", all);
-    alert("Material request terkirim.");
-    setItems([{ name: "", quantity: 1 }]);
-  }
-
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-3">Material Request</h3>
-      <div className="space-y-2">
-        {items.map((it, idx) => (
-          <div key={idx} className="flex gap-2">
-            <input className="flex-1 p-2 border rounded" placeholder="Nama barang" value={it.name} onChange={(e) => updateItem(idx, "name", e.target.value)} />
-            <input className="w-24 p-2 border rounded" type="number" value={it.quantity} onChange={(e) => updateItem(idx, "quantity", e.target.value)} />
-          </div>
-        ))}
-        <div className="flex gap-2">
-          <button className="px-3 py-2 bg-slate-100 rounded" onClick={addItem}>Tambah Item</button>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={submit}>Kirim Request</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ServiceRequestForm({ user }) {
-  const [subject, setSubject] = useState("");
-  const [desc, setDesc] = useState("");
-
-  function submit() {
-    if (!subject.trim()) return alert("Masukkan judul service.");
-    const req = newRequestBase(user, "service");
-    req.subject = subject;
-    req.description = desc;
-    const all = LS.get("sgs_requests", []);
-    all.push(req);
-    LS.set("sgs_requests", all);
-    alert("Service request terkirim.");
-    setSubject(""); setDesc("");
-  }
-
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-3">Service Request</h3>
-      <input className="w-full p-2 border rounded mb-2" placeholder="Judul" value={subject} onChange={(e) => setSubject(e.target.value)} />
-      <textarea className="w-full p-2 border rounded mb-2" placeholder="Deskripsi singkat" value={desc} onChange={(e) => setDesc(e.target.value)} />
-      <div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={submit}>Kirim</button>
-      </div>
-    </div>
-  );
-}
-
-function LeaveForm({ user, type }) {
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
-  const [reason, setReason] = useState("");
-
-  function submit() {
-    if (!start || !end) return alert("Pilih tanggal mulai dan akhir.");
-    const req = newRequestBase(user, type === "cuti" ? "leave" : "permit");
-    req.period = { start, end };
-    req.reason = reason;
-    const all = LS.get("sgs_requests", []);
-    all.push(req);
-    LS.set("sgs_requests", all);
-    alert(`${type === "cuti" ? "Form cuti" : "Leave permit"} terkirim.`);
-    setStart(""); setEnd(""); setReason("");
-  }
-
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-3">{type === "cuti" ? "Form Cuti" : "Leave Permit"}</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <label className="text-sm">Dari</label>
-        <label className="text-sm">Sampai</label>
-        <input type="date" className="p-2 border rounded" value={start} onChange={(e) => setStart(e.target.value)} />
-        <input type="date" className="p-2 border rounded" value={end} onChange={(e) => setEnd(e.target.value)} />
-      </div>
-      <textarea className="w-full p-2 border rounded my-2" placeholder="Alasan" value={reason} onChange={(e) => setReason(e.target.value)} />
-      <div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={submit}>Kirim</button>
-      </div>
-    </div>
-  );
-}
-
-function RequestsList({ user }) {
-  const [list, setList] = useState(LS.get("sgs_requests", []));
-
-  useEffect(() => {
-    setList(LS.get("sgs_requests", []));
-  }, []);
-
-  return (
-    <div>
-      <h3 className="text-lg font-semibold mb-3">Permintaan Saya</h3>
-      {list.filter(r => r.username === user.username).length === 0 && <div className="text-sm text-slate-500">Belum ada request.</div>}
-      <div className="space-y-3">
-        {list.filter(r => r.username === user.username).map(r => (
-          <div key={r.id} className="p-3 border rounded">
-            <div className="flex justify-between items-start">
-              <div>
-                <div className="font-semibold">{r.category.toUpperCase()} — {r.id}</div>
-                <div className="text-xs text-slate-500">Dibuat: {new Date(r.createdAt).toLocaleString()}</div>
-              </div>
-              <div className={`px-2 py-1 rounded text-xs ${r.status === 'submitted' ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700'}`}>{r.status}</div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugar Group Schools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .sugar-primary {
+            background-color: var(--primary);
+        }
+        
+        .sugar-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .sugar-accent {
+            background-color: var(--accent);
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        .verification-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--light);
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+            margin-right: 15px;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--primary);
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .content-area {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .btn-sugar {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-sugar:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sugar-primary">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="https://files.catbox.moe/nmqo6a.png" alt="Sugar Group Schools Logo">
+                <span>Sugar Group Schools</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=3498db&color=fff" alt="Profile" class="rounded-circle me-2" width="30" height="30">
+                        John Doe
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
+                    </ul>
+                </div>
             </div>
-            <div className="mt-2 text-sm text-slate-700">
-              {r.subject && <div><strong>{r.subject}</strong></div>}
-              {r.items && <div className="mt-2">Items: {r.items.map(it => `${it.name} (x${it.quantity})`).join(", ")}</div>}
-              {r.reason && <div className="mt-2">Reason: {r.reason}</div>}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+        </div>
+    </nav>
 
-// --------------------------------------------------------------------------------
-// Notes for production integration (leave in comments):
-// - Replace simulated verification with backend API that generates code and sends via SMTP/SendGrid/Mailgun.
-// - Use secure password storage (bcrypt) and proper auth tokens (JWT + refresh tokens or sessions).
-// - Store users and requests in a database (Postgres, MySQL, MongoDB).
-// - Add role-based access control for approvals, admin dashboards, and notifications.
-// - Add file upload for attachments on requests (policy documents, doctor's note, etc.).
-// - Add email/sms notifications for status changes.
-// - Add server-side validation and rate limiting to avoid abuse.
-// --------------------------------------------------------------------------------
+    <!-- Main Content Area -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="sidebar sticky-top">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-home"></i> Beranda
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user"></i> Data Diri
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-box"></i> Material Request
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-tools"></i> Service Request
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-calendar-minus"></i> Form Cuti
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-file-signature"></i> Leave Permit
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-history"></i> Riwayat Permohonan
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="col-lg-9">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2>Selamat Datang, John Doe</h2>
+                                <p class="mb-0">Guru Matematika - SMP Sugar Group Schools</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=3498db&color=fff&size=120" alt="Profile" class="profile-img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="card-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <h5>Material Request</h5>
+                                <h3 class="text-primary">12</h3>
+                                <p class="text-muted">Permintaan aktif</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="card-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <h5>Service Request</h5>
+                                <h3 class="text-primary">5</h3>
+                                <p class="text-muted">Permintaan aktif</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="card-icon">
+                                    <i class="fas fa-calendar-minus"></i>
+                                </div>
+                                <h5>Cuti Tersisa</h5>
+                                <h3 class="text-primary">18</h3>
+                                <p class="text-muted">Hari tersisa</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="card-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h5>Menunggu</h5>
+                                <h3 class="text-primary">3</h3>
+                                <p class="text-muted">Persetujuan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content Area -->
+                <div class="content-area">
+                    <h4 class="mb-4">Data Diri</h4>
+                    
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h5>Informasi Pribadi</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" value="John Doe" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">NIK</label>
+                                <input type="text" class="form-control" value="1987654321" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tempat, Tanggal Lahir</label>
+                                <input type="text" class="form-control" value="Jakarta, 15 April 1985" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Jenis Kelamin</label>
+                                <input type="text" class="form-control" value="Laki-laki" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" value="john.doe@sugargroup.sch.id" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">No. Telepon</label>
+                                <input type="text" class="form-control" value="081234567890" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Employment Information -->
+                    <div class="form-section">
+                        <h5>Informasi Kepegawaian</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Jabatan</label>
+                                <input type="text" class="form-control" value="Guru Matematika" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Departemen</label>
+                                <input type="text" class="form-control" value="SMP" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tanggal Bergabung</label>
+                                <input type="text" class="form-control" value="15 Juli 2015" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Status</label>
+                                <input type="text" class="form-control" value="Pegawai Tetap" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Requests -->
+                    <div class="form-section">
+                        <h5>Permohonan Terbaru</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Jenis</th>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Material Request</td>
+                                        <td>10 Nov 2023</td>
+                                        <td>Permintaan buku matematika kelas 8</td>
+                                        <td><span class="status-badge status-approved">Disetujui</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Service Request</td>
+                                        <td>8 Nov 2023</td>
+                                        <td>Perbaikan AC ruang guru</td>
+                                        <td><span class="status-badge status-pending">Menunggu</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Form Cuti</td>
+                                        <td>5 Nov 2023</td>
+                                        <td>Cuti tahunan 3 hari</td>
+                                        <td><span class="status-badge status-approved">Disetujui</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Leave Permit</td>
+                                        <td>1 Nov 2023</td>
+                                        <td>Izin setengah hari - urusan keluarga</td>
+                                        <td><span class="status-badge status-rejected">Ditolak</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="form-section">
+                        <h5>Aksi Cepat</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <a href="#" class="card text-decoration-none">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="feature-icon">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Material Request</h6>
+                                            <small class="text-muted">Ajukan permintaan material</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="#" class="card text-decoration-none">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="feature-icon">
+                                            <i class="fas fa-tools"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Service Request</h6>
+                                            <small class="text-muted">Ajukan permintaan layanan</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="#" class="card text-decoration-none">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="feature-icon">
+                                            <i class="fas fa-calendar-minus"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Form Cuti</h6>
+                                            <small class="text-muted">Ajukan cuti</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Modal (akan muncul sebelum login) -->
+    <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header sugar-primary text-white">
+                    <h5 class="modal-title" id="verificationModalLabel">Verifikasi Email</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://files.catbox.moe/nmqo6a.png" alt="Sugar Group Schools Logo" class="mb-3" width="100">
+                        <h4>Verifikasi Email Anda</h4>
+                        <p class="text-muted">Masukkan alamat email Anda untuk menerima username dan password</p>
+                    </div>
+                    <form id="verificationForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Alamat Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-sugar w-100">Kirim Verifikasi</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header sugar-primary text-white">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://files.catbox.moe/nmqo6a.png" alt="Sugar Group Schools Logo" class="mb-3" width="100">
+                        <h4>Selamat Datang</h4>
+                        <p class="text-muted">Masuk ke akun Anda</p>
+                    </div>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-sugar w-100">Masuk</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Tampilkan modal verifikasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Untuk demo, kita akan langsung tampilkan modal login
+            // Dalam aplikasi nyata, ini akan tergantung status login user
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+            
+            // Event listener untuk form login
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Simulasi login berhasil
+                loginModal.hide();
+                // Tampilkan konten aplikasi
+                document.querySelector('.navbar').style.display = 'flex';
+                document.querySelector('.container-fluid').style.display = 'block';
+            });
+            
+            // Event listener untuk tombol logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                // Tampilkan modal login lagi
+                loginModal.show();
+                // Sembunyikan konten aplikasi
+                document.querySelector('.navbar').style.display = 'none';
+                document.querySelector('.container-fluid').style.display = 'none';
+            });
+            
+            // Event listener untuk form verifikasi
+            document.getElementById('verificationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Tutup modal verifikasi dan tampilkan modal login
+                const verificationModal = bootstrap.Modal.getInstance(document.getElementById('verificationModal'));
+                verificationModal.hide();
+                
+                // Tampilkan modal login
+                loginModal.show();
+            });
+        });
+    </script>
+</body>
+                      </html>
